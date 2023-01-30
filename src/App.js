@@ -18,6 +18,7 @@ const Login = React.lazy(() => import("./scenes/login"))
 const Join = React.lazy(() => import("./scenes/join"))
 const ResetPassword = React.lazy(() => import("./scenes/resetPassword"))
 const Main = React.lazy(() => import("./scenes/main"))
+const NotFound = React.lazy(() => import("./scenes/notFound"))
 
 /*
  *TODO
@@ -74,7 +75,7 @@ function App() {
     const pathname = window.location.pathname
     const refreshToken = getRefreshToken()
     const user = getUser()
-    if (!Const.IS_NOT_AUTHENTICATED_PATH_LIST.includes(pathname) && (!refreshToken || !user)) {
+    if (Const.IS_AUTHENTICATED_PATH_LIST.includes(pathname) && (!refreshToken || !user)) {
       alert("인증이 만료되었습니다.\n다시 로그인 해주세요.")
       clearInterval(authInterval)
       clearInterval(reIssueInterval)
@@ -134,6 +135,7 @@ function App() {
               <Route element={<PrivateRoute authenticated={authenticated} requireAuth={true} />}>
                 <Route path="/" element={<Main />} />
               </Route>
+              <Route path="/*" element={<NotFound />} />
             </Routes>
           </Suspense>
           </main>

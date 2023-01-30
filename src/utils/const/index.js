@@ -1,4 +1,7 @@
 
+/* 로그인 접근 url */
+export const IS_AUTHENTICATED_PATH_LIST = ['/']
+
 /* 비로그인 접근 url */
 export const IS_NOT_AUTHENTICATED_PATH_LIST = ['/login', '/join', '/reset-password']
 
