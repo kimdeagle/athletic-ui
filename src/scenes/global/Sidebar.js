@@ -6,10 +6,11 @@ import { Link } from "react-router-dom";
 import { tokens } from "../../theme";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import PeopleOutlinedIcon from "@mui/icons-material/LightModeOutlined";
+import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
+import {getUser} from "../../utils/cookie";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme()
@@ -32,6 +33,9 @@ const Sidebar = () => {
   const colors = tokens(theme.palette.mode)
   const [isCollapsed, setIsCollapsed] = useState(false)
   const [selected, setSelected] = useState('Main')
+  const { adminNm, auth } = getUser()
+  const role = auth.replace("ROLE_", "")
+
   return (
     <Box
       sx={{
@@ -99,10 +103,10 @@ const Sidebar = () => {
                   fontWeight="bold"
                   sx={{ m: "10px 0 5px 0" }}
                 >
-                  Kimdeagle
+                  {adminNm || 'Username'}
                 </Typography>
                 <Typography variant="h6" color={colors.greenAccent[500]}>
-                  Admin
+                  {role}
                 </Typography>
               </Box>
             </Box>
@@ -128,8 +132,8 @@ const Sidebar = () => {
             </Typography>
 
             <Item
-              title="Manage Team"
-              to="/team"
+              title="Login"
+              to="/login"
               icon={<PeopleOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}

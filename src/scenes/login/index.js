@@ -1,28 +1,49 @@
 import {tokens} from "../../theme";
-import {Box, Button, Checkbox, FormControlLabel, FormGroup, TextField, Typography, useTheme} from "@mui/material";
-import {useState} from "react";
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  FormGroup, Link,
+  TextField,
+  Typography,
+  useTheme
+} from "@mui/material";
+import {useEffect, useState} from "react";
+import {getRememberId, removeRememberId, setRememberId} from "../../utils/cookie";
+import {useNavigate} from "react-router-dom";
 
-/*TODO
- * 아이디 저장
- * 로그인 구현
- * 비밀번호 초기화
- * 회원가입
- */
-
-const Login = () => {
+const Login = ({handleLogin}) => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
-  const [values, setValues] = useState({})
-  const [isRemember, setIsRemember] = useState(false)
+  const [isRememberId, setIsRememberId] = useState(false)
+  const [loginId, setLoginId] = useState('')
+  const [loginPw, setLoginPw] = useState('')
+  const navigate = useNavigate()
 
-  const handleChange = (e) => {
-    setValues({...values, [e.target.name]: e.target.value})
-  }
-
-  const handleFormSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log(values)
+
+    const isLoginSuccess = await handleLogin(loginId, loginPw)
+    if (isLoginSuccess) {
+      if (isRememberId) {
+        setRememberId(loginId)
+      } else {
+        removeRememberId()
+      }
+      navigate('/')
+    } else {
+      return false
+    }
   }
+
+  useEffect(() => {
+    const rememberId = getRememberId()
+    if (rememberId) {
+      setLoginId(rememberId)
+      setIsRememberId(true)
+    }
+  }, [])
 
   return (
     <Box
@@ -30,7 +51,7 @@ const Login = () => {
       justifyContent="center"
       flexDirection="column"
       alignItems="center"
-      width="50%"
+      width="20%"
       height="100vh"
       m="10px auto"
     >
@@ -42,7 +63,7 @@ const Login = () => {
       >
         LOGIN
       </Typography>
-      <Box component="form" width="50%" onSubmit={handleFormSubmit}>
+      <Box component="form" width="100%" onSubmit={handleSubmit}>
         <TextField
           autoFocus
           required
@@ -51,9 +72,10 @@ const Login = () => {
           name="loginId"
           variant="outlined"
           color="info"
-          label="ID"
+          label="아이디"
           margin="normal"
-          onChange={handleChange}
+          onChange={(e) => setLoginId(e.target.value)}
+          value={loginId}
         />
         <TextField
           type="password"
@@ -63,9 +85,9 @@ const Login = () => {
           name="loginPw"
           variant="outlined"
           color="info"
-          label="PASSWORD"
+          label="비밀번호"
           margin="normal"
-          onChange={handleChange}
+          onChange={(e) => setLoginPw(e.target.value)}
         />
         <FormGroup>
           <FormControlLabel
@@ -74,8 +96,8 @@ const Login = () => {
               <Checkbox
                 id='isRemember'
                 sx={{color: `${colors.greenAccent[200]} !important`}}
-                onChange={(e) => setIsRemember(e.target.checked)}
-                checked={isRemember}
+                onChange={(e) => setIsRememberId(e.target.checked)}
+                checked={isRememberId}
               />
             }
           />
@@ -85,11 +107,36 @@ const Login = () => {
           type="submit"
           variant="contained"
           size="large"
-          color="success"
+          color="info"
           sx={{ mt: 3 }}
         >
           LOGIN
         </Button>
+      </Box>
+      <Box
+        width="100%"
+        display="flex"
+        justifyContent="space-between"
+        mt={2}
+      >
+        <Link
+          component="button"
+          variant="body1"
+          underline="hover"
+          color={colors.grey[100]}
+          onClick={() => navigate("/reset-password")}
+        >
+          비밀번호 초기화
+        </Link>
+        <Link
+          component="button"
+          variant="body1"
+          underline="hover"
+          color={colors.grey[100]}
+          onClick={() => navigate("/join")}
+        >
+          회원가입
+        </Link>
       </Box>
     </Box>
   )
