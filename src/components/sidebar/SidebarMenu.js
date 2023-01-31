@@ -61,7 +61,6 @@ const mockMenuList = [
 const SidebarMenu = ({isCollapsed}) => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
-
   const location = useLocation()
 
   const processMenuList = (menuList) => {

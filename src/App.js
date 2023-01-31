@@ -20,6 +20,7 @@ const ResetPassword = React.lazy(() => import("./scenes/resetPassword"))
 const Home = React.lazy(() => import("./scenes/home"))
 const NotFound = React.lazy(() => import("./scenes/notFound"))
 
+//TODO 메뉴리스트 저장 방식 확인 -> state, cookie, localStorage, other.. (api는 완료)
 function App() {
   const [theme, colorMode] = useMode()
   const authenticated = useSelector(state => state.auth.authenticated)
@@ -28,8 +29,8 @@ function App() {
   /* handle login */
   const handleLogin = async (loginId, loginPw) => {
     try {
-      const response = await Apis.auth.login({loginId, loginPw})
-      const {accessToken, accessTokenExpiresIn, refreshToken, refreshTokenExpiresIn} = response.data
+      const token = await Apis.auth.login({loginId, loginPw})
+      const {accessToken, accessTokenExpiresIn, refreshToken, refreshTokenExpiresIn} = token
 
       dispatch(setAccessToken({accessToken, accessTokenExpiresIn}))
       setRefreshToken({refreshToken, refreshTokenExpiresIn})
@@ -90,8 +91,8 @@ function App() {
     const refreshToken = getRefreshToken()
     if (refreshToken) {
       try {
-        const response = await Apis.auth.reIssueAccessToken({refreshToken})
-        const { accessToken, accessTokenExpiresIn } = response.data
+        const token = await Apis.auth.reIssueAccessToken({refreshToken})
+        const { accessToken, accessTokenExpiresIn } = token
         dispatch(setAccessToken({accessToken, accessTokenExpiresIn}))
         setAxiosHeaders(accessToken)
       } catch (e) {

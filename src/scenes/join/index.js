@@ -133,8 +133,8 @@ const Join = () => {
       return false;
     }
     try {
-      const response = await Apis.auth.join(params)
-      alert(response.data.adminNm + "님. 회원가입 요청이 완료되었습니다.");
+      const data = await Apis.auth.join(params)
+      alert(data.adminNm + "님. 회원가입 요청이 완료되었습니다.");
       navigate("/login")
     } catch (e) {
       console.log(e)
