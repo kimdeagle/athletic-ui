@@ -10,3 +10,6 @@ export const AUTH_INTERVAL_TIMEOUT = 1000
 
 /* re issue access token interval timeout */
 export const RE_ISSUE_ACCESS_TOKEN_INTERVAL_TIMEOUT = 1000 * 10
+
+/* role prefix */
+export const ROLE_PREFIX = "ROLE_"

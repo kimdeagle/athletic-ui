@@ -1,8 +1,8 @@
 import {ColorModeContext, useMode} from "./theme";
 import {CssBaseline, ThemeProvider} from "@mui/material";
 import {Route, Routes} from "react-router-dom";
-import Header from "./scenes/global/Header";
-import Sidebar from "./scenes/global/Sidebar";
+import Header from "./components/header";
+import Sidebar from "./components/sidebar";
 import * as Apis from "./apis"
 import {useDispatch, useSelector} from "react-redux";
 import {resetAccessToken, setAccessToken} from "./redux/auth";
@@ -17,13 +17,9 @@ import PrivateRoute from "./components/PrivateRoute";
 const Login = React.lazy(() => import("./scenes/login"))
 const Join = React.lazy(() => import("./scenes/join"))
 const ResetPassword = React.lazy(() => import("./scenes/resetPassword"))
-const Main = React.lazy(() => import("./scenes/main"))
+const Home = React.lazy(() => import("./scenes/home"))
 const NotFound = React.lazy(() => import("./scenes/notFound"))
 
-/*
- *TODO
- * scrollTop
- */
 function App() {
   const [theme, colorMode] = useMode()
   const authenticated = useSelector(state => state.auth.authenticated)
@@ -133,7 +129,7 @@ function App() {
                 <Route path="/reset-password" element={<ResetPassword />} />
               </Route>
               <Route element={<PrivateRoute authenticated={authenticated} requireAuth={true} />}>
-                <Route path="/" element={<Main />} />
+                <Route path="/" element={<Home />} />
               </Route>
               <Route path="/*" element={<NotFound />} />
             </Routes>
