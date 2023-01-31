@@ -121,7 +121,7 @@ function App() {
         <div className="app">
           {authenticated && <Sidebar />}
           <main className="content">
-            <Header handleLogout={handleLogout} />
+            <Header authenticated={authenticated} handleLogout={handleLogout} />
           <Suspense fallback={<Loading />}>
             <Routes>
               <Route element={<PrivateRoute authenticated={authenticated} requireAuth={false} />}>

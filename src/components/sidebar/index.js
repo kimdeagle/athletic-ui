@@ -13,8 +13,6 @@ const Sidebar = () => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
   const [isCollapsed, setIsCollapsed] = useState(false)
-  const { adminNm, auth } = getUser()
-  const role = auth.replace(Const.ROLE_PREFIX, "")
 
   return (
     <Box
@@ -39,7 +37,7 @@ const Sidebar = () => {
           <SidebarHeader isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
 
           {/* Profile */}
-          {!isCollapsed && <SidebarProfile adminNm={adminNm} role={role} />}
+          {!isCollapsed && <SidebarProfile />}
 
           {/* Menus */}
           <SidebarMenu isCollapsed={isCollapsed} />

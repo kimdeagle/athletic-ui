@@ -46,7 +46,7 @@ export const removeRefreshToken = () => {
 }
 
 /**
- * 3. user infomation
+ * 3. user information
  */
 export const getUser = () => {
   return cookies.get(USER_COOKIE_NAME)

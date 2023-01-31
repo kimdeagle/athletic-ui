@@ -7,16 +7,14 @@ import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
-import {useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 
-const Header = ({handleLogout}) => {
+const Header = ({authenticated, handleLogout}) => {
   const navigate = useNavigate()
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
   const colorMode = useContext(ColorModeContext)
   const [anchorEl, setAnchorEl] = useState(null)
-  const authenticated = useSelector(state => state.auth.authenticated)
 
   const handleClick = (e) => {
     setAnchorEl(e.currentTarget)
