@@ -48,7 +48,10 @@ const Header = ({authenticated, handleLogout}) => {
           }}
         >
           {authenticated &&
-            <MenuItem onClick={() => navigate('/my')}>
+            <MenuItem onClick={() => {
+              setAnchorEl(null)
+              navigate('/my')
+            }}>
               <ManageAccountsOutlinedIcon />
               <Typography
                 variant="body1"

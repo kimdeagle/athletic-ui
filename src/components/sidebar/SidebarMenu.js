@@ -1,6 +1,6 @@
 import React from "react";
 import * as Icons from "@mui/icons-material";
-import {Box, Typography, useTheme} from "@mui/material";
+import {Box, useTheme} from "@mui/material";
 import {tokens} from "../../theme";
 import {MenuItem, SubMenu} from "react-pro-sidebar";
 import {useLocation, useNavigate} from "react-router-dom";
@@ -59,7 +59,7 @@ const SidebarMenu = ({isCollapsed}) => {
         style={{ color: colors.grey[100] }}
         onClick={() => navigate(to)}
       >
-        <Typography>{title}</Typography>
+        {title}
       </MenuItem>
     )
   }

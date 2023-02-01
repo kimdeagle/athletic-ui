@@ -1,4 +1,4 @@
-import {tokens} from "../../theme";
+import {tokens} from "../../../theme";
 import {
   Box,
   Button,
@@ -9,8 +9,8 @@ import {
   Typography,
   useTheme
 } from "@mui/material";
-import {useEffect, useLayoutEffect, useState} from "react";
-import {getRememberId, removeRememberId, setRememberId} from "../../utils/cookie";
+import {useLayoutEffect, useState} from "react";
+import {getRememberId, removeRememberId, setRememberId} from "../../../utils/cookie";
 import {useNavigate} from "react-router-dom";
 
 const Login = ({handleLogin}) => {
@@ -37,7 +37,7 @@ const Login = ({handleLogin}) => {
     }
   }
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const rememberId = getRememberId()
     if (rememberId) {
       setLoginId(rememberId)

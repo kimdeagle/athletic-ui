@@ -10,19 +10,18 @@ import React, {Suspense, useEffect} from "react";
 import * as Const from "./utils/const";
 import jwtDecode from "jwt-decode";
 import {getMenuList, removeMenuList} from "./redux/menu";
+import routes from "./routes";
+import Loading from "./components/etc/Loading"
 
-const Login = React.lazy(() => import("./scenes/login"))
-const Join = React.lazy(() => import("./scenes/join"))
-const ResetPassword = React.lazy(() => import("./scenes/resetPassword"))
-const NotFound = React.lazy(() => import("./scenes/notFound"))
-const Home = React.lazy(() => import("./scenes/home"))
+const Login = React.lazy(() => import("./scenes/public/login"))
+const Join = React.lazy(() => import("./scenes/public/join"))
+const ResetPassword = React.lazy(() => import("./scenes/public/resetPassword"))
+const NotFound = React.lazy(() => import("./scenes/etc/notFound"))
 
 const Header = React.lazy(() => import("./components/header"))
 const Sidebar = React.lazy(() => import("./components/sidebar"))
-const Loading = React.lazy(() => import("./components/Loading"))
-const PrivateRoute = React.lazy(() => import("./components/PrivateRoute"))
+const PrivateRoute = React.lazy(() => import("./components/etc/PrivateRoute"))
 
-//TODO 로그인 화면 표시 안 됨 -> 해결하기
 function App() {
   const [theme, colorMode] = useMode()
   const authenticated = useSelector(state => state.auth.authenticated)
@@ -105,6 +104,16 @@ function App() {
     }
   }
 
+  /* set private route list */
+  const routeList = (
+    routes.map(route => {
+      const Element = route.element
+      return (
+        <Route key={route.path} path={route.path} element={<Element />} />
+      )
+    })
+  )
+
   /* clear interval when change auth interval */
   useEffect(() => {
     return () => {
@@ -134,7 +143,7 @@ function App() {
                 <Route path="/reset-password" element={<ResetPassword />} />
               </Route>
               <Route element={<PrivateRoute authenticated={authenticated} requireAuth={true} />}>
-                <Route path="/" element={<Home />} />
+                {routeList}
               </Route>
               <Route path="/*" element={<NotFound />} />
             </Routes>

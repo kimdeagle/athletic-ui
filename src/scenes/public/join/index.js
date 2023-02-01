@@ -1,7 +1,7 @@
 import {Box, Button, TextField, Typography, useTheme} from "@mui/material";
 import {useState} from "react";
-import {tokens} from "../../theme";
-import * as Apis from "../../apis";
+import {tokens} from "../../../theme";
+import * as Apis from "../../../apis";
 import {useNavigate} from "react-router-dom";
 
 const Join = () => {

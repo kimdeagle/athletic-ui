@@ -21,6 +21,9 @@ const Sidebar = () => {
         "& .pro-icon-wrapper": {
           backgroundColor: "transparent !important"
         },
+        "& .pro-menu-item": {
+          fontSize: "15px !important"
+        },
         "& .pro-inner-item:hover": {
           color: "#868dfb !important"
         },

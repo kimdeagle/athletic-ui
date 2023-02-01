@@ -1,4 +1,4 @@
-import ContentHeader from "../../components/ContentHeader";
+import ContentHeader from "../../../components/content/ContentHeader";
 import {Box} from "@mui/material";
 
 const Home = () => {
@@ -6,6 +6,9 @@ const Home = () => {
     <Box m="20px">
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <ContentHeader title="HOME" subTitle="Welcome to Home" />
+      </Box>
+      <Box>
+        Home Contents...
       </Box>
     </Box>
   )
