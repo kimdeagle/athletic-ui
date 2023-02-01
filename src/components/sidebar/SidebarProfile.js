@@ -1,3 +1,4 @@
+import React from "react";
 import {Box, Typography, useTheme} from "@mui/material";
 import {tokens} from "../../theme";
 import ArrowCircleRightOutlinedIcon from '@mui/icons-material/ArrowCircleRightOutlined';
@@ -54,4 +55,4 @@ const SidebarProfile = () => {
   )
 }
 
-export default SidebarProfile
+export default React.memo(SidebarProfile)

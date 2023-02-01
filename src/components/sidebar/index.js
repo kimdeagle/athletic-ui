@@ -3,10 +3,8 @@ import {ProSidebar, Menu} from "react-pro-sidebar";
 import 'react-pro-sidebar/dist/css/styles.css';
 import { Box, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
-import {getUser} from "../../utils/cookie";
 import SidebarHeader from "./SidebarHeader";
 import SidebarProfile from "./SidebarProfile";
-import * as Const from "../../utils/const"
 import SidebarMenu from "./SidebarMenu";
 
 const Sidebar = () => {
@@ -47,4 +45,4 @@ const Sidebar = () => {
   )
 }
 
-export default Sidebar
+export default React.memo(Sidebar)

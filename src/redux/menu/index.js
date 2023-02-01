@@ -21,10 +21,20 @@ export const menuSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getMenuList.fulfilled, (state, action) => {
-        state.menuList = action.payload
+        state.menuList = processMenuList(action.payload).filter(menu => menu.upMenuNo === null)
       })
   }
 })
+
+const processMenuList = (menuList) => {
+  menuList.map(menu => {
+    const children = menuList.filter(m => menu.menuNo === m.upMenuNo).sort((a, b) => a.sortSeq - b.sortSeq)
+    if (children) {
+      menu.children = processMenuList(children)
+    }
+  })
+  return menuList
+}
 
 export const { setMenuList, removeMenuList } = menuSlice.actions
 

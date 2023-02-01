@@ -1,8 +1,6 @@
 import {ColorModeContext, useMode} from "./theme";
 import {CssBaseline, ThemeProvider} from "@mui/material";
 import {Route, Routes} from "react-router-dom";
-import Header from "./components/header";
-import Sidebar from "./components/sidebar";
 import * as Apis from "./apis"
 import {useDispatch, useSelector} from "react-redux";
 import {resetAccessToken, setAccessToken} from "./redux/auth";
@@ -11,16 +9,20 @@ import axios from "axios";
 import React, {Suspense, useEffect} from "react";
 import * as Const from "./utils/const";
 import jwtDecode from "jwt-decode";
-import Loading from "./components/Loading";
-import PrivateRoute from "./components/PrivateRoute";
+import {getMenuList, removeMenuList} from "./redux/menu";
 
 const Login = React.lazy(() => import("./scenes/login"))
 const Join = React.lazy(() => import("./scenes/join"))
 const ResetPassword = React.lazy(() => import("./scenes/resetPassword"))
-const Home = React.lazy(() => import("./scenes/home"))
 const NotFound = React.lazy(() => import("./scenes/notFound"))
+const Home = React.lazy(() => import("./scenes/home"))
 
-//TODO 메뉴리스트 저장 방식 확인 -> state, cookie, localStorage, other.. (api는 완료)
+const Header = React.lazy(() => import("./components/header"))
+const Sidebar = React.lazy(() => import("./components/sidebar"))
+const Loading = React.lazy(() => import("./components/Loading"))
+const PrivateRoute = React.lazy(() => import("./components/PrivateRoute"))
+
+//TODO 로그인 화면 표시 안 됨 -> 해결하기
 function App() {
   const [theme, colorMode] = useMode()
   const authenticated = useSelector(state => state.auth.authenticated)
@@ -37,6 +39,7 @@ function App() {
       setAxiosHeaders(accessToken)
       const user = jwtDecode(accessToken)
       setUser({user, expires: refreshTokenExpiresIn})
+      dispatch(getMenuList())
       return true;
     } catch (e) {
       console.log(e)
@@ -58,6 +61,7 @@ function App() {
       dispatch(resetAccessToken())
       removeRefreshToken()
       removeUser()
+      dispatch(removeMenuList())
       window.location.replace('/login')
     }
   }
@@ -118,11 +122,11 @@ function App() {
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
+        <Suspense fallback={<Loading />}>
         <div className="app">
           {authenticated && <Sidebar />}
           <main className="content">
             <Header authenticated={authenticated} handleLogout={handleLogout} />
-          <Suspense fallback={<Loading />}>
             <Routes>
               <Route element={<PrivateRoute authenticated={authenticated} requireAuth={false} />}>
                 <Route path="/login" element={<Login handleLogin={handleLogin} />} />
@@ -134,9 +138,9 @@ function App() {
               </Route>
               <Route path="/*" element={<NotFound />} />
             </Routes>
-          </Suspense>
           </main>
         </div>
+        </Suspense>
       </ThemeProvider>
     </ColorModeContext.Provider>
   )
