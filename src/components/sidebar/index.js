@@ -3,9 +3,9 @@ import {ProSidebar, Menu} from "react-pro-sidebar";
 import 'react-pro-sidebar/dist/css/styles.css';
 import { Box, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
-import SidebarHeader from "./SidebarHeader";
-import SidebarProfile from "./SidebarProfile";
-import SidebarMenu from "./SidebarMenu";
+import SidebarHeader from "./header";
+import SidebarProfile from "./profile";
+import SidebarMenu from "./menu";
 
 const Sidebar = () => {
   const theme = useTheme()
@@ -34,13 +34,11 @@ const Sidebar = () => {
     >
       <ProSidebar collapsed={isCollapsed}>
         <Menu iconShape="square">
-          {/* Logo and Menu Icon */}
+          {/* Header */}
           <SidebarHeader isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
-
           {/* Profile */}
           {!isCollapsed && <SidebarProfile />}
-
-          {/* Menus */}
+          {/* Menu */}
           <SidebarMenu isCollapsed={isCollapsed} />
         </Menu>
       </ProSidebar>

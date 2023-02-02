@@ -1,12 +1,11 @@
-import {Box, IconButton, Menu, MenuItem, Typography, useTheme} from "@mui/material";
+import {Box, IconButton, Menu, MenuItem, MenuList, Typography, useTheme} from "@mui/material";
 import {useContext, useState} from "react";
 import { ColorModeContext, tokens } from "../../theme";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined';
-import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
-import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import ExitToAppOutlinedIcon from '@mui/icons-material/ExitToAppOutlined';
 import {useNavigate} from "react-router-dom";
 
 const Header = ({authenticated, handleLogout}) => {
@@ -16,68 +15,71 @@ const Header = ({authenticated, handleLogout}) => {
   const colorMode = useContext(ColorModeContext)
   const [anchorEl, setAnchorEl] = useState(null)
 
-  const handleClick = (e) => {
-    setAnchorEl(e.currentTarget)
-  }
-
-  const handleClose = () => {
+  const handleGoMyInfo = async () => {
     setAnchorEl(null)
+    setTimeout(() => navigate('/my'), 10)
   }
 
   return (
     <Box display="flex" justifyContent="end" p={2}>
       <Box display="flex">
-        <IconButton onClick={colorMode.toggleColorMode}>
-          {theme.palette.mode === 'dark' ? (
-            <DarkModeOutlinedIcon />
-          ) : (
-            <LightModeOutlinedIcon />
-          )}
-        </IconButton>
+        {/* toggle theme icon button */}
         <IconButton
-          onClick={handleClick}
+          size="large"
+          onClick={colorMode.toggleColorMode}
         >
-          <PersonOutlinedIcon />
-        </IconButton>
-        <Menu
-          open={!!anchorEl}
-          anchorEl={anchorEl}
-          onClose={handleClose}
-          MenuListProps={{
-
-          }}
-        >
-          {authenticated &&
-            <MenuItem onClick={() => {
-              setAnchorEl(null)
-              navigate('/my')
-            }}>
-              <ManageAccountsOutlinedIcon />
-              <Typography
-                variant="body1"
-                color={colors.grey[100]}
-                fontWeight="bold"
-                ml={1}
-              >
-                내 정보
-              </Typography>
-            </MenuItem>
+          {theme.palette.mode === 'dark'
+            ? <DarkModeOutlinedIcon />
+            : <LightModeOutlinedIcon />
           }
-          <MenuItem onClick={() => authenticated ? handleLogout() : navigate('/login')}>
-            {authenticated
-              ? <LogoutOutlinedIcon fontSize="small" />
-              : <LoginOutlinedIcon fontSize="small" />
-            }
-            <Typography
-              variant="body1"
-              color={colors.grey[100]}
-              fontWeight="bold"
-              ml={1}
+        </IconButton>
+
+        {/* my information icon button and submenu */}
+        {authenticated &&
+          <>
+            <IconButton
+              size="large"
+              onClick={(e) => setAnchorEl(e.currentTarget)}
             >
-              {authenticated ? '로그아웃' : '로그인'}
-            </Typography>
-          </MenuItem>
-        </Menu>
+              <AccountCircleOutlinedIcon />
+            </IconButton>
+              <Menu
+                open={!!anchorEl}
+                anchorEl={anchorEl}
+                onClose={() => setAnchorEl(null)}
+                sx={{
+                  "& .MuiMenuItem-root": {
+                    marginBottom: '5px'
+                  },
+                }}
+              >
+              <MenuList>
+                <MenuItem onClick={handleGoMyInfo}>
+                  <InfoOutlinedIcon />
+                  <Typography
+                    variant="body1"
+                    color={colors.grey[100]}
+                    fontWeight="bold"
+                    ml={1}
+                  >
+                    내 정보
+                  </Typography>
+                </MenuItem>
+                <MenuItem onClick={handleLogout}>
+                  <ExitToAppOutlinedIcon />
+                  <Typography
+                    variant="body1"
+                    color={colors.grey[100]}
+                    fontWeight="bold"
+                    ml={1}
+                  >
+                    로그아웃
+                  </Typography>
+                </MenuItem>
+              </MenuList>
+              </Menu>
+          </>
+        }
       </Box>
     </Box>
   )

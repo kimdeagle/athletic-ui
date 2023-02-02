@@ -109,7 +109,7 @@ function App() {
     routes.map(route => {
       const Element = route.element
       return (
-        <Route key={route.path} path={route.path} element={<Element />} />
+        <Route key={route.path} path={route.path} element={<Element title={route.title} />} />
       )
     })
   )

@@ -1,9 +1,9 @@
 import React from "react";
 import {Box, Typography, useTheme} from "@mui/material";
-import {tokens} from "../../theme";
+import {tokens} from "../../../theme";
 import ArrowCircleRightOutlinedIcon from '@mui/icons-material/ArrowCircleRightOutlined';
-import {getUser} from "../../utils/cookie";
-import * as Const from "../../utils/const";
+import {getUser} from "../../../utils/cookie";
+import * as Const from "../../../utils/const";
 
 const SidebarProfile = () => {
   const theme = useTheme()
@@ -37,7 +37,7 @@ const SidebarProfile = () => {
         >
           {auth.replace(Const.ROLE_PREFIX, "")}
         </Typography>
-        <Box display="flex" justifyContent="center" alignItems="center">
+        <Box display="flex" justifyContent="center" alignItems="center" mr={2}>
           <ArrowCircleRightOutlinedIcon
             fontSize="small"
             color="warning"

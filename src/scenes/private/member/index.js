@@ -1,12 +1,14 @@
 import ContentHeader from "../../../components/content/ContentHeader";
 import {Box} from "@mui/material";
 
-const Member = () => {
+//TODO 버튼별 함수..
+const Member = (props) => {
+  const buttonProps = {
+    excelUpload: { disabled: false, onClick: () => {} },
+  }
   return (
     <Box m="20px">
-      <Box display="flex" justifyContent="space-between" alignItems="center">
-        <ContentHeader title="MEMBER" subTitle="Member Management Page" />
-      </Box>
+      <ContentHeader title={props.title} subTitle="Member Management Page" buttonProps={buttonProps} />
       <Box>
         Member Management Contents...
       </Box>
