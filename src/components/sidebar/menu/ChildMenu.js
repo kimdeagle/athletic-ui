@@ -4,7 +4,7 @@ import {useTheme} from "@mui/material";
 import {tokens} from "../../../theme";
 import {useLocation, useNavigate} from "react-router-dom";
 
-const ParentMenu = ({title, icon, to}) => {
+const ChildMenu = ({title, icon, to}) => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
   const navigate = useNavigate()
@@ -22,4 +22,4 @@ const ParentMenu = ({title, icon, to}) => {
   )
 }
 
-export default ParentMenu
+export default ChildMenu
