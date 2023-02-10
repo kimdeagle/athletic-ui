@@ -10,8 +10,14 @@ import {
   useTheme
 } from "@mui/material";
 import {useLayoutEffect, useState} from "react";
-import {getRememberId, removeRememberId, setRememberId} from "../../../utils/cookie";
+import {getRememberId, removeRememberId, setRefreshToken, setRememberId, setUser} from "../../../utils/cookie";
 import {useNavigate} from "react-router-dom";
+import * as Apis from "../../../apis";
+import {setAccessToken} from "../../../redux/auth";
+import jwtDecode from "jwt-decode";
+import {getMenuList} from "../../../redux/menu";
+import {useDispatch} from "react-redux";
+import axios from "axios";
 
 const Login = ({handleLogin}) => {
   const theme = useTheme()
@@ -19,21 +25,38 @@ const Login = ({handleLogin}) => {
   const [isRememberId, setIsRememberId] = useState(false)
   const [loginId, setLoginId] = useState('')
   const [loginPw, setLoginPw] = useState('')
+  const dispatch = useDispatch()
   const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    const isLoginSuccess = await handleLogin(loginId, loginPw)
-    if (isLoginSuccess) {
+    try {
+      const token = await Apis.auth.login({loginId, loginPw})
+      const {accessToken, accessTokenExpiresIn, refreshToken, refreshTokenExpiresIn} = token
+
+      dispatch(setAccessToken({accessToken, accessTokenExpiresIn}))
+      setRefreshToken({refreshToken, refreshTokenExpiresIn})
+      axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`
+      const user = jwtDecode(accessToken)
+      setUser({user, expires: refreshTokenExpiresIn})
+      dispatch(getMenuList())
+
       if (isRememberId) {
         setRememberId(loginId)
       } else {
         removeRememberId()
       }
-      navigate('/')
-    } else {
-      return false
+      navigate('/', {replace: true})
+
+    } catch (e) {
+      console.log(e)
+      const status = e.response.status
+      if (status === 401) {
+        alert("아이디 또는 비밀번호를 확인해주세요.")
+      } else {
+        alert(e.response.data.message)
+      }
     }
   }
 

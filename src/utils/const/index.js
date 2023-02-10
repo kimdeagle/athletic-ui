@@ -15,4 +15,4 @@ export const RE_ISSUE_ACCESS_TOKEN_INTERVAL_TIMEOUT = 1000 * 60 * 30;
 export const ROLE_PREFIX = "ROLE_"
 
 /* hide button pathname list */
-export const HIDE_BUTTON_PATHNAME_LIST = ['/', '/system']
+export const HIDE_BUTTON_PATHNAME_LIST = ['/', '/my', '/system']

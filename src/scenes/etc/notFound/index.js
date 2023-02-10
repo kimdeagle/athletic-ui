@@ -1,9 +1,7 @@
-import {Box, Link, Typography, useTheme} from "@mui/material";
+import {Box, Typography, useTheme} from "@mui/material";
 import {tokens} from "../../../theme";
-import {useNavigate} from "react-router-dom";
 
 const NotFound = () => {
-  const navigate = useNavigate()
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
   return (
@@ -13,8 +11,8 @@ const NotFound = () => {
       flexDirection="column"
       alignItems="center"
       width="100%"
-      height="100vh"
-      m="10px auto"
+      height="94%"
+      m="0 auto"
     >
       <Typography
         variant="h3"
@@ -24,15 +22,6 @@ const NotFound = () => {
       >
         페이지를 찾을 수 없습니다.
       </Typography>
-      <Link
-        component="button"
-        variant="h3"
-        underline="hover"
-        color={colors.greenAccent[500]}
-        onClick={() => navigate(-1)}
-      >
-        돌아가기
-      </Link>
     </Box>
   )
 }

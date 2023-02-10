@@ -2,36 +2,23 @@ import React from "react";
 import {Box, IconButton, Typography, useTheme} from "@mui/material";
 import {tokens} from "../../../theme";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import {MenuItem} from "react-pro-sidebar";
+import {useProSidebar} from "react-pro-sidebar";
 
-const SidebarHeader = ({isCollapsed, setIsCollapsed}) => {
+const SidebarHeader = () => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
+  const { collapsed, collapseSidebar } = useProSidebar()
+
   return (
-    <MenuItem
-      onClick={() => setIsCollapsed(!isCollapsed)}
-      icon={isCollapsed ? <MenuOutlinedIcon /> : undefined}
-      style={{
-        margin: "10px 0 20px 0",
-        color: colors.grey[100]
-      }}
+    <Box
+      display='flex'
+      justifyContent='center'
+      alignItems='center'
+      m='20px 0 20px 0'
     >
-      {!isCollapsed && (
-        <Box
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
-          ml="15px"
-        >
-          <Typography variant="h3" fontWeight="bold" color={colors.grey[100]}>
-            Athletic
-          </Typography>
-          <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
-            <MenuOutlinedIcon />
-          </IconButton>
-        </Box>
-      )}
-    </MenuItem>
+      {!collapsed && <Typography variant='h3' fontWeight='bold' color={colors.grey[100]} mr='30px'>Athletic</Typography>}
+      <IconButton sx={{ mr: collapsed ? '5px' : undefined }} onClick={() => collapseSidebar()}><MenuOutlinedIcon /></IconButton>
+    </Box>
   )
 }
 

@@ -28,12 +28,12 @@ export const menuSlice = createSlice({
 
 const processMenuList = (menuList) => {
   menuList.map(menu => {
-    const children = menuList.filter(m => menu.menuNo === m.upMenuNo).sort((a, b) => a.sortSeq - b.sortSeq)
+    const children = menuList.filter(m => menu.menuNo === m.upMenuNo)
     if (children) {
       menu.children = processMenuList(children)
     }
   })
-  return menuList
+  return menuList.sort((a, b) => a.sortSeq - b.sortSeq)
 }
 
 export const { setMenuList, removeMenuList } = menuSlice.actions

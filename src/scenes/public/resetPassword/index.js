@@ -20,7 +20,7 @@ const ResetPassword = () => {
       const data = await Apis.auth.resetPassword(params)
       if (data) {
         alert("임시 비밀번호를 이메일로 전송했습니다.\n확인 후 로그인 하세요.")
-        navigate("/login")
+        navigate("/login", {replace: true})
       }
     } catch (e) {
       console.log(e)

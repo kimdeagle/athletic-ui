@@ -135,7 +135,7 @@ const Join = () => {
     try {
       const data = await Apis.auth.join(params)
       alert(data.adminNm + "님. 회원가입 요청이 완료되었습니다.");
-      navigate("/login")
+      navigate("/login", {replace: true})
     } catch (e) {
       console.log(e)
     }

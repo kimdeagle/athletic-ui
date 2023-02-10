@@ -1,49 +1,67 @@
 import React, {useState} from "react";
-import {ProSidebar, Menu} from "react-pro-sidebar";
-import 'react-pro-sidebar/dist/css/styles.css';
+import {Sidebar, Menu, useProSidebar} from "react-pro-sidebar";
 import { Box, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
 import SidebarHeader from "./header";
 import SidebarProfile from "./profile";
 import SidebarMenu from "./menu";
 
-const Sidebar = () => {
+const ProSidebar = () => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
-  const [isCollapsed, setIsCollapsed] = useState(false)
+  const { collapsed } = useProSidebar()
+
+  const menuItemStyles = {
+    root: {
+      fontSize: '15px',
+      fontWeight: 500
+    },
+    icon: {
+      color: colors.sidebar.menu.icon
+    },
+    subMenuContent: () => ({
+      backgroundColor: !collapsed ? 'transparent' : colors.sidebar.menu.menuContent,
+      paddingLeft: !collapsed ? '20px' : '10px'
+    }),
+    button: ({active}) => ({
+      color: active ? colors.sidebar.menu.active.color : undefined,
+      fontWeight: active ? 600 : undefined,
+      "&:hover": {
+        fontWeight: 600,
+        color: colors.sidebar.menu.hover.color,
+        backgroundColor: colors.sidebar.menu.hover.backgroundColor
+      }
+    }),
+    label: ({open}) => ({
+      fontWeight: open ? 600 : undefined
+    })
+  }
 
   return (
     <Box
       sx={{
-        "& .pro-sidebar-inner": {
-          background: `${colors.primary[400]} !important`
-        },
-        "& .pro-icon-wrapper": {
-          backgroundColor: "transparent !important"
-        },
-        "& .pro-menu-item": {
-          fontSize: "15px !important"
-        },
-        "& .pro-inner-item:hover": {
-          color: "#868dfb !important"
-        },
-        "& .pro-menu-item.active": {
-          color: "#6870fa !important"
-        }
+        display: 'flex',
+        height: '100vh',
       }}
     >
-      <ProSidebar collapsed={isCollapsed}>
-        <Menu iconShape="square">
+      <Sidebar
+        backgroundColor={colors.sidebar.sidebar.backgroundColor}
+        rootStyles={{
+          border: 'none',
+          color: colors.sidebar.sidebar.color
+        }}
+      >
+        <Menu menuItemStyles={menuItemStyles}>
           {/* Header */}
-          <SidebarHeader isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
+          <SidebarHeader />
           {/* Profile */}
-          {!isCollapsed && <SidebarProfile />}
+          <SidebarProfile />
           {/* Menu */}
-          <SidebarMenu isCollapsed={isCollapsed} />
+          <SidebarMenu />
         </Menu>
-      </ProSidebar>
+      </Sidebar>
     </Box>
   )
 }
 
-export default React.memo(Sidebar)
+export default React.memo(ProSidebar)

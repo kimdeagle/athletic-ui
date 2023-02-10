@@ -16,14 +16,14 @@ const ContentHeader = ({ title, subTitle, buttonProps }) => {
   }
 
   return (
-    <Box display="flex" justifyContent="space-between" alignItems="center">
-      <Box mb="30px">
+    <Box display="flex" justifyContent="space-between" alignItems="center" mb={7}>
+      <Box>
         {title &&
           <Typography
             variant="h2"
             color={colors.grey[100]}
             fontWeight="bold"
-            sx={{ mb: "5px" }}
+            mb={1}
           >
             {title}
           </Typography>}
@@ -31,6 +31,7 @@ const ContentHeader = ({ title, subTitle, buttonProps }) => {
           <Typography
             variant="h5"
             color={colors.greenAccent[400]}
+            ml={1}
           >
             {subTitle}
           </Typography>}

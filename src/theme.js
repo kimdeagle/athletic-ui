@@ -61,6 +61,26 @@ export const tokens = (mode) => ({
         800: "#2a2d64",
         900: "#151632",
       },
+      sidebar: {
+        sidebar: {
+          backgroundColor: '#0b2948',
+          color: '#8ba1b7',
+        },
+        menu: {
+          menuContent: '#082440',
+          icon: '#59d0ff',
+          hover: {
+            backgroundColor: '#00458b',
+            color: '#b6c8d9',
+          },
+          active: {
+            color: '#59d0ff',
+          },
+          disabled: {
+            color: '#3e5e7e',
+          },
+        },
+      },
     }
     : {
       grey: {
@@ -117,6 +137,26 @@ export const tokens = (mode) => ({
         700: "#a4a9fc",
         800: "#c3c6fd",
         900: "#e1e2fe",
+      },
+      sidebar: {
+        sidebar: {
+          backgroundColor: '#ececec',
+          color: '#607489',
+        },
+        menu: {
+          menuContent: '#fbfcfd',
+          icon: '#0098e5',
+          hover: {
+            backgroundColor: '#c5e4ff',
+            color: '#44596e',
+          },
+          active: {
+            color: '#0098e5',
+          },
+          disabled: {
+            color: '#9fb6cf',
+          },
+        },
       },
     }),
 });

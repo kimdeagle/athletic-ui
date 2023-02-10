@@ -1,24 +1,26 @@
+import React, {useEffect, useState} from "react";
 import {SubMenu} from "react-pro-sidebar";
-import React from "react";
-import {useTheme} from "@mui/material";
-import {tokens} from "../../../theme";
 import {useLocation} from "react-router-dom";
 
 const ParentMenu = ({title, icon, to, children}) => {
-  const theme = useTheme()
-  const colors = tokens(theme.palette.mode)
+  const { pathname } = useLocation()
+  const [open, setOpen] = useState(false)
 
-  const location = useLocation()
+  useEffect(() => {
+    setOpen(pathname.includes(to))
+  }, [pathname])
+
   return (
     <SubMenu
-      title={title}
+      label={title}
       icon={icon}
-      defaultOpen={location.pathname.includes(to)}
-      style={{ color: colors.grey[100] }}
+      // defaultOpen={pathname.includes(to)}
+      open={open}
+      onClick={() => setOpen((open) => !open)}
     >
       {children}
     </SubMenu>
   )
 }
 
-export default ParentMenu
+export default React.memo(ParentMenu)

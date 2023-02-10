@@ -4,12 +4,15 @@ import {tokens} from "../../../theme";
 import ArrowCircleRightOutlinedIcon from '@mui/icons-material/ArrowCircleRightOutlined';
 import {getUser} from "../../../utils/cookie";
 import * as Const from "../../../utils/const";
+import {useProSidebar} from "react-pro-sidebar";
 
 const SidebarProfile = () => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
+  const { collapsed } = useProSidebar()
   const { adminNm, auth, loginAt } = getUser()
   return (
+    !collapsed &&
     <Box mb="25px">
       <Box display="flex" justifyContent="center" alignItems="center">
         <img
