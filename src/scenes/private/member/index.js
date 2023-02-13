@@ -3,9 +3,15 @@ import {Box} from "@mui/material";
 
 //TODO 버튼별 함수..
 const Member = (props) => {
-  const buttonProps = {
-    excelUpload: { disabled: false, onClick: () => {} },
+
+  const handleExcelUpload = () => {
+    alert('excel upload')
   }
+
+  const buttonProps = {
+    excelUpload: { disabled: false, onClick: handleExcelUpload },
+  }
+
   return (
     <Box m="20px">
       <ContentHeader title={props.title} subTitle="Member Management Page" buttonProps={buttonProps} />

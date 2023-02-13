@@ -3,6 +3,7 @@ import {useState} from "react";
 import {tokens} from "../../../theme";
 import * as Apis from "../../../apis";
 import {useNavigate} from "react-router-dom";
+import * as utils from "../../../utils/util";
 
 const Join = () => {
   const navigate = useNavigate()
@@ -60,70 +61,19 @@ const Join = () => {
   }
 
   const validatePassword = (e) => {
-    const password = e.target.value
-    /*
-     * validate password
-     * 1. 8~20자리
-     * 2. 공백X
-     * 3. 특수문자 1개 이상
-     * 4. 영문 1개 이상
-     */
-    if (password === '') {
-      setValidPassword({
-        isValid: false,
-        helperText: ''
-      })
-    } else {
-      if (password.length < 8 || password.length > 20) {
-        setValidPassword({
-          isValid: false,
-          helperText: '8 ~ 20자리로 입력해주세요.'
-        })
-      } else if (password.search(/\s/g) !== -1) {
-        setValidPassword({
-          isValid: false,
-          helperText: '공백없이 입력해주세요.'
-        })
-      } else if (password.search(/[~!@#$%^&*()_+]/g) === -1) {
-        setValidPassword({
-          isValid: false,
-          helperText: '특수문자 1개 이상 입력해주세요.'
-        })
-      } else if (password.search(/[a-zA-z]/g) === -1) {
-        setValidPassword({
-          isValid: false,
-          helperText: '영문 1개 이상 입력해주세요.'
-        })
-      } else {
-        setValidPassword({
-          isValid: true,
-          helperText: ''
-        })
-      }
-    }
     setParams({...params, [e.target.name]: e.target.value})
+    utils.validatePw({ password: e.target.value, setValidPassword })
+
+    const password = e.target.value
+    const checkPassword = params['repeatPw']
+    utils.checkEqualPw({password, checkPassword, setEqualPassword})
   }
 
   const checkEqualPassword = (e) => {
+    setParams({...params, [e.target.name]: e.target.value})
     const password = params['loginPw']
     const checkPassword = e.target.value
-    //check equal password
-    if (checkPassword === '') {
-      setEqualPassword({
-        isEqual: false,
-        helperText: ''
-      })
-    } else if (password === checkPassword) {
-      setEqualPassword({
-        isEqual: true,
-        helperText: '일치'
-      })
-    } else if (password !== checkPassword) {
-      setEqualPassword({
-        isEqual: false,
-        helperText: '불일치'
-      })
-    }
+    utils.checkEqualPw({password, checkPassword, setEqualPassword})
   }
 
   const handleSubmit = async (e) => {

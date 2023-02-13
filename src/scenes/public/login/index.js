@@ -19,7 +19,7 @@ import {getMenuList} from "../../../redux/menu";
 import {useDispatch} from "react-redux";
 import axios from "axios";
 
-const Login = ({handleLogin}) => {
+const Login = () => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
   const [isRememberId, setIsRememberId] = useState(false)

@@ -11,16 +11,30 @@ const request = async (data, thunkAPI) => {
     .then(res => res.data)
 }
 
-export const get = async (params, thunkAPI) => {
+export const GET = async (params, thunkAPI) => {
   return await request({
     method: 'get',
     ...params
   }, thunkAPI)
 }
 
-export const post = async (params, thunkAPI) => {
+export const POST = async (params, thunkAPI) => {
   return await request({
     method: 'post',
+    ...params
+  }, thunkAPI)
+}
+
+export const PUT = async (params, thunkAPI) => {
+  return await request({
+    method: 'put',
+    ...params
+  }, thunkAPI)
+}
+
+export const DELETE = async (params, thunkAPI) => {
+  return await request({
+    method: 'delete',
     ...params
   }, thunkAPI)
 }

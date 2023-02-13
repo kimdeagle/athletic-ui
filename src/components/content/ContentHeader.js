@@ -1,12 +1,9 @@
 import {Typography, Box, useTheme, Button} from "@mui/material";
 import { tokens } from "../../theme";
-import {useLocation} from "react-router-dom";
-import * as Const from "../../utils/const";
 
-const ContentHeader = ({ title, subTitle, buttonProps }) => {
+const ContentHeader = ({ title, subTitle, hideButtons, buttonProps }) => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
-  const location = useLocation()
 
   const defaultButtonProps = {
     excelUpload: buttonProps === undefined || buttonProps.excelUpload === undefined ? { disabled: true, onClick: null } : buttonProps.excelUpload,
@@ -36,7 +33,7 @@ const ContentHeader = ({ title, subTitle, buttonProps }) => {
             {subTitle}
           </Typography>}
       </Box>
-      {!Const.HIDE_BUTTON_PATHNAME_LIST.includes(location.pathname) &&
+      {!hideButtons &&
         <Box
         sx={{
           "& button": {
