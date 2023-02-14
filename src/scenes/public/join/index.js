@@ -4,6 +4,7 @@ import {tokens} from "../../../theme";
 import * as Apis from "../../../apis";
 import {useNavigate} from "react-router-dom";
 import * as utils from "../../../utils/util";
+import {Helmet} from "react-helmet-async";
 
 const Join = () => {
   const navigate = useNavigate()
@@ -92,111 +93,114 @@ const Join = () => {
   }
 
   return (
-    <Box
-      display="flex"
-      justifyContent="center"
-      flexDirection="column"
-      alignItems="center"
-      width="20%"
-      height="100vh"
-      m="10px auto"
-    >
-      <Typography
-        variant="h2"
-        color={colors.grey[100]}
-        fontWeight="bold"
-        mb={3}
+    <>
+      <Helmet title='Join' />
+      <Box
+        display="flex"
+        justifyContent="center"
+        flexDirection="column"
+        alignItems="center"
+        width="20%"
+        height="100vh"
+        m="10px auto"
       >
-        회원가입
-      </Typography>
-      <Box component="form" width="100%" onSubmit={handleSubmit}>
-        <TextField
-          autoFocus
-          required
-          fullWidth
-          id="loginId"
-          name="loginId"
-          variant="outlined"
-          color="info"
-          label="아이디"
-          margin="normal"
-          error={!validLoginId.isValid && validLoginId.helperText !== ''}
-          helperText={validLoginId.helperText}
-          onChange={validateLoginId}
-        />
-        <TextField
-          required
-          fullWidth
-          type="password"
-          id="loginPw"
-          name="loginPw"
-          variant="outlined"
-          color="info"
-          label="비밀번호"
-          margin="normal"
-          error={!validPassword.isValid && validPassword.helperText !== ''}
-          helperText={validPassword.helperText}
-          onChange={validatePassword}
-        />
-        <TextField
-          required
-          fullWidth
-          type="password"
-          id="repeatPw"
-          name="repeatPw"
-          variant="outlined"
-          color="info"
-          label="비밀번호 확인"
-          margin="normal"
-          error={!equalPassword.isEqual && equalPassword.helperText !== ''}
-          helperText={equalPassword.helperText}
-          onChange={checkEqualPassword}
-        />
-        <TextField
-          required
-          fullWidth
-          id="adminNm"
-          name="adminNm"
-          variant="outlined"
-          color="info"
-          label="이름"
-          margin="normal"
-          onChange={handleChange}
-        />
-        <TextField
-          required
-          fullWidth
-          id="email"
-          name="email"
-          variant="outlined"
-          color="info"
-          label="이메일"
-          margin="normal"
-          onChange={handleChange}
-        />
-        <TextField
-          required
-          fullWidth
-          id="mobileNo"
-          name="mobileNo"
-          variant="outlined"
-          color="info"
-          label="휴대폰 번호"
-          margin="normal"
-          onChange={handleChange}
-        />
-        <Button
-          fullWidth
-          type="submit"
-          variant="contained"
-          size="large"
-          color="success"
-          sx={{ mt: 3 }}
+        <Typography
+          variant="h2"
+          color={colors.grey[100]}
+          fontWeight="bold"
+          mb={3}
         >
           회원가입
-        </Button>
+        </Typography>
+        <Box component="form" width="100%" onSubmit={handleSubmit}>
+          <TextField
+            autoFocus
+            required
+            fullWidth
+            id="loginId"
+            name="loginId"
+            variant="outlined"
+            color="info"
+            label="아이디"
+            margin="normal"
+            error={!validLoginId.isValid && validLoginId.helperText !== ''}
+            helperText={validLoginId.helperText}
+            onChange={validateLoginId}
+          />
+          <TextField
+            required
+            fullWidth
+            type="password"
+            id="loginPw"
+            name="loginPw"
+            variant="outlined"
+            color="info"
+            label="비밀번호"
+            margin="normal"
+            error={!validPassword.isValid && validPassword.helperText !== ''}
+            helperText={validPassword.helperText}
+            onChange={validatePassword}
+          />
+          <TextField
+            required
+            fullWidth
+            type="password"
+            id="repeatPw"
+            name="repeatPw"
+            variant="outlined"
+            color="info"
+            label="비밀번호 확인"
+            margin="normal"
+            error={!equalPassword.isEqual && equalPassword.helperText !== ''}
+            helperText={equalPassword.helperText}
+            onChange={checkEqualPassword}
+          />
+          <TextField
+            required
+            fullWidth
+            id="adminNm"
+            name="adminNm"
+            variant="outlined"
+            color="info"
+            label="이름"
+            margin="normal"
+            onChange={handleChange}
+          />
+          <TextField
+            required
+            fullWidth
+            id="email"
+            name="email"
+            variant="outlined"
+            color="info"
+            label="이메일"
+            margin="normal"
+            onChange={handleChange}
+          />
+          <TextField
+            required
+            fullWidth
+            id="mobileNo"
+            name="mobileNo"
+            variant="outlined"
+            color="info"
+            label="휴대폰 번호"
+            margin="normal"
+            onChange={handleChange}
+          />
+          <Button
+            fullWidth
+            type="submit"
+            variant="contained"
+            size="large"
+            color="success"
+            sx={{ mt: 3 }}
+          >
+            회원가입
+          </Button>
+        </Box>
       </Box>
-    </Box>
+    </>
   )
 }
 

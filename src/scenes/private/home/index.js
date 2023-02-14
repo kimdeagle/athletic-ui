@@ -1,10 +1,10 @@
 import ContentHeader from "../../../components/content/ContentHeader";
 import {Box} from "@mui/material";
 
-const Home = (props) => {
+const Home = () => {
   return (
     <Box m="20px">
-      <ContentHeader title={props.title} subTitle="Welcome to Home" hideButtons={true} />
+      <ContentHeader title='Home' subTitle="Welcome to Home" hideButtons={true} />
       <Box>
         Home Contents...
       </Box>

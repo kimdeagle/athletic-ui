@@ -11,6 +11,7 @@ import RouteList from "./routes/RouteList";
 import {ProSidebarProvider} from "react-pro-sidebar";
 import Topbar from "./components/topbar";
 import ProSidebar from "./components/sidebar";
+import {Helmet} from "react-helmet-async";
 
 
 function App() {
@@ -63,20 +64,23 @@ function App() {
   }, [])
 
   return (
-    <ColorModeContext.Provider value={colorMode}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-          <div className="app">
-            <ProSidebarProvider>
-              {authenticated && <ProSidebar />}
-              <main className="content">
-                <Topbar />
-                <RouteList />
-              </main>
-            </ProSidebarProvider>
-          </div>
-      </ThemeProvider>
-    </ColorModeContext.Provider>
+    <>
+      <Helmet titleTemplate='Athletic | %s' defaultTitle='Athletic' />
+      <ColorModeContext.Provider value={colorMode}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+            <div className="app">
+              <ProSidebarProvider>
+                {authenticated && <ProSidebar />}
+                <main className="content">
+                  <Topbar />
+                  <RouteList />
+                </main>
+              </ProSidebarProvider>
+            </div>
+        </ThemeProvider>
+      </ColorModeContext.Provider>
+    </>
   )
 }
 

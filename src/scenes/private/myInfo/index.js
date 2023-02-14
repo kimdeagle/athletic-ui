@@ -15,9 +15,9 @@ import {useDispatch, useSelector} from "react-redux";
 import {useLayoutEffect, useState} from "react";
 import {getMyInfo, resetMyInfo} from "../../../redux/auth";
 import {convertMobileNo} from "../../../utils/util";
-import ChangePwModal from "../../../components/modal/ChangePwModal";
+import ChangePwModal from "../../../components/modal/myInfo/ChangePwModal";
 
-const MyInfo = (props) => {
+const MyInfo = () => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
   const dispatch = useDispatch()
@@ -33,7 +33,7 @@ const MyInfo = (props) => {
 
   return (
     <Box m="20px">
-      <ContentHeader title={props.title} subTitle="내 정보 관리" hideButtons={true} />
+      <ContentHeader title='내 정보' subTitle="내 정보 관리" hideButtons={true} />
       <Box
         maxWidth='50%'
       >

@@ -1,5 +1,6 @@
 import {Box, Typography, useTheme} from "@mui/material";
 import {tokens} from "../../../theme";
+import {Helmet} from "react-helmet-async";
 
 const NotFound = () => {
   const theme = useTheme()
@@ -14,6 +15,7 @@ const NotFound = () => {
       height="94%"
       m="0 auto"
     >
+      <Helmet title='Not Found' />
       <Typography
         variant="h3"
         color={colors.grey[200]}

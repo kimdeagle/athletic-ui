@@ -1,3 +1,4 @@
+import {format} from "date-fns";
 
 export const validatePw = ({ password, setValidPassword }) => {
   /*
@@ -67,4 +68,24 @@ export const convertMobileNo = (mobileNo) => {
    * convert 01012345678 to 010-1234-5678
    */
   return mobileNo === '' || mobileNo === undefined ? '' : mobileNo.substring(0, 3) + '-' + mobileNo.substring(3, 7) + '-' + mobileNo.substring(7)
+}
+
+export const convertMobileNoWithMark = (mobileNo) => {
+  /**
+   * convert 01012345678 to 010-****-5678
+   */
+  return mobileNo === '' || mobileNo === undefined ? '' : mobileNo.substring(0, 3) + '-****-' + mobileNo.substring(7)
+}
+
+export const getAgeFromBirthday = (birthday) => {
+  return birthday === '' || birthday === undefined ? '' : Math.floor((parseInt(format(new Date(), 'yyyyMMdd')) - parseInt(birthday)) / 10000)
+}
+
+export const generateGridIdByNumber = (list) => {
+  list.forEach((item, index) => item.id = index+1)
+  return list
+}
+
+export const formatDateHyphen = (date) => {
+  return date === '' || date === undefined ? '' : date.substring(0, 4) + '-' + date.substring(4, 6) + '-' + date.substring(6)
 }

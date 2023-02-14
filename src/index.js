@@ -7,6 +7,7 @@ import {CookiesProvider} from "react-cookie";
 import {Provider} from "react-redux";
 import store, {persistor} from "./redux/store";
 import {PersistGate} from "redux-persist/integration/react";
+import {HelmetProvider} from "react-helmet-async";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -14,7 +15,9 @@ root.render(
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <BrowserRouter>
-          <App />
+          <HelmetProvider>
+            <App />
+          </HelmetProvider>
         </BrowserRouter>
       </PersistGate>
     </Provider>

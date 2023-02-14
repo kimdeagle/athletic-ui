@@ -8,7 +8,7 @@ const ContentHeader = ({ title, subTitle, hideButtons, buttonProps }) => {
   const defaultButtonProps = {
     excelUpload: buttonProps === undefined || buttonProps.excelUpload === undefined ? { disabled: true, onClick: null } : buttonProps.excelUpload,
     excelDownload: buttonProps === undefined || buttonProps.excelDownload === undefined ? { disabled: true, onClick: null } : buttonProps.excelDownload,
-    create: buttonProps === undefined || buttonProps.create === undefined ? { disabled: true, onClick: null } : buttonProps.create,
+    add: buttonProps === undefined || buttonProps.add === undefined ? { disabled: true, onClick: null } : buttonProps.add,
     search: buttonProps === undefined || buttonProps.search === undefined ? { disabled: true, onClick: null } : buttonProps.search,
   }
 
@@ -63,8 +63,8 @@ const ContentHeader = ({ title, subTitle, hideButtons, buttonProps }) => {
           variant="contained"
           size="small"
           color="success"
-          disabled={defaultButtonProps.create.disabled}
-          onClick={defaultButtonProps.create.onClick}
+          disabled={defaultButtonProps.add.disabled}
+          onClick={defaultButtonProps.add.onClick}
         >
           신규
         </Button>
