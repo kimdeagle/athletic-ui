@@ -52,12 +52,7 @@ const Login = () => {
 
     } catch (e) {
       console.log(e)
-      const status = e.response.status
-      if (status === 401) {
-        alert("아이디 또는 비밀번호를 확인해주세요.")
-      } else {
-        alert(e.response.data.message)
-      }
+      alert(e.response.data.message)
     }
   }
 

@@ -36,7 +36,7 @@ export const getMyInfo = async (params, thunkAPI) => {
   }, thunkAPI)
 }
 
-export const changeLoginPw = async (params, thunkAPI) => {
+export const changePassword = async (params, thunkAPI) => {
   return await apiService.PUT({
     url: '/admin/password',
     params

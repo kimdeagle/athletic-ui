@@ -3,9 +3,11 @@ import * as Apis from "../../apis";
 import {generateGridIdByNumber} from "../../utils/util";
 
 export const getMemberList = createAsyncThunk('getMemberList', Apis.member.getMemberList)
+export const getMember = createAsyncThunk('getMember', Apis.member.getMember)
 
 const initialState = {
-  memberList: []
+  memberList: [],
+  member: {},
 }
 
 export const memberSlice = createSlice({
@@ -14,16 +16,26 @@ export const memberSlice = createSlice({
   reducers: {
     resetMemberList: (state) => {
       state.memberList = []
-    }
+    },
+    resetMember: (state) => {
+      state.member = {}
+    },
   },
   extraReducers: (builder) => {
     builder
       .addCase(getMemberList.fulfilled, (state, action) => {
         state.memberList = generateGridIdByNumber(action.payload)
       })
+      .addCase(getMemberList.rejected, (state, action) => {
+      })
+      .addCase(getMember.fulfilled, (state, action) => {
+        state.member = action.payload
+      })
+      .addCase(getMember.rejected, (state, action) => {
+      })
   }
 })
 
-export const { resetMemberList } = memberSlice.actions
+export const { resetMemberList, resetMember } = memberSlice.actions
 
 export default memberSlice.reducer

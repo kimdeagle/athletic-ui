@@ -46,9 +46,9 @@ const ChangePwModal = ({open, setOpen}) => {
     }
     try {
       //기존 비밀번호와 동일한지 체크
-      const response = await Apis.auth.changeLoginPw(params)
+      const response = await Apis.auth.changePassword(params)
       if (response.code === 200) alert(response.message)
-      handleClose(params)
+      handleClose()
       window.location.replace('/my')
     } catch (e) {
       console.log(e)

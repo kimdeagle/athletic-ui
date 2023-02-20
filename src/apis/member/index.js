@@ -6,3 +6,23 @@ export const getMemberList = async (params, thunkAPI) => {
     params
   }, thunkAPI)
 }
+
+export const addMember = async (params, thunkAPI) => {
+  return await apiService.POST({
+    url: '/member',
+    params
+  }, thunkAPI)
+}
+
+export const getMember = async (memberNo, thunkAPI) => {
+  return await apiService.GET({
+    url: `/member/${memberNo}`
+  }, thunkAPI)
+}
+
+export const updateMember = async (params, thunkAPI) => {
+  return await apiService.PUT({
+    url: '/member',
+    params
+  }, thunkAPI)
+}

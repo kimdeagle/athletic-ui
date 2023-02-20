@@ -1,57 +1,104 @@
-import {Box, Button, TextField} from "@mui/material";
-import {useState} from "react";
+import {
+  Box,
+  Button,
+  IconButton,
+  TextField,
+} from "@mui/material";
+import {useLayoutEffect, useState} from "react";
 import CustomModal from "../index";
+import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
+import { useDaumPostcodePopup } from "react-daum-postcode";
+import * as Const from "../../../utils/const";
+import {replaceOnlyNumber} from "../../../utils/util";
+import {useDispatch, useSelector} from "react-redux";
+import * as Apis from "../../../apis";
+import {resetMember} from "../../../redux/member";
 
-/**
- * TODO
- * 1. 회원 추가
- * 이메일, 휴대폰번호, 주소/상세주소, 입회일자 쪼개기
- * 주소 api 추가(카카오?다음?)
- * 추가 버튼 클릭 시 회원명, 핸드폰번호 중복 체크
- * 2. 회원 리스트 조회
- * 3. 회원 상세 조회 및 수정
- * 4. 회원 삭제
- * 5. 엑셀 다운로드
- * 6. 엑셀 업로드
- */
-const AddMemberModal = ({open, setOpen}) => {
-  const [params, setParams] = useState({})
+const initialParams = {
+  memberNo: '',
+  memberNm: '',
+  email: '',
+  mobileNo: '',
+  birthday: '',
+  address: '',
+  addressDtl: '',
+  joinDt: ''
+}
+
+const AddMemberModal = ({action, open, setOpen, handleCallback}) => {
+  const dispatch = useDispatch()
+  const [params, setParams] = useState(initialParams)
+  const openAddressPopup = useDaumPostcodePopup(Const.DAUM_POSTCODE_SCRIPT_URL)
+  const member = useSelector(state => state.member.member)
 
   const handleChange = (e) => {
     setParams({...params, [e.target.name]: e.target.value})
   }
 
+  const handleNumberInput = (e) => {
+    e.target.value = replaceOnlyNumber(e.target.value)
+    if (e.target.value.length > e.target.maxLength) e.target.value = e.target.value.slice(0, e.target.maxLength)
+  }
+
   const handleClose = () => {
-    setParams({})
+    setParams(initialParams)
     setOpen(false)
+  }
+
+  const openSearchAddressPopup = () => {
+    openAddressPopup({
+      width: 500,
+      height: 500,
+      top: (window.innerHeight / 2) - 250,
+      left: (window.innerWidth / 2) - 250,
+      popupKey: 'popup1',
+      onComplete: handleComplete,
+    })
+  }
+
+  const handleComplete = (data) => {
+    const address = data.roadAddress
+    setParams({...params, address})
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    // try {
-    //   const response = await Apis.auth.changeLoginPw(params)
-    //   if (response.code === 200) alert(response.message)
-    //   handleClose(params)
-    //   window.location.replace('/my')
-    // } catch (e) {
-    //   console.log(e)
-    //   alert(e.response.data.message)
-    // }
+    try {
+      if (window.confirm(action === Const.BUTTONS_ADD ? "추가하시겠습니까?" : "수정하시겠습니까?")) {
+        const response = action === Const.BUTTONS_ADD ? await Apis.member.addMember(params) : await Apis.member.updateMember(params)
+        if (response.code === 200) {
+          alert(response.message)
+          handleClose()
+          handleCallback()
+        }
+      }
+    } catch (e) {
+      alert(e.response.data.message)
+    }
   }
 
+  useLayoutEffect(() => {
+    if (action === Const.BUTTONS_EDIT) setParams({...params, ...member})
+    return () => {
+      dispatch(resetMember())
+    }
+  }, [open])
+
   return (
-    <CustomModal title='회원 추가' open={open} handleClose={handleClose}>
+    <CustomModal width={500} title={action === Const.BUTTONS_ADD ? '회원 추가' : '회원 상세'} open={open} handleClose={handleClose}>
       <Box component="form" width="100%" onSubmit={handleSubmit}>
         <TextField
-          autoFocus={open}
-          required
+          autoFocus={open && action === Const.BUTTONS_ADD}
           fullWidth
+          required={action === Const.BUTTONS_ADD}
+          disabled={action === Const.BUTTONS_EDIT}
           id="memberNm"
           name="memberNm"
           variant="outlined"
           color="info"
           label="회원명"
           margin="normal"
+          value={params.memberNm}
           onChange={handleChange}
         />
         <TextField
@@ -62,6 +109,7 @@ const AddMemberModal = ({open, setOpen}) => {
           color="info"
           label="이메일"
           margin="normal"
+          value={params.email}
           onChange={handleChange}
         />
         <TextField
@@ -73,6 +121,10 @@ const AddMemberModal = ({open, setOpen}) => {
           color="info"
           label="휴대폰 번호"
           margin="normal"
+          value={params.mobileNo}
+          inputProps={{ maxLength: 11}}
+          helperText='숫자만 입력(ex. 01012345678)'
+          onInput={handleNumberInput}
           onChange={handleChange}
         />
         <TextField
@@ -83,18 +135,37 @@ const AddMemberModal = ({open, setOpen}) => {
           color="info"
           label="생년월일"
           margin="normal"
+          value={params.birthday}
+          inputProps={{ maxLength: 8}}
+          helperText='숫자만 입력(ex. 20020101)'
+          onInput={handleNumberInput}
           onChange={handleChange}
         />
-        <TextField
-          fullWidth
-          id="address"
-          name="address"
-          variant="outlined"
-          color="info"
-          label="주소"
-          margin="normal"
-          onChange={handleChange}
-        />
+        <Box
+          display='flex'
+          justifyContent='start'
+          alignItems='center'
+          mt={2}
+          mb={1}
+        >
+          <TextField
+            readOnly
+            id="address"
+            name="address"
+            variant="outlined"
+            color="info"
+            label="주소"
+            value={params.address}
+            sx={{ width: '90%', mr: 1 }}
+            onClick={() => params.address === '' && openSearchAddressPopup()}
+          />
+          <IconButton
+            color='info'
+            onClick={openSearchAddressPopup}
+          >
+            <SearchOutlinedIcon />
+          </IconButton>
+        </Box>
         <TextField
           fullWidth
           id="addressDtl"
@@ -103,6 +174,7 @@ const AddMemberModal = ({open, setOpen}) => {
           color="info"
           label="상세주소"
           margin="normal"
+          value={params.addressDtl}
           onChange={handleChange}
         />
         <TextField
@@ -114,6 +186,10 @@ const AddMemberModal = ({open, setOpen}) => {
           color="info"
           label="입회일자"
           margin="normal"
+          value={params.joinDt}
+          inputProps={{ maxLength: 8}}
+          helperText='숫자만 입력(ex. 20020101)'
+          onInput={handleNumberInput}
           onChange={handleChange}
         />
         <Button
@@ -124,7 +200,7 @@ const AddMemberModal = ({open, setOpen}) => {
           color="success"
           sx={{ mt: 3 }}
         >
-          회원 추가
+          {action === Const.BUTTONS_ADD ? '회원 추가' : '회원 수정'}
         </Button>
       </Box>
     </CustomModal>

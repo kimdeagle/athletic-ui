@@ -21,6 +21,7 @@ export const BUTTONS_EXCEL_UPLOAD = 'excelUpload'
 export const BUTTONS_EXCEL_DOWNLOAD = 'excelDownload'
 export const BUTTONS_ADD = 'add'
 export const BUTTONS_SEARCH = 'search'
+export const BUTTONS_EDIT = 'edit'
 export const BUTTON_PROPS_DISABLED = 'disabled'
 export const BUTTON_PROPS_ON_CLICK = 'onClick'
 
@@ -28,3 +29,5 @@ export const DATA_GRID_CELL_CLASS_NAME = {
   GREEN_COLOR: 'green-color--cell',
   CURSOR_POINTER: 'hover-cursor-pointer--cell'
 }
+
+export const DAUM_POSTCODE_SCRIPT_URL = 'https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js'

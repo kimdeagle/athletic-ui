@@ -1,5 +1,17 @@
 import {format} from "date-fns";
 
+export const isBlank = (value) => {
+  if (typeof value === 'object') {
+    return !value || Object.keys(value).length === 0
+  } else {
+    return !value
+  }
+}
+
+export const isNotBlank = (value) => {
+  return !isBlank(value)
+}
+
 export const validatePw = ({ password, setValidPassword }) => {
   /*
    * validate password
@@ -8,7 +20,7 @@ export const validatePw = ({ password, setValidPassword }) => {
    * 3. 특수문자 1개 이상
    * 4. 영문 1개 이상
    */
-  if (password === '' || password === undefined) {
+  if (isBlank(password)) {
     setValidPassword({
       isValid: false,
       helperText: ''
@@ -45,7 +57,7 @@ export const validatePw = ({ password, setValidPassword }) => {
 
 export const checkEqualPw = ({ password, checkPassword, setEqualPassword }) => {
   //check equal password
-  if (checkPassword === '' || checkPassword === undefined) {
+  if (isBlank(checkPassword)) {
     setEqualPassword({
       isEqual: false,
       helperText: ''
@@ -67,18 +79,11 @@ export const convertMobileNo = (mobileNo) => {
   /**
    * convert 01012345678 to 010-1234-5678
    */
-  return mobileNo === '' || mobileNo === undefined ? '' : mobileNo.substring(0, 3) + '-' + mobileNo.substring(3, 7) + '-' + mobileNo.substring(7)
-}
-
-export const convertMobileNoWithMark = (mobileNo) => {
-  /**
-   * convert 01012345678 to 010-****-5678
-   */
-  return mobileNo === '' || mobileNo === undefined ? '' : mobileNo.substring(0, 3) + '-****-' + mobileNo.substring(7)
+  return isBlank(mobileNo) ? mobileNo : mobileNo.substring(0, 3) + '-' + mobileNo.substring(3, 7) + '-' + mobileNo.substring(7)
 }
 
 export const getAgeFromBirthday = (birthday) => {
-  return birthday === '' || birthday === undefined ? '' : Math.floor((parseInt(format(new Date(), 'yyyyMMdd')) - parseInt(birthday)) / 10000)
+  return isBlank(birthday) ? birthday : String(Math.floor((parseInt(format(new Date(), 'yyyyMMdd')) - parseInt(birthday)) / 10000))
 }
 
 export const generateGridIdByNumber = (list) => {
@@ -87,5 +92,9 @@ export const generateGridIdByNumber = (list) => {
 }
 
 export const formatDateHyphen = (date) => {
-  return date === '' || date === undefined ? '' : date.substring(0, 4) + '-' + date.substring(4, 6) + '-' + date.substring(6)
+  return isBlank(date) ? date : date.substring(0, 4) + '-' + date.substring(4, 6) + '-' + date.substring(6)
+}
+
+export const replaceOnlyNumber = (value) => {
+  return value.replaceAll(/[^0-9]/g, '')
 }
