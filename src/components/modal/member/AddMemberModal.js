@@ -37,7 +37,8 @@ const AddMemberModal = ({action, open, setOpen, handleCallback}) => {
 
   const handleNumberInput = (e) => {
     e.target.value = replaceOnlyNumber(e.target.value)
-    if (e.target.value.length > e.target.maxLength) e.target.value = e.target.value.slice(0, e.target.maxLength)
+    if (e.target.value.length > e.target.maxLength)
+      e.target.value = e.target.value.slice(0, e.target.maxLength)
   }
 
   const handleClose = () => {
@@ -73,12 +74,14 @@ const AddMemberModal = ({action, open, setOpen, handleCallback}) => {
         }
       }
     } catch (e) {
+      console.log(e)
       alert(e.response.data.message)
     }
   }
 
   useLayoutEffect(() => {
-    if (action === Const.BUTTONS_EDIT) setParams({...params, ...member})
+    if (action === Const.BUTTONS_EDIT)
+      setParams({...params, ...member})
     return () => {
       dispatch(resetMember())
     }

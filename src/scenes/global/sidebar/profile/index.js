@@ -1,9 +1,9 @@
 import React from "react";
 import {Box, Typography, useTheme} from "@mui/material";
-import {tokens} from "../../../theme";
+import {tokens} from "../../../../theme";
 import ArrowCircleRightOutlinedIcon from '@mui/icons-material/ArrowCircleRightOutlined';
-import {getUser} from "../../../utils/cookie";
-import * as Const from "../../../utils/const";
+import {getUser} from "../../../../utils/cookie";
+import * as Const from "../../../../utils/const";
 import {useProSidebar} from "react-pro-sidebar";
 
 const SidebarProfile = () => {

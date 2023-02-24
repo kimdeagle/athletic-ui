@@ -1,6 +1,6 @@
 import {CircularProgress, useTheme} from "@mui/material";
 import React from "react";
-import {tokens} from "../../theme";
+import {tokens} from "../../../theme";
 
 const Loading = () => {
   const theme = useTheme()

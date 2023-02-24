@@ -42,3 +42,10 @@ export const changePassword = async (params, thunkAPI) => {
     params
   }, thunkAPI)
 }
+
+export const logout = async (params, thunkAPI) => {
+  return await apiService.POST({
+    url: '/auth/logout',
+    params
+  }, thunkAPI)
+}

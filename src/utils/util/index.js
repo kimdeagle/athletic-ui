@@ -1,11 +1,10 @@
 import {format} from "date-fns";
 
 export const isBlank = (value) => {
-  if (typeof value === 'object') {
+  if (typeof value === 'object')
     return !value || Object.keys(value).length === 0
-  } else {
+  else
     return !value
-  }
 }
 
 export const isNotBlank = (value) => {
@@ -91,7 +90,7 @@ export const generateGridIdByNumber = (list) => {
   return list
 }
 
-export const formatDateHyphen = (date) => {
+export const StringToDateHyphen = (date) => {
   return isBlank(date) ? date : date.substring(0, 4) + '-' + date.substring(4, 6) + '-' + date.substring(6)
 }
 

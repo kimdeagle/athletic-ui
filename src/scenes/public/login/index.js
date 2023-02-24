@@ -2,14 +2,10 @@ import {tokens} from "../../../theme";
 import {
   Box,
   Button,
-  Checkbox,
-  FormControlLabel,
-  FormGroup, Link,
-  TextField,
+  Link,
   Typography,
   useTheme
 } from "@mui/material";
-import {useLayoutEffect, useState} from "react";
 import {getRememberId, removeRememberId, setRefreshToken, setRememberId, setUser} from "../../../utils/cookie";
 import {useNavigate} from "react-router-dom";
 import * as Apis from "../../../apis";
@@ -19,21 +15,33 @@ import {getMenuList} from "../../../redux/menu";
 import {useDispatch} from "react-redux";
 import axios from "axios";
 import {Helmet} from "react-helmet-async";
+import {useSnackbar} from "notistack";
+import { Formik, Form, Field } from "formik";
+import {CheckboxWithLabel, TextField} from "formik-mui";
+import * as Yup from "yup";
+import {makeSnackbarMessage, VALIDATION_SCHEMA} from "../../../utils/const";
 
 const Login = () => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
-  const [isRememberId, setIsRememberId] = useState(false)
-  const [loginId, setLoginId] = useState('')
-  const [loginPw, setLoginPw] = useState('')
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const { enqueueSnackbar } = useSnackbar()
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
+  const initialValues = {
+    loginId: getRememberId() || '',
+    loginPw: '',
+    isRemember: !!getRememberId(),
+  }
 
+  const validationSchema = Yup.object().shape({
+    loginId: Yup.string().required(VALIDATION_SCHEMA.COMMON.requiredMessage),
+    loginPw: Yup.string().required(VALIDATION_SCHEMA.COMMON.requiredMessage)
+  })
+
+  const handleSubmit = async (values, { setSubmitting }) => {
     try {
-      const token = await Apis.auth.login({loginId, loginPw})
+      const token = await Apis.auth.login(values)
       const {accessToken, accessTokenExpiresIn, refreshToken, refreshTokenExpiresIn} = token
 
       dispatch(setAccessToken({accessToken, accessTokenExpiresIn}))
@@ -43,8 +51,8 @@ const Login = () => {
       setUser({user, expires: refreshTokenExpiresIn})
       dispatch(getMenuList())
 
-      if (isRememberId) {
-        setRememberId(loginId)
+      if (values.isRemember) {
+        setRememberId(values.loginId)
       } else {
         removeRememberId()
       }
@@ -52,17 +60,11 @@ const Login = () => {
 
     } catch (e) {
       console.log(e)
-      alert(e.response.data.message)
+      enqueueSnackbar(makeSnackbarMessage(e.response.data.message), { variant: 'error' })
+    } finally {
+      setTimeout(() => setSubmitting(false), 500)
     }
   }
-
-  useLayoutEffect(() => {
-    const rememberId = getRememberId()
-    if (rememberId) {
-      setLoginId(rememberId)
-      setIsRememberId(true)
-    }
-  }, [])
 
   return (
     <>
@@ -84,61 +86,61 @@ const Login = () => {
         >
           LOGIN
         </Typography>
-        <Box component="form" width="100%" onSubmit={handleSubmit}>
-          <TextField
-            autoFocus
-            required
-            fullWidth
-            id="loginId"
-            name="loginId"
-            variant="outlined"
-            color="info"
-            label="아이디"
-            margin="normal"
-            onChange={(e) => setLoginId(e.target.value)}
-            value={loginId}
-          />
-          <TextField
-            type="password"
-            required
-            fullWidth
-            id="loginPw"
-            name="loginPw"
-            variant="outlined"
-            color="info"
-            label="비밀번호"
-            margin="normal"
-            onChange={(e) => setLoginPw(e.target.value)}
-          />
-          <FormGroup>
-            <FormControlLabel
-              label='아이디 저장'
-              control={
-                <Checkbox
-                  id='isRemember'
-                  sx={{color: `${colors.greenAccent[200]} !important`}}
-                  onChange={(e) => setIsRememberId(e.target.checked)}
-                  checked={isRememberId}
-                />
-              }
-            />
-          </FormGroup>
-          <Button
-            fullWidth
-            type="submit"
-            variant="contained"
-            size="large"
-            color="info"
-            sx={{ mt: 3 }}
-          >
-            LOGIN
-          </Button>
-        </Box>
+        <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
+          {({submitForm, isSubmitting}) => (
+            <Form>
+              <Field
+                component={TextField}
+                type='text'
+                autoFocus
+                fullWidth
+                required
+                id='loginId'
+                name='loginId'
+                label='아이디'
+                color='info'
+                variant='outlined'
+                margin='normal'
+              />
+              <Field
+                component={TextField}
+                type='password'
+                fullWidth
+                required
+                id='loginPw'
+                name='loginPw'
+                label='비밀번호'
+                color='info'
+                variant='outlined'
+                margin='normal'
+              />
+              <Field
+                component={CheckboxWithLabel}
+                type='checkbox'
+                id='isRemember'
+                name='isRemember'
+                Label={{ label: '아이디 저장' }}
+                color='info'
+              />
+              <Button
+                fullWidth
+                variant="contained"
+                size="large"
+                color="info"
+                sx={{ mt: 3 }}
+                disabled={isSubmitting}
+                onClick={submitForm}
+              >
+                LOGIN
+              </Button>
+            </Form>
+          )}
+        </Formik>
         <Box
           width="100%"
           display="flex"
           justifyContent="space-between"
-          mt={2}
+          mt={1}
         >
           <Link
             component="button"

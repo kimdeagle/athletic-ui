@@ -29,9 +29,8 @@ export const menuSlice = createSlice({
 const processMenuList = (menuList) => {
   menuList.map(menu => {
     const children = menuList.filter(m => menu.menuNo === m.upMenuNo)
-    if (children) {
+    if (children)
       menu.children = processMenuList(children)
-    }
   })
   return menuList.sort((a, b) => a.sortSeq - b.sortSeq)
 }

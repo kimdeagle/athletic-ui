@@ -31,3 +31,45 @@ export const DATA_GRID_CELL_CLASS_NAME = {
 }
 
 export const DAUM_POSTCODE_SCRIPT_URL = 'https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js'
+
+/* validation schema */
+export const VALIDATION_SCHEMA = {
+  COMMON: {
+    requiredMessage: '필수 입력 항목입니다.',
+    emailMessage: '이메일 형식이 아닙니다.',
+    confirmPasswordMessage: '비밀번호 불일치',
+  },
+  LOGIN_ID: {
+    MATCHES: {
+      regex: /^[a-z0-9]{3,15}$/gi,
+      message: '3 ~ 15글자 이하의 영어 또는 숫자만 입력하세요.',
+    },
+  },
+  LOGIN_PW: {
+    MATCHES: {
+      regex: /^(?=.*[0-9])(?=.*[a-z])(?=.*[~!@#$%^&*()_+])[a-z0-9~!@#$%^&*()_+]{8,20}$/gi,
+      message: '8 ~ 20글자 이하의 영어/숫자/특수문자를 조합해서 입력하세요.',
+    }
+  },
+  ADMIN_NM: {
+    MAX: {
+      length: 10,
+      message: '10글자 이하로 입력하세요.',
+    }
+  },
+  MOBILE_NO: {
+    MATCHES: {
+      regex: /^01[016789]-?[0-9]{3,4}-?[0-9]{4}$/g,
+      message: '올바르지 않은 휴대폰 번호입니다.',
+    }
+  }
+}
+
+/* make snackbar message element */
+export const makeSnackbarMessage = (msg) => {
+  /* 줄바꿈 변경하여 리턴 */
+  const message = msg.replaceAll('\n', '<br/>')
+  return (
+    <div dangerouslySetInnerHTML={{__html: message}}/>
+  )
+}

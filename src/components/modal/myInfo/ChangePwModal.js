@@ -1,4 +1,4 @@
-import {Box, Button, Modal, TextField, Typography} from "@mui/material";
+import {Box, Button, TextField} from "@mui/material";
 import {useState} from "react";
 import * as Apis from "../../../apis";
 import * as utils from "../../../utils/util";
@@ -47,9 +47,11 @@ const ChangePwModal = ({open, setOpen}) => {
     try {
       //기존 비밀번호와 동일한지 체크
       const response = await Apis.auth.changePassword(params)
-      if (response.code === 200) alert(response.message)
-      handleClose()
-      window.location.replace('/my')
+      if (response.code === 200) {
+        alert(response.message)
+        handleClose()
+        window.location.replace('/my')
+      }
     } catch (e) {
       console.log(e)
       alert(e.response.data.message)

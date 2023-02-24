@@ -1,6 +1,6 @@
 import React from "react";
 import {Box, IconButton, Typography, useTheme} from "@mui/material";
-import {tokens} from "../../../theme";
+import {tokens} from "../../../../theme";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import {useProSidebar} from "react-pro-sidebar";
 

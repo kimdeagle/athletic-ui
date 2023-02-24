@@ -1,31 +1,47 @@
-import {Box, Button, TextField, Typography, useTheme} from "@mui/material";
-import {useState} from "react";
+import {Box, Button, Typography, useTheme} from "@mui/material";
 import {tokens} from "../../../theme";
 import * as Apis from "../../../apis";
 import {useNavigate} from "react-router-dom";
 import {Helmet} from "react-helmet-async";
+import {useSnackbar} from "notistack";
+import { Formik, Form, Field } from "formik";
+import { TextField } from "formik-mui";
+import * as Yup from "yup";
+import {makeSnackbarMessage, VALIDATION_SCHEMA} from "../../../utils/const";
 
 const ResetPassword = () => {
   const navigate = useNavigate()
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
-  const [params, setParams] = useState({})
+  const { enqueueSnackbar } = useSnackbar()
 
-  const handleChange = (e) => {
-    setParams({...params, [e.target.name]: e.target.value})
+  const initialValues = {
+    loginId: '',
+    email: '',
   }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
+  const validationSchema = Yup.object().shape({
+    loginId: Yup.string().required(VALIDATION_SCHEMA.COMMON.requiredMessage),
+    email: Yup.string().email(VALIDATION_SCHEMA.COMMON.emailMessage).required(VALIDATION_SCHEMA.COMMON.requiredMessage)
+  })
+
+  const snackbarOptions = {
+    variant: 'success',
+    autoHideDuration: 3000,
+    onClose: () => navigate('/login', { replace: true }),
+  }
+
+  const handleSubmit = async (values, { setSubmitting }) => {
     try {
-      const data = await Apis.auth.resetPassword(params)
-      if (data) {
-        alert("임시 비밀번호를 이메일로 전송했습니다.\n확인 후 로그인 하세요.")
-        navigate("/login", {replace: true})
+      const response = await Apis.auth.resetPassword(values)
+      if (response.code === 200) {
+        enqueueSnackbar(makeSnackbarMessage(response.message), snackbarOptions)
       }
     } catch (e) {
       console.log(e)
-      alert(e.response.data.message || '알 수 없는 오류')
+      enqueueSnackbar(e.response.data.message || '알 수 없는 오류', { variant: 'error' })
+    } finally {
+      setTimeout(() => setSubmitting(false), 3500)
     }
   }
 
@@ -49,41 +65,48 @@ const ResetPassword = () => {
         >
           비밀번호 초기화
         </Typography>
-        <Box component="form" width="100%" onSubmit={handleSubmit}>
-          <TextField
-            autoFocus
-            required
-            fullWidth
-            id="loginId"
-            name="loginId"
-            variant="outlined"
-            color="info"
-            label="아이디"
-            margin="normal"
-            onChange={handleChange}
-          />
-          <TextField
-            required
-            fullWidth
-            id="email"
-            name="email"
-            variant="outlined"
-            color="info"
-            label="이메일"
-            margin="normal"
-            onChange={handleChange}
-          />
-          <Button
-            fullWidth
-            type="submit"
-            variant="contained"
-            size="large"
-            color="warning"
-            sx={{ mt: 3 }}
-          >
-            비밀번호 초기화
-          </Button>
-        </Box>
+        <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
+          {({ submitForm, isSubmitting }) => (
+            <Form>
+              <Field
+                component={TextField}
+                type='text'
+                autoFocus
+                fullWidth
+                required
+                id='loginId'
+                name='loginId'
+                label='아이디'
+                color='info'
+                variant='outlined'
+                margin='normal'
+              />
+              <Field
+                component={TextField}
+                type='text'
+                fullWidth
+                required
+                id='email'
+                name='email'
+                label='이메일'
+                color='info'
+                variant='outlined'
+                margin='normal'
+              />
+              <Button
+                fullWidth
+                variant='contained'
+                size='large'
+                color='warning'
+                sx={{ mt: 3 }}
+                disabled={isSubmitting}
+                onClick={submitForm}
+              >
+                비밀번호 초기화
+              </Button>
+            </Form>
+          )}
+        </Formik>
       </Box>
     </>
   )

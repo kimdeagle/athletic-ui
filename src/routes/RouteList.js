@@ -1,6 +1,6 @@
 import React, {Suspense} from "react";
 import { Routes, Route } from "react-router-dom";
-import Loading from "../components/etc/Loading";
+import Loading from "../scenes/global/loading";
 
 const AuthRoute = React.lazy(() => import("./AuthRoute"))
 const Login = React.lazy(() => import("../scenes/public/login"))
@@ -8,7 +8,7 @@ const Join = React.lazy(() => import("../scenes/public/join"))
 const ResetPassword = React.lazy(() => import("../scenes/public/resetPassword"))
 const Home = React.lazy(() => import("../scenes/private/home"))
 const Member = React.lazy(() => import("../scenes/private/member"))
-const NotFound = React.lazy(() => import("../scenes/etc/notFound"))
+const NotFound = React.lazy(() => import("../scenes/global/notFound"))
 const MyInfo = React.lazy(() => import("../scenes/private/myInfo"))
 
 const RouteList = () => {

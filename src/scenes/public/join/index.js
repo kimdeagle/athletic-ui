@@ -1,15 +1,19 @@
-import {Box, Button, TextField, Typography, useTheme} from "@mui/material";
+import {Box, Button, Typography, useTheme} from "@mui/material";
 import {useState} from "react";
 import {tokens} from "../../../theme";
 import * as Apis from "../../../apis";
 import {useNavigate} from "react-router-dom";
 import * as utils from "../../../utils/util";
 import {Helmet} from "react-helmet-async";
+import { Formik, Form, Field } from "formik";
+import {CheckboxWithLabel, TextField} from "formik-mui";
+import * as Yup from "yup";
+import {makeSnackbarMessage, VALIDATION_SCHEMA} from "../../../utils/const";
 
 const Join = () => {
-  const navigate = useNavigate()
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
+  const navigate = useNavigate()
   const [params, setParams] = useState({})
   const [validLoginId, setValidLoginId] = useState({
     isValid: false,
@@ -84,13 +88,42 @@ const Join = () => {
       return false;
     }
     try {
-      const data = await Apis.auth.join(params)
-      alert(data.adminNm + "님. 회원가입 요청이 완료되었습니다.");
-      navigate("/login", {replace: true})
+      const response = await Apis.auth.join(params)
+      if (response.code === 200) {
+        alert(response.message)
+        navigate("/login", {replace: true})
+      }
     } catch (e) {
       console.log(e)
+      alert(e.response.data.message)
     }
   }
+
+  const initialValues = {
+    loginId: '',
+    loginPw: '',
+    confirmLoginPw: '',
+    adminNm: '',
+    email: '',
+    mobileNo: '',
+  }
+
+  const validationSchema = Yup.object().shape({
+    loginId: Yup.string()
+      .required(VALIDATION_SCHEMA.COMMON.requiredMessage)
+      .matches(VALIDATION_SCHEMA.LOGIN_ID.MATCHES.regex, VALIDATION_SCHEMA.LOGIN_ID.MATCHES.message),
+    loginPw: Yup.string()
+      .required(VALIDATION_SCHEMA.COMMON.requiredMessage)
+      .matches(VALIDATION_SCHEMA.LOGIN_PW.MATCHES.regex, VALIDATION_SCHEMA.LOGIN_PW.MATCHES.message),
+    confirmLoginPw: Yup.string().oneOf([Yup.ref('loginPw'), null], VALIDATION_SCHEMA.COMMON.confirmPasswordMessage),
+    adminNm: Yup.string()
+      .required(VALIDATION_SCHEMA.COMMON.requiredMessage)
+      .max(VALIDATION_SCHEMA.ADMIN_NM.MAX.length, VALIDATION_SCHEMA.ADMIN_NM.MAX.message),
+    email: Yup.string().email().required(VALIDATION_SCHEMA.COMMON.requiredMessage),
+    mobileNo: Yup.string()
+      .required(VALIDATION_SCHEMA.COMMON.requiredMessage)
+      .matches(VALIDATION_SCHEMA.MOBILE_NO.MATCHES.regex, VALIDATION_SCHEMA.MOBILE_NO.MATCHES.message)
+  })
 
   return (
     <>

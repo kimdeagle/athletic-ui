@@ -14,7 +14,6 @@ const ParentMenu = ({title, icon, to, children}) => {
     <SubMenu
       label={title}
       icon={icon}
-      // defaultOpen={pathname.includes(to)}
       open={open}
       onClick={() => setOpen((open) => !open)}
     >

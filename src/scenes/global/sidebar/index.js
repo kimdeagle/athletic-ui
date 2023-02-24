@@ -1,7 +1,7 @@
-import React, {useState} from "react";
+import React from "react";
 import {Sidebar, Menu, useProSidebar} from "react-pro-sidebar";
 import { Box, useTheme } from "@mui/material";
-import { tokens } from "../../theme";
+import { tokens } from "../../../theme";
 import SidebarHeader from "./header";
 import SidebarProfile from "./profile";
 import SidebarMenu from "./menu";

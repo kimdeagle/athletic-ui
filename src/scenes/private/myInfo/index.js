@@ -87,6 +87,10 @@ const MyInfo = () => {
                 <TableCell component='th' scope='row'>휴대폰 번호</TableCell>
                 <TableCell>{convertMobileNo(admin.mobileNo)}</TableCell>
               </TableRow>
+              <TableRow>
+                <TableCell component='th' scope='row'>최종 수정일시</TableCell>
+                <TableCell>{admin.modDt}</TableCell>
+              </TableRow>
             </TableBody>
           </Table>
         </TableContainer>

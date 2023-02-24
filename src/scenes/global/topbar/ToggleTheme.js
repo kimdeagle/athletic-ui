@@ -2,7 +2,7 @@ import {IconButton, useTheme} from "@mui/material";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import {useContext} from "react";
-import {ColorModeContext} from "../../theme";
+import {ColorModeContext} from "../../../theme";
 
 const ToggleTheme = () => {
   const theme = useTheme()

@@ -9,8 +9,8 @@ import React, {useEffect} from "react";
 import * as Const from "./utils/const";
 import RouteList from "./routes/RouteList";
 import {ProSidebarProvider} from "react-pro-sidebar";
-import Topbar from "./components/topbar";
-import ProSidebar from "./components/sidebar";
+import Topbar from "./scenes/global/topbar";
+import ProSidebar from "./scenes/global/sidebar";
 import {Helmet} from "react-helmet-async";
 
 

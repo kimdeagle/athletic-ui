@@ -6,7 +6,7 @@ import ParentMenu from "./ParentMenu";
 import ChildMenu from "./ChildMenu";
 import {useProSidebar} from "react-pro-sidebar";
 
-const SidebarMenu = ({selected, setSelected}) => {
+const SidebarMenu = () => {
   const { collapsed } = useProSidebar()
   const menuList = useSelector(state => state.menu.menuList)
 

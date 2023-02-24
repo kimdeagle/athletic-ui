@@ -1,4 +1,4 @@
-import {Box, Button, IconButton, Modal, TextField, Typography} from "@mui/material";
+import {Box, IconButton, Modal, Typography} from "@mui/material";
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 
 const CustomModal = ({width, title, open, handleClose, children}) => {

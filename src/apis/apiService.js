@@ -1,4 +1,4 @@
-import axios, {AxiosError} from "axios";
+import axios from "axios";
 
 const request = async (data, thunkAPI) => {
   return await axios({
