@@ -1,118 +1,110 @@
-import {Box, Button, TextField} from "@mui/material";
-import {useState} from "react";
+import {Button} from "@mui/material";
 import * as Apis from "../../../apis";
-import * as utils from "../../../utils/util";
 import CustomModal from "../index";
+import {makeSnackbarMessage, sleep} from "../../../utils/util";
+import { Formik, Form, Field } from "formik";
+import { TextField } from "formik-mui";
+import {useSnackbar} from "notistack";
+import * as Yup from "yup";
+import {DEFAULT_SLEEP_MS, VALIDATION_SCHEMA} from "../../../utils/const";
+import {ROUTE_PATH_NAME} from "../../../routes/RouteList";
 
 const ChangePwModal = ({open, setOpen}) => {
-  const [params, setParams] = useState({})
-  const [validPassword, setValidPassword] = useState({
-    isValid: false,
-    helperText: ''
-  })
-  const [equalPassword, setEqualPassword] = useState({
-    isEqual: false,
-    helperText: ''
-  })
-
-  const validatePassword = (e) => {
-    setParams({...params, [e.target.name]: e.target.value})
-    utils.validatePw({ password: e.target.value, setValidPassword })
-
-    const password = e.target.value
-    const checkPassword = params['repeatPw']
-    utils.checkEqualPw({password, checkPassword, setEqualPassword})
-  }
-
-  const checkEqualPassword = (e) => {
-    setParams({...params, [e.target.name]: e.target.value})
-    const password = params['changePw']
-    const checkPassword = e.target.value
-    utils.checkEqualPw({password, checkPassword, setEqualPassword})
-  }
+  const { enqueueSnackbar } = useSnackbar()
 
   const handleClose = () => {
-    setParams({})
-    setValidPassword({isValid: false, helperText: ''})
-    setEqualPassword({isEqual: false, helperText: ''})
     setOpen(false)
   }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    if (!(validPassword.isValid && equalPassword.isEqual)) {
-      alert("변경할 비밀번호를 확인해주세요.")
-      return false;
-    }
+  const initialValues = {
+    loginPw: '',
+    changePw: '',
+    confirmChangePw: '',
+  }
+
+  const validationSchema = Yup.object().shape({
+    loginPw: Yup.string().required(VALIDATION_SCHEMA.COMMON.requiredMessage),
+    changePw: Yup.string()
+      .required(VALIDATION_SCHEMA.COMMON.requiredMessage)
+      .matches(VALIDATION_SCHEMA.LOGIN_PW.MATCHES.regex, VALIDATION_SCHEMA.LOGIN_PW.MATCHES.message),
+    confirmChangePw: Yup.string().oneOf([Yup.ref('changePw'), null], VALIDATION_SCHEMA.COMMON.confirmPasswordMessage)
+  })
+
+  const handleSubmit = async (values) => {
     try {
       //기존 비밀번호와 동일한지 체크
-      const response = await Apis.auth.changePassword(params)
+      const response = await Apis.auth.changePassword(values)
       if (response.code === 200) {
-        alert(response.message)
-        handleClose()
-        window.location.replace('/my')
+        enqueueSnackbar(makeSnackbarMessage(response.message), {
+          variant: 'success',
+          onExit: () => window.location.replace(ROUTE_PATH_NAME.myInfo),
+        })
       }
     } catch (e) {
       console.log(e)
-      alert(e.response.data.message)
+      enqueueSnackbar(makeSnackbarMessage(e.response.data.message), {
+        variant: 'error',
+      })
     }
+    await sleep(DEFAULT_SLEEP_MS)
   }
 
   return (
     <CustomModal width='500' title='비밀번호 변경' open={open} handleClose={handleClose}>
-      <Box component="form" width="100%" onSubmit={handleSubmit}>
-        <TextField
-          autoFocus={open}
-          required
-          fullWidth
-          type="password"
-          id="loginPw"
-          name="loginPw"
-          variant="outlined"
-          color="info"
-          label="현재 비밀번호"
-          margin="normal"
-          onChange={(e) => setParams({...params, [e.target.name]: e.target.value})}
-        />
-        <TextField
-          required
-          fullWidth
-          type="password"
-          id="changePw"
-          name="changePw"
-          variant="outlined"
-          color="info"
-          label="변경할 비밀번호"
-          margin="normal"
-          error={!validPassword.isValid && validPassword.helperText !== ''}
-          helperText={validPassword.helperText}
-          onChange={validatePassword}
-        />
-        <TextField
-          required
-          fullWidth
-          type="password"
-          id="repeatPw"
-          name="repeatPw"
-          variant="outlined"
-          color="info"
-          label="변경할 비밀번호 확인"
-          margin="normal"
-          error={!equalPassword.isEqual && equalPassword.helperText !== ''}
-          helperText={equalPassword.helperText}
-          onChange={checkEqualPassword}
-        />
-        <Button
-          fullWidth
-          type="submit"
-          variant="contained"
-          size="large"
-          color="info"
-          sx={{ mt: 3 }}
-        >
-          비밀번호 변경
-        </Button>
-      </Box>
+      <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
+        {({submitForm, isSubmitting}) => (
+          <Form>
+            <Field
+              component={TextField}
+              type='password'
+              autoFocus={open}
+              fullWidth
+              required
+              id='loginPw'
+              name='loginPw'
+              label='현재 비밀번호'
+              color='info'
+              variant='outlined'
+              margin='normal'
+            />
+            <Field
+              component={TextField}
+              type='password'
+              fullWidth
+              required
+              id='changePw'
+              name='changePw'
+              label='변경 비밀번호'
+              color='info'
+              variant='outlined'
+              margin='normal'
+            />
+            <Field
+              component={TextField}
+              type='password'
+              fullWidth
+              required
+              id='confirmChangePw'
+              name='confirmChangePw'
+              label='변경 비밀번호 확인'
+              color='info'
+              variant='outlined'
+              margin='normal'
+            />
+            <Button
+              fullWidth
+              variant="contained"
+              size="large"
+              color="info"
+              sx={{ mt: 3 }}
+              disabled={isSubmitting}
+              onClick={submitForm}
+            >
+              비밀번호 변경
+            </Button>
+          </Form>
+        )}
+      </Formik>
     </CustomModal>
   )
 }

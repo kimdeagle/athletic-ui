@@ -13,7 +13,7 @@ const ContentHeader = ({ title, subTitle, hideButtons, buttonProps }) => {
   }
 
   return (
-    <Box display="flex" justifyContent="space-between" alignItems="center" mb={7}>
+    <Box display="flex" justifyContent="space-between" alignItems="center" mb={8}>
       <Box>
         {title &&
           <Typography
@@ -43,7 +43,6 @@ const ContentHeader = ({ title, subTitle, hideButtons, buttonProps }) => {
       >
         <Button
           variant="contained"
-          size="small"
           color="warning"
           disabled={defaultButtonProps.excelUpload.disabled}
           onClick={defaultButtonProps.excelUpload.onClick}
@@ -52,7 +51,6 @@ const ContentHeader = ({ title, subTitle, hideButtons, buttonProps }) => {
         </Button>
         <Button
           variant="contained"
-          size="small"
           color="info"
           disabled={defaultButtonProps.excelDownload.disabled}
           onClick={defaultButtonProps.excelDownload.onClick}
@@ -61,7 +59,6 @@ const ContentHeader = ({ title, subTitle, hideButtons, buttonProps }) => {
         </Button>
         <Button
           variant="contained"
-          size="small"
           color="success"
           disabled={defaultButtonProps.add.disabled}
           onClick={defaultButtonProps.add.onClick}
@@ -70,7 +67,6 @@ const ContentHeader = ({ title, subTitle, hideButtons, buttonProps }) => {
         </Button>
         <Button
           variant="contained"
-          size="small"
           color="info"
           disabled={defaultButtonProps.search.disabled}
           onClick={defaultButtonProps.search.onClick}

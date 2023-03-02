@@ -7,10 +7,15 @@ import {removeMenuList} from "../../../redux/menu";
 import {useDispatch} from "react-redux";
 import * as Apis from "../../../apis";
 import axios from "axios";
+import {useSnackbar} from "notistack";
+import {makeSnackbarMessage} from "../../../utils/util";
+import {AUTHORIZATION_HEADER_NAME} from "../../../utils/const";
+import {ROUTE_PATH_NAME} from "../../../routes/RouteList";
 
 const Logout = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const { enqueueSnackbar } = useSnackbar()
 
   const handleLogout = async () => {
     try {
@@ -24,13 +29,15 @@ const Logout = () => {
           removeRefreshToken()
           removeUser()
           dispatch(removeMenuList())
-          axios.defaults.headers.common['Authorization'] = null
-          navigate('/login', {replace: true})
+          axios.defaults.headers.common[AUTHORIZATION_HEADER_NAME] = null
+          navigate(ROUTE_PATH_NAME.login, {replace: true})
         }
       }
     } catch (e) {
       console.log(e)
-      alert(e.response.data.message)
+      enqueueSnackbar(makeSnackbarMessage(e.response.data.message), {
+        variant: 'error',
+      })
     }
   }
 

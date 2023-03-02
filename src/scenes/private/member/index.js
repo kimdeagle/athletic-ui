@@ -1,40 +1,46 @@
 import ContentHeader from "../../../components/content/ContentHeader";
-import {Box} from "@mui/material";
-import {getAgeFromBirthday, isNotBlank, StringToDateHyphen} from "../../../utils/util";
-import * as Const from "../../../utils/const";
+import {Box, Button} from "@mui/material";
+import {getAgeFromBirthday, makeSnackbarMessage, sleep} from "../../../utils/util";
 import CustomGrid from "../../../components/grid";
 import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {getMember, getMemberList, resetMemberList} from "../../../redux/member";
 import AddMemberModal from "../../../components/modal/member/AddMemberModal";
+import {
+  BUTTON_PROPS_DISABLED,
+  BUTTON_PROPS_ON_CLICK,
+  BUTTONS_ADD, BUTTONS_EDIT, BUTTONS_SEARCH,
+  DATA_GRID_CELL_CLASS_NAME, DEFAULT_SLEEP_MS
+} from "../../../utils/const";
+import * as Apis from "../../../apis";
+import {useSnackbar} from "notistack";
 
 /**
  * TODO
  * 1. 회원추가 -> 이메일, 휴대폰번호, 주소/상세주소, 입회일자 쪼개기 -> 일단 주소만...
- * 2. 회원 삭제
- * 3. 엑셀 다운로드
- * 4. 엑셀 업로드
+ * 2. 엑셀 다운로드
+ * 3. 엑셀 업로드
  */
 const Member = () => {
   const dispatch = useDispatch()
   const memberList = useSelector(state => state.member.memberList)
   const [open, setOpen] = useState(false)
   const [action, setAction] = useState(null)
-  const [memberNo, setMemberNo] = useState(null)
+  const [selectionModel, setSelectionModel] = useState([])
+  const { enqueueSnackbar } = useSnackbar()
 
   const columns = [
-    { field: 'id', headerName: 'No', width: 80, headerAlign: 'center', align: 'center'},
-    { field: 'memberNm', headerName: 'Name', flex: 1, cellClassName: `${Const.DATA_GRID_CELL_CLASS_NAME.GREEN_COLOR} ${Const.DATA_GRID_CELL_CLASS_NAME.CURSOR_POINTER}`},
-    { field: 'email', headerName: 'Email', flex: 1},
-    { field: 'mobileNo', headerName: 'Mobile Number', flex: 1},
-    { field: 'age', headerName: 'Age', flex: 1, valueGetter: (params) => getAgeFromBirthday(params.row.birthday)},
-    { field: 'address', headerName: 'Address', flex: 1, valueGetter: (params) => isNotBlank(params.row.address) ? isNotBlank(params.row.addressDtl) ? params.row.address + ' ' + params.row.addressDtl : params.row.address : null},
-    { field: 'joinDt', headerName: 'Join Date', flex: 1, valueGetter: (params) => StringToDateHyphen(params.row.joinDt)}
+    { field: 'memberNm', headerName: '회원명', flex: 1, cellClassName: `${DATA_GRID_CELL_CLASS_NAME.GREEN_COLOR} ${DATA_GRID_CELL_CLASS_NAME.CURSOR_POINTER}`},
+    { field: 'email', headerName: '이메일', flex: 1},
+    { field: 'mobileNo', headerName: '휴대폰 번호', flex: 1},
+    { field: 'age', headerName: '나이', flex: 1, valueGetter: (params) => getAgeFromBirthday(params.row.birthday)},
+    { field: 'address', headerName: '주소', flex: 1},
+    { field: 'joinDt', headerName: '입회일자', flex: 1}
   ]
 
   const handleAdd = () => {
     setOpen(true)
-    setAction(Const.BUTTONS_ADD)
+    setAction(BUTTONS_ADD)
   }
 
   const handleSearch = () => {
@@ -46,22 +52,43 @@ const Member = () => {
   }
 
   const buttonProps = {
-    [Const.BUTTONS_ADD]: {
-      [Const.BUTTON_PROPS_DISABLED]: false,
-      [Const.BUTTON_PROPS_ON_CLICK]: handleAdd
+    [BUTTONS_ADD]: {
+      [BUTTON_PROPS_DISABLED]: false,
+      [BUTTON_PROPS_ON_CLICK]: handleAdd
     },
-    [Const.BUTTONS_SEARCH]: {
-      [Const.BUTTON_PROPS_DISABLED]: false,
-      [Const.BUTTON_PROPS_ON_CLICK]: handleSearch
+    [BUTTONS_SEARCH]: {
+      [BUTTON_PROPS_DISABLED]: false,
+      [BUTTON_PROPS_ON_CLICK]: handleSearch
     }
   }
 
   const handleCellClick = async (params, event) => {
     if (params.field === 'memberNm') {
       await dispatch(getMember(params.row.memberNo))
-      setAction(Const.BUTTONS_EDIT)
-      setMemberNo(params.row.memberNo)
+      setAction(BUTTONS_EDIT)
       setOpen(true)
+    }
+  }
+
+  const handleDelete = async () => {
+    const count = selectionModel.length
+    if (window.confirm("선택한 " + count + "명의 회원을 삭제하시겠습니까?")) {
+      try {
+        const response = await Apis.member.deleteMember(selectionModel)
+        if (response.code === 200) {
+          setSelectionModel([])
+          enqueueSnackbar(makeSnackbarMessage(response.message), {
+            variant: 'success',
+          })
+          handleSearch()
+        }
+      } catch (e) {
+        console.log(e)
+        enqueueSnackbar(makeSnackbarMessage(e.response.data.message), {
+          variant: 'error',
+        })
+      }
+      await sleep(DEFAULT_SLEEP_MS)
     }
   }
 
@@ -74,14 +101,31 @@ const Member = () => {
   return (
     <Box m="20px">
       <ContentHeader title='회원 관리' subTitle="Member Management" buttonProps={buttonProps} />
+      <Box
+        display='flex'
+        justifyContent='start'
+        alignItems='center'
+      >
+        <Button
+          variant="contained"
+          color="error"
+          disabled={!selectionModel.length}
+          onClick={handleDelete}
+        >
+          선택삭제
+        </Button>
+      </Box>
       <CustomGrid
         rows={memberList}
         columns={columns}
         onCellClick={handleCellClick}
-        disableColumnMenu={true}
+        checkboxSelection={true}
+        selectionModel={selectionModel}
+        setSelectionModel={setSelectionModel}
+        getRowId={(row) => row.memberNo}
       >
       </CustomGrid>
-      <AddMemberModal action={action} memberNo={memberNo} open={open} setOpen={setOpen} handleCallback={handleCallback} />
+      <AddMemberModal action={action} open={open} setOpen={setOpen} handleCallback={handleCallback} />
     </Box>
   )
 }

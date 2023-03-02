@@ -49,3 +49,10 @@ export const logout = async (params, thunkAPI) => {
     params
   }, thunkAPI)
 }
+
+export const out = async (params, thunkAPI) => {
+  return await apiService.POST({
+    url: '/auth/out',
+    params
+  }, thunkAPI)
+}

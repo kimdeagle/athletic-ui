@@ -9,6 +9,7 @@ import store, {persistor} from "./redux/store";
 import {PersistGate} from "redux-persist/integration/react";
 import {HelmetProvider} from "react-helmet-async";
 import {SnackbarProvider} from "notistack";
+import {DEFAULT_AUTO_HIDE_DURATION_MS} from "./utils/const";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -18,7 +19,7 @@ root.render(
         <BrowserRouter>
           <HelmetProvider>
             <SnackbarProvider
-              autoHideDuration={2000}
+              autoHideDuration={DEFAULT_AUTO_HIDE_DURATION_MS}
               anchorOrigin={{ horizontal: 'center', vertical: 'top' }}
             >
               <App />

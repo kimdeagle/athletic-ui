@@ -1,9 +1,9 @@
 import {DataGrid} from "@mui/x-data-grid";
 import {Box, styled, useTheme} from "@mui/material";
 import {tokens} from "../../theme";
-import * as Const from "../../utils/const";
+import {DATA_GRID_CELL_CLASS_NAME} from "../../utils/const";
 
-const CustomGrid = ({rows, columns, onCellClick, disableColumnMenu}) => {
+const CustomGrid = ({rows, columns, onCellClick, selectionModel, setSelectionModel, checkboxSelection, getRowId}) => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
 
@@ -23,29 +23,37 @@ const CustomGrid = ({rows, columns, onCellClick, disableColumnMenu}) => {
       font-weight: bold;
     }
     & .MuiDataGrid-virtualScroller {
-      background-color: ${colors.primary[400]};
+      background-color: ${colors.grey[800]};
     }
     & .MuiDataGrid-footerContainer {
       border-top: none;
       background-color: ${colors.blueAccent[800]};
     }
-    & .${Const.DATA_GRID_CELL_CLASS_NAME.GREEN_COLOR} {
-      color: ${colors.greenAccent[300]}
+    & .MuiCheckbox-root {
+      color: ${colors.blueAccent[300]} !important;
     }
-    & .${Const.DATA_GRID_CELL_CLASS_NAME.CURSOR_POINTER}:hover {
+    & .${DATA_GRID_CELL_CLASS_NAME.GREEN_COLOR} {
+      color: ${colors.greenAccent[300]};
+    }
+    & .${DATA_GRID_CELL_CLASS_NAME.CURSOR_POINTER}:hover {
       cursor: pointer;
     }
   `
   return (
     <CustomBox
-      m='40px 0 0 0'
+      mt={1}
       height='75vh'
     >
       <DataGrid
         rows={rows}
         columns={columns}
         onCellClick={onCellClick}
-        disableColumnMenu={disableColumnMenu}
+        disableColumnMenu={true}
+        disableSelectionOnClick={true}
+        checkboxSelection={checkboxSelection}
+        selectionModel={selectionModel}
+        onSelectionModelChange={(newSelectionModel) => {setSelectionModel(newSelectionModel)}}
+        getRowId={getRowId}
       />
     </CustomBox>
   )

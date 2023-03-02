@@ -2,210 +2,228 @@ import {
   Box,
   Button,
   IconButton,
-  TextField,
 } from "@mui/material";
 import {useLayoutEffect, useState} from "react";
 import CustomModal from "../index";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import { useDaumPostcodePopup } from "react-daum-postcode";
-import * as Const from "../../../utils/const";
-import {replaceOnlyNumber} from "../../../utils/util";
+import {makeSnackbarMessage, sleep} from "../../../utils/util";
 import {useDispatch, useSelector} from "react-redux";
 import * as Apis from "../../../apis";
 import {resetMember} from "../../../redux/member";
-
-const initialParams = {
-  memberNo: '',
-  memberNm: '',
-  email: '',
-  mobileNo: '',
-  birthday: '',
-  address: '',
-  addressDtl: '',
-  joinDt: ''
-}
+import {
+  BUTTONS_ADD,
+  BUTTONS_EDIT,
+  DAUM_POSTCODE_SCRIPT_URL,
+  DEFAULT_SLEEP_MS,
+  VALIDATION_SCHEMA
+} from "../../../utils/const";
+import { Formik, Form, Field } from "formik";
+import { TextField } from "formik-mui";
+import {useSnackbar} from "notistack";
+import * as Yup from "yup";
 
 const AddMemberModal = ({action, open, setOpen, handleCallback}) => {
   const dispatch = useDispatch()
-  const [params, setParams] = useState(initialParams)
-  const openAddressPopup = useDaumPostcodePopup(Const.DAUM_POSTCODE_SCRIPT_URL)
+  const openAddressPopup = useDaumPostcodePopup(DAUM_POSTCODE_SCRIPT_URL)
   const member = useSelector(state => state.member.member)
+  const { enqueueSnackbar } = useSnackbar()
+  const [initialValues, setInitialValues] = useState({})
 
-  const handleChange = (e) => {
-    setParams({...params, [e.target.name]: e.target.value})
-  }
-
-  const handleNumberInput = (e) => {
-    e.target.value = replaceOnlyNumber(e.target.value)
-    if (e.target.value.length > e.target.maxLength)
-      e.target.value = e.target.value.slice(0, e.target.maxLength)
-  }
+  const validationSchema = Yup.object().shape({
+    memberNm: Yup.string()
+      .required(VALIDATION_SCHEMA.COMMON.requiredMessage)
+      .max(VALIDATION_SCHEMA.MEMBER_NM.MAX.length, VALIDATION_SCHEMA.MEMBER_NM.MAX.message),
+    email: Yup.string()
+      .email(VALIDATION_SCHEMA.COMMON.emailMessage),
+    mobileNo: Yup.string()
+      .required(VALIDATION_SCHEMA.COMMON.requiredMessage)
+      .matches(VALIDATION_SCHEMA.MOBILE_NO.MATCHES.regex, VALIDATION_SCHEMA.MOBILE_NO.MATCHES.message),
+    birthday: Yup.string()
+      .matches(VALIDATION_SCHEMA.BIRTHDAY.MATCHES.regex, VALIDATION_SCHEMA.BIRTHDAY.MATCHES.message),
+    joinDt: Yup.string()
+      .required(VALIDATION_SCHEMA.COMMON.requiredMessage)
+      .matches(VALIDATION_SCHEMA.JOIN_DT.MATCHES.regex, VALIDATION_SCHEMA.JOIN_DT.MATCHES.message),
+  })
 
   const handleClose = () => {
-    setParams(initialParams)
+    setInitialValues({})
     setOpen(false)
   }
 
-  const openSearchAddressPopup = () => {
+  const openSearchAddressPopup = (setFieldValue) => {
     openAddressPopup({
       width: 500,
       height: 500,
       top: (window.innerHeight / 2) - 250,
       left: (window.innerWidth / 2) - 250,
       popupKey: 'popup1',
-      onComplete: handleComplete,
+      onComplete: (data) => setFieldValue('address', data.roadAddress),
     })
   }
 
-  const handleComplete = (data) => {
-    const address = data.roadAddress
-    setParams({...params, address})
+  const handleExit = () => {
+    handleClose()
+    handleCallback()
   }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    try {
-      if (window.confirm(action === Const.BUTTONS_ADD ? "추가하시겠습니까?" : "수정하시겠습니까?")) {
-        const response = action === Const.BUTTONS_ADD ? await Apis.member.addMember(params) : await Apis.member.updateMember(params)
-        if (response.code === 200) {
-          alert(response.message)
-          handleClose()
-          handleCallback()
-        }
+  const handleSubmit = async (values) => {
+    if (window.confirm(action === BUTTONS_ADD ? "추가하시겠습니까?" : "수정하시겠습니까?")) {
+      try {
+          const response = action === BUTTONS_ADD ? await Apis.member.addMember(values) : await Apis.member.updateMember(values)
+          if (response.code === 200) {
+            enqueueSnackbar(makeSnackbarMessage(response.message), {
+              variant: 'success',
+              onExit: handleExit,
+            })
+          }
+      } catch (e) {
+        console.log(e)
+        enqueueSnackbar(makeSnackbarMessage(e.response.data.message), {
+          variant: 'error',
+        })
       }
-    } catch (e) {
-      console.log(e)
-      alert(e.response.data.message)
+      await sleep(DEFAULT_SLEEP_MS)
     }
   }
 
   useLayoutEffect(() => {
-    if (action === Const.BUTTONS_EDIT)
-      setParams({...params, ...member})
+    if (action === BUTTONS_ADD) {
+      setInitialValues({
+        memberNo: '',
+        memberNm: '',
+        email: '',
+        mobileNo: '',
+        birthday: '',
+        address: '',
+        addressDtl: '',
+        joinDt: '',
+      })
+    } else if (action === BUTTONS_EDIT) {
+      setInitialValues({...member})
+    }
     return () => {
       dispatch(resetMember())
     }
   }, [open])
 
   return (
-    <CustomModal width={500} title={action === Const.BUTTONS_ADD ? '회원 추가' : '회원 상세'} open={open} handleClose={handleClose}>
-      <Box component="form" width="100%" onSubmit={handleSubmit}>
-        <TextField
-          autoFocus={open && action === Const.BUTTONS_ADD}
-          fullWidth
-          required={action === Const.BUTTONS_ADD}
-          disabled={action === Const.BUTTONS_EDIT}
-          id="memberNm"
-          name="memberNm"
-          variant="outlined"
-          color="info"
-          label="회원명"
-          margin="normal"
-          value={params.memberNm}
-          onChange={handleChange}
-        />
-        <TextField
-          fullWidth
-          id="email"
-          name="email"
-          variant="outlined"
-          color="info"
-          label="이메일"
-          margin="normal"
-          value={params.email}
-          onChange={handleChange}
-        />
-        <TextField
-          required
-          fullWidth
-          id="mobileNo"
-          name="mobileNo"
-          variant="outlined"
-          color="info"
-          label="휴대폰 번호"
-          margin="normal"
-          value={params.mobileNo}
-          inputProps={{ maxLength: 11}}
-          helperText='숫자만 입력(ex. 01012345678)'
-          onInput={handleNumberInput}
-          onChange={handleChange}
-        />
-        <TextField
-          fullWidth
-          id="birthday"
-          name="birthday"
-          variant="outlined"
-          color="info"
-          label="생년월일"
-          margin="normal"
-          value={params.birthday}
-          inputProps={{ maxLength: 8}}
-          helperText='숫자만 입력(ex. 20020101)'
-          onInput={handleNumberInput}
-          onChange={handleChange}
-        />
-        <Box
-          display='flex'
-          justifyContent='start'
-          alignItems='center'
-          mt={2}
-          mb={1}
-        >
-          <TextField
-            readOnly
-            id="address"
-            name="address"
-            variant="outlined"
-            color="info"
-            label="주소"
-            value={params.address}
-            sx={{ width: '90%', mr: 1 }}
-            onClick={() => params.address === '' && openSearchAddressPopup()}
-          />
-          <IconButton
-            color='info'
-            onClick={openSearchAddressPopup}
-          >
-            <SearchOutlinedIcon />
-          </IconButton>
-        </Box>
-        <TextField
-          fullWidth
-          id="addressDtl"
-          name="addressDtl"
-          variant="outlined"
-          color="info"
-          label="상세주소"
-          margin="normal"
-          value={params.addressDtl}
-          onChange={handleChange}
-        />
-        <TextField
-          required
-          fullWidth
-          id="joinDt"
-          name="joinDt"
-          variant="outlined"
-          color="info"
-          label="입회일자"
-          margin="normal"
-          value={params.joinDt}
-          inputProps={{ maxLength: 8}}
-          helperText='숫자만 입력(ex. 20020101)'
-          onInput={handleNumberInput}
-          onChange={handleChange}
-        />
-        <Button
-          fullWidth
-          type="submit"
-          variant="contained"
-          size="large"
-          color="success"
-          sx={{ mt: 3 }}
-        >
-          {action === Const.BUTTONS_ADD ? '회원 추가' : '회원 수정'}
-        </Button>
-      </Box>
+    <CustomModal width={500} title={action === BUTTONS_ADD ? '회원 추가' : '회원 상세'} open={open} handleClose={handleClose}>
+      <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
+        {({values, setFieldValue, submitForm, isSubmitting}) => (
+          <Form>
+            <Field
+              component={TextField}
+              type='text'
+              autoFocus={open && action === BUTTONS_ADD}
+              fullWidth
+              required={action === BUTTONS_ADD}
+              disabled={action === BUTTONS_EDIT}
+              id='memberNm'
+              name='memberNm'
+              label='회원명'
+              color='info'
+              variant='outlined'
+              margin='normal'
+            />
+            <Field
+              component={TextField}
+              type='text'
+              fullWidth
+              id='email'
+              name='email'
+              label='이메일'
+              color='info'
+              variant='outlined'
+              margin='normal'
+            />
+            <Field
+              component={TextField}
+              type='text'
+              fullWidth
+              required
+              id='mobileNo'
+              name='mobileNo'
+              label='휴대폰 번호'
+              color='info'
+              variant='outlined'
+              margin='normal'
+            />
+            <Field
+              component={TextField}
+              type='text'
+              fullWidth
+              id='birthday'
+              name='birthday'
+              label='생년월일'
+              color='info'
+              variant='outlined'
+              margin='normal'
+            />
+            <Box
+              display='flex'
+              justifyContent='start'
+              alignItems='center'
+              mt={2}
+              mb={1}
+            >
+              <Field
+                component={TextField}
+                type='text'
+                id='address'
+                name='address'
+                label='주소'
+                color='info'
+                variant='outlined'
+                margin='normal'
+                readOnly
+                sx={{ width: '90%', mr: 1 }}
+                onClick={() => values.address.trim() === '' && openSearchAddressPopup(setFieldValue)}
+              />
+              <IconButton
+                color='info'
+                onClick={() => openSearchAddressPopup(setFieldValue)}
+              >
+                <SearchOutlinedIcon />
+              </IconButton>
+            </Box>
+            <Field
+              component={TextField}
+              type='text'
+              fullWidth
+              id='addressDtl'
+              name='addressDtl'
+              label='상세주소'
+              color='info'
+              variant='outlined'
+              margin='normal'
+            />
+            <Field
+              component={TextField}
+              type='text'
+              fullWidth
+              required
+              id='joinDt'
+              name='joinDt'
+              label='입회일자'
+              color='info'
+              variant='outlined'
+              margin='normal'
+            />
+            <Button
+              fullWidth
+              variant="contained"
+              size="large"
+              color="success"
+              sx={{ mt: 3 }}
+              disabled={isSubmitting}
+              onClick={submitForm}
+            >
+              {action === BUTTONS_ADD ? '회원 추가' : '회원 수정'}
+            </Button>
+          </Form>
+        )}
+      </Formik>
     </CustomModal>
   )
 }

@@ -11,6 +11,10 @@ export const isNotBlank = (value) => {
   return !isBlank(value)
 }
 
+export const sleep = (ms) => {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
 export const validatePw = ({ password, setValidPassword }) => {
   /*
    * validate password
@@ -74,26 +78,19 @@ export const checkEqualPw = ({ password, checkPassword, setEqualPassword }) => {
   }
 }
 
-export const convertMobileNo = (mobileNo) => {
-  /**
-   * convert 01012345678 to 010-1234-5678
-   */
-  return isBlank(mobileNo) ? mobileNo : mobileNo.substring(0, 3) + '-' + mobileNo.substring(3, 7) + '-' + mobileNo.substring(7)
-}
-
 export const getAgeFromBirthday = (birthday) => {
-  return isBlank(birthday) ? birthday : String(Math.floor((parseInt(format(new Date(), 'yyyyMMdd')) - parseInt(birthday)) / 10000))
-}
-
-export const generateGridIdByNumber = (list) => {
-  list.forEach((item, index) => item.id = index+1)
-  return list
-}
-
-export const StringToDateHyphen = (date) => {
-  return isBlank(date) ? date : date.substring(0, 4) + '-' + date.substring(4, 6) + '-' + date.substring(6)
+  return isBlank(birthday) ? birthday : String(Math.floor((parseInt(format(new Date(), 'yyyyMMdd')) - parseInt(birthday.replaceAll(/[^0-9]/g, ''))) / 10000))
 }
 
 export const replaceOnlyNumber = (value) => {
   return value.replaceAll(/[^0-9]/g, '')
+}
+
+/* make snackbar message element */
+export const makeSnackbarMessage = (msg) => {
+  /* 줄바꿈 변경하여 리턴 */
+  const message = msg.replaceAll('\n', '<br/>')
+  return (
+    <div dangerouslySetInnerHTML={{__html: message}}/>
+  )
 }

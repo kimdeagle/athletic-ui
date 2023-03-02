@@ -1,6 +1,5 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import * as Apis from "../../apis";
-import {generateGridIdByNumber} from "../../utils/util";
 
 export const getMemberList = createAsyncThunk('getMemberList', Apis.member.getMemberList)
 export const getMember = createAsyncThunk('getMember', Apis.member.getMember)
@@ -24,7 +23,7 @@ export const memberSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getMemberList.fulfilled, (state, action) => {
-        state.memberList = generateGridIdByNumber(action.payload)
+        state.memberList = action.payload
       })
       .addCase(getMemberList.rejected, (state, action) => {
       })

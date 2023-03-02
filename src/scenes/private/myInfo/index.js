@@ -14,15 +14,16 @@ import {tokens} from "../../../theme";
 import {useDispatch, useSelector} from "react-redux";
 import {useLayoutEffect, useState} from "react";
 import {getMyInfo, resetMyInfo} from "../../../redux/auth";
-import {convertMobileNo} from "../../../utils/util";
 import ChangePwModal from "../../../components/modal/myInfo/ChangePwModal";
+import OutModal from "../../../components/modal/myInfo/OutModal";
 
 const MyInfo = () => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
   const dispatch = useDispatch()
   const admin = useSelector(state => state.auth.admin)
-  const [open, setOpen] = useState(false)
+  const [openChangePwModal, setOpenChangePwModal] = useState(false)
+  const [openOutModal, setOpenOutModal] = useState(false)
 
   useLayoutEffect(() => {
     dispatch(getMyInfo())
@@ -42,7 +43,7 @@ const MyInfo = () => {
             variant="outlined"
             size="medium"
             color="info"
-            onClick={() => setOpen(true)}
+            onClick={() => setOpenChangePwModal(true)}
           >
             비밀번호 변경
           </Button>
@@ -51,9 +52,9 @@ const MyInfo = () => {
             size="medium"
             color="warning"
             sx={{ ml: 2 }}
-            onClick={() => alert('회원탈퇴 모달 호출')}
+            onClick={() => setOpenOutModal(true)}
           >
-            회원탈퇴
+            계정삭제
           </Button>
         </Box>
         <TableContainer component={Paper} sx={{ mt: 2 }}>
@@ -85,7 +86,7 @@ const MyInfo = () => {
               </TableRow>
               <TableRow>
                 <TableCell component='th' scope='row'>휴대폰 번호</TableCell>
-                <TableCell>{convertMobileNo(admin.mobileNo)}</TableCell>
+                <TableCell>{admin.mobileNo}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell component='th' scope='row'>최종 수정일시</TableCell>
@@ -95,7 +96,8 @@ const MyInfo = () => {
           </Table>
         </TableContainer>
       </Box>
-      <ChangePwModal open={open} setOpen={setOpen} />
+      <ChangePwModal open={openChangePwModal} setOpen={setOpenChangePwModal} />
+      <OutModal open={openOutModal} setOpen={setOpenOutModal} />
     </Box>
   )
 }

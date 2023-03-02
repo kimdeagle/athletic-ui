@@ -11,19 +11,28 @@ const Member = React.lazy(() => import("../scenes/private/member"))
 const NotFound = React.lazy(() => import("../scenes/global/notFound"))
 const MyInfo = React.lazy(() => import("../scenes/private/myInfo"))
 
+export const ROUTE_PATH_NAME = {
+  login: '/login',
+  join: '/join',
+  resetPassword: '/reset-password',
+  home: '/',
+  member: '/member',
+  myInfo: '/my',
+}
+
 const RouteList = () => {
   return (
     <Suspense fallback={<Loading />}>
       <Routes>
         <Route element={<AuthRoute requireAuth={false} />}>
-          <Route path='/login' element={<Login />} />
-          <Route path='/join' element={<Join />} />
-          <Route path='/reset-password' element={<ResetPassword />} />
+          <Route path={ROUTE_PATH_NAME.login} element={<Login />} />
+          <Route path={ROUTE_PATH_NAME.join} element={<Join />} />
+          <Route path={ROUTE_PATH_NAME.resetPassword} element={<ResetPassword />} />
         </Route>
         <Route element={<AuthRoute requireAuth={true} />}>
-          <Route path='/' element={<Home />} />
-          <Route path='/member' element={<Member />} />
-          <Route path='/my' element={<MyInfo />} />
+          <Route path={ROUTE_PATH_NAME.home} element={<Home />} />
+          <Route path={ROUTE_PATH_NAME.member} element={<Member />} />
+          <Route path={ROUTE_PATH_NAME.myInfo} element={<MyInfo />} />
         </Route>
         <Route path='/*' element={<NotFound />} />
       </Routes>
