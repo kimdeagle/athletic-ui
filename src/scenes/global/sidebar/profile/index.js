@@ -26,7 +26,6 @@ const SidebarProfile = () => {
       <Box textAlign="center">
         <Typography
           variant="h3"
-          color={colors.grey[100]}
           fontWeight="bold"
           mt={2}
           mb={1}

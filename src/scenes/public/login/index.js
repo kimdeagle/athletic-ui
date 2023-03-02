@@ -87,7 +87,6 @@ const Login = () => {
       >
         <Typography
           variant="h2"
-          color={colors.grey[100]}
           fontWeight="bold"
           mb={3}
         >
@@ -105,7 +104,7 @@ const Login = () => {
                 id='loginId'
                 name='loginId'
                 label='아이디'
-                color='info'
+                color='primary'
                 variant='outlined'
                 margin='normal'
               />
@@ -117,7 +116,7 @@ const Login = () => {
                 id='loginPw'
                 name='loginPw'
                 label='비밀번호'
-                color='info'
+                color='primary'
                 variant='outlined'
                 margin='normal'
               />
@@ -127,13 +126,13 @@ const Login = () => {
                 id='isRemember'
                 name='isRemember'
                 Label={{ label: '아이디 저장' }}
-                color='info'
+                color='primary'
               />
               <Button
                 fullWidth
                 variant="contained"
                 size="large"
-                color="info"
+                color='primary'
                 sx={{ mt: 3 }}
                 disabled={isSubmitting}
                 onClick={submitForm}

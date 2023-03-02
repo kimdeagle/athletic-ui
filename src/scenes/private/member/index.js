@@ -9,7 +9,7 @@ import AddMemberModal from "../../../components/modal/member/AddMemberModal";
 import {
   BUTTON_PROPS_DISABLED,
   BUTTON_PROPS_ON_CLICK,
-  BUTTONS_ADD, BUTTONS_EDIT, BUTTONS_SEARCH,
+  BUTTONS_ADD, BUTTONS_EDIT, BUTTONS_EXCEL_DOWNLOAD, BUTTONS_SEARCH,
   DATA_GRID_CELL_CLASS_NAME, DEFAULT_SLEEP_MS
 } from "../../../utils/const";
 import * as Apis from "../../../apis";
@@ -47,6 +47,10 @@ const Member = () => {
     dispatch(getMemberList())
   }
 
+  const handleExcelDownload = () => {
+    alert(1)
+  }
+
   const handleCallback = () => {
     handleSearch()
   }
@@ -59,6 +63,10 @@ const Member = () => {
     [BUTTONS_SEARCH]: {
       [BUTTON_PROPS_DISABLED]: false,
       [BUTTON_PROPS_ON_CLICK]: handleSearch
+    },
+    [BUTTONS_EXCEL_DOWNLOAD]: {
+      [BUTTON_PROPS_DISABLED]: false,
+      [BUTTON_PROPS_ON_CLICK]: handleExcelDownload
     }
   }
 

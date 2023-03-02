@@ -16,7 +16,7 @@ const SidebarHeader = () => {
       alignItems='center'
       m='20px 0 20px 0'
     >
-      {!collapsed && <Typography variant='h3' fontWeight='bold' color={colors.grey[100]} mr='30px'>Athletic</Typography>}
+      {!collapsed && <Typography variant='h3' fontWeight='bold' mr='30px'>Athletic</Typography>}
       <IconButton sx={{ mr: collapsed ? '5px' : undefined }} onClick={() => collapseSidebar()}><MenuOutlinedIcon /></IconButton>
     </Box>
   )

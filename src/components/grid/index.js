@@ -23,17 +23,14 @@ const CustomGrid = ({rows, columns, onCellClick, selectionModel, setSelectionMod
       font-weight: bold;
     }
     & .MuiDataGrid-virtualScroller {
-      background-color: ${colors.grey[800]};
+      background-color: ${theme.palette.mode === 'light' ? colors.grey[900] : colors.grey[800]};
     }
     & .MuiDataGrid-footerContainer {
       border-top: none;
       background-color: ${colors.blueAccent[800]};
     }
-    & .MuiCheckbox-root {
-      color: ${colors.blueAccent[300]} !important;
-    }
     & .${DATA_GRID_CELL_CLASS_NAME.GREEN_COLOR} {
-      color: ${colors.greenAccent[300]};
+      color: ${colors.greenAccent[500]};
     }
     & .${DATA_GRID_CELL_CLASS_NAME.CURSOR_POINTER}:hover {
       cursor: pointer;

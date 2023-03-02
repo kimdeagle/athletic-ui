@@ -81,7 +81,7 @@ const OutModal = ({open, setOpen}) => {
               id='loginPw'
               name='loginPw'
               label='비밀번호'
-              color='info'
+              color='primary'
               variant='outlined'
               margin='normal'
             />

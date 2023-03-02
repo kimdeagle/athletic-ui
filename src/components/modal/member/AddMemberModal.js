@@ -122,7 +122,7 @@ const AddMemberModal = ({action, open, setOpen, handleCallback}) => {
               id='memberNm'
               name='memberNm'
               label='회원명'
-              color='info'
+              color='primary'
               variant='outlined'
               margin='normal'
             />
@@ -133,7 +133,7 @@ const AddMemberModal = ({action, open, setOpen, handleCallback}) => {
               id='email'
               name='email'
               label='이메일'
-              color='info'
+              color='primary'
               variant='outlined'
               margin='normal'
             />
@@ -145,7 +145,7 @@ const AddMemberModal = ({action, open, setOpen, handleCallback}) => {
               id='mobileNo'
               name='mobileNo'
               label='휴대폰 번호'
-              color='info'
+              color='primary'
               variant='outlined'
               margin='normal'
             />
@@ -156,7 +156,7 @@ const AddMemberModal = ({action, open, setOpen, handleCallback}) => {
               id='birthday'
               name='birthday'
               label='생년월일'
-              color='info'
+              color='primary'
               variant='outlined'
               margin='normal'
             />
@@ -173,7 +173,7 @@ const AddMemberModal = ({action, open, setOpen, handleCallback}) => {
                 id='address'
                 name='address'
                 label='주소'
-                color='info'
+                color='primary'
                 variant='outlined'
                 margin='normal'
                 readOnly
@@ -181,7 +181,7 @@ const AddMemberModal = ({action, open, setOpen, handleCallback}) => {
                 onClick={() => values.address.trim() === '' && openSearchAddressPopup(setFieldValue)}
               />
               <IconButton
-                color='info'
+                color='primary'
                 onClick={() => openSearchAddressPopup(setFieldValue)}
               >
                 <SearchOutlinedIcon />
@@ -194,7 +194,7 @@ const AddMemberModal = ({action, open, setOpen, handleCallback}) => {
               id='addressDtl'
               name='addressDtl'
               label='상세주소'
-              color='info'
+              color='primary'
               variant='outlined'
               margin='normal'
             />
@@ -206,7 +206,7 @@ const AddMemberModal = ({action, open, setOpen, handleCallback}) => {
               id='joinDt'
               name='joinDt'
               label='입회일자'
-              color='info'
+              color='primary'
               variant='outlined'
               margin='normal'
             />

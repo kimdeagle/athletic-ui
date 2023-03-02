@@ -169,13 +169,12 @@ export const themeSettings = (mode) => {
       mode: mode,
       ...(mode === "dark"
         ? {
-          // palette values for dark mode
-          primary: {
-            main: colors.primary[500],
-          },
-          secondary: {
-            main: colors.greenAccent[500],
-          },
+          /*
+           * palette values for light mode
+           * Example
+           * primary: { main: #aaabbb },
+           * secondary: { main: #bababa },
+           */
           neutral: {
             dark: colors.grey[700],
             main: colors.grey[500],
@@ -186,13 +185,12 @@ export const themeSettings = (mode) => {
           },
         }
         : {
-          // palette values for light mode
-          primary: {
-            main: colors.primary[100],
-          },
-          secondary: {
-            main: colors.greenAccent[500],
-          },
+          /*
+           * palette values for light mode
+           * Example
+           * primary: { main: #aaabbb },
+           * secondary: { main: #bababa },
+           */
           neutral: {
             dark: colors.grey[700],
             main: colors.grey[500],
@@ -206,6 +204,7 @@ export const themeSettings = (mode) => {
     typography: {
       fontFamily: ["Noto Sans Korean", "sans-serif"].join(","),
       fontSize: 12,
+      allVariants: { color: colors.grey[100] },
       h1: {
         fontFamily: ["Noto Sans Korean", "sans-serif"].join(","),
         fontSize: 40,

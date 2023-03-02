@@ -1,5 +1,4 @@
-import {Box, Button, Typography, useTheme} from "@mui/material";
-import {tokens} from "../../../theme";
+import {Box, Button, Typography} from "@mui/material";
 import * as Apis from "../../../apis";
 import {useNavigate} from "react-router-dom";
 import {Helmet} from "react-helmet-async";
@@ -12,8 +11,6 @@ import {makeSnackbarMessage, sleep} from "../../../utils/util";
 import {ROUTE_PATH_NAME} from "../../../routes/RouteList";
 
 const Join = () => {
-  const theme = useTheme()
-  const colors = tokens(theme.palette.mode)
   const { enqueueSnackbar } = useSnackbar()
   const navigate = useNavigate()
 
@@ -77,7 +74,6 @@ const Join = () => {
       >
         <Typography
           variant="h2"
-          color={colors.grey[100]}
           fontWeight="bold"
           mb={3}
         >
@@ -95,7 +91,7 @@ const Join = () => {
                 id='loginId'
                 name='loginId'
                 label='아이디'
-                color='info'
+                color='primary'
                 variant='outlined'
                 margin='normal'
               />
@@ -107,7 +103,7 @@ const Join = () => {
                 id='loginPw'
                 name='loginPw'
                 label='비밀번호'
-                color='info'
+                color='primary'
                 variant='outlined'
                 margin='normal'
               />
@@ -119,7 +115,7 @@ const Join = () => {
                 id='confirmLoginPw'
                 name='confirmLoginPw'
                 label='비밀번호 확인'
-                color='info'
+                color='primary'
                 variant='outlined'
                 margin='normal'
               />
@@ -131,7 +127,7 @@ const Join = () => {
                 id='adminNm'
                 name='adminNm'
                 label='이름'
-                color='info'
+                color='primary'
                 variant='outlined'
                 margin='normal'
               />
@@ -143,7 +139,7 @@ const Join = () => {
                 id='email'
                 name='email'
                 label='이메일'
-                color='info'
+                color='primary'
                 variant='outlined'
                 margin='normal'
               />
@@ -155,7 +151,7 @@ const Join = () => {
                 id='mobileNo'
                 name='mobileNo'
                 label='휴대폰 번호'
-                color='info'
+                color='primary'
                 variant='outlined'
                 margin='normal'
               />

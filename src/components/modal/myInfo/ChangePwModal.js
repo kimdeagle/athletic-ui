@@ -63,7 +63,7 @@ const ChangePwModal = ({open, setOpen}) => {
               id='loginPw'
               name='loginPw'
               label='현재 비밀번호'
-              color='info'
+              color='primary'
               variant='outlined'
               margin='normal'
             />
@@ -75,7 +75,7 @@ const ChangePwModal = ({open, setOpen}) => {
               id='changePw'
               name='changePw'
               label='변경 비밀번호'
-              color='info'
+              color='primary'
               variant='outlined'
               margin='normal'
             />
@@ -87,15 +87,15 @@ const ChangePwModal = ({open, setOpen}) => {
               id='confirmChangePw'
               name='confirmChangePw'
               label='변경 비밀번호 확인'
-              color='info'
+              color='primary'
               variant='outlined'
               margin='normal'
             />
             <Button
               fullWidth
-              variant="contained"
-              size="large"
-              color="info"
+              variant='contained'
+              size='large'
+              color='primary'
               sx={{ mt: 3 }}
               disabled={isSubmitting}
               onClick={submitForm}

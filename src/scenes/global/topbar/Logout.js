@@ -43,9 +43,9 @@ const Logout = () => {
 
   return (
     <Button
-      variant="outlined"
-      size="large"
-      color="info"
+      variant='outlined'
+      size='large'
+      color='primary'
       startIcon={<ExitToAppOutlinedIcon />}
       sx={{ m: '0 10px 0 10px' }}
       onClick={handleLogout}

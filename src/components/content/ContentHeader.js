@@ -18,7 +18,6 @@ const ContentHeader = ({ title, subTitle, hideButtons, buttonProps }) => {
         {title &&
           <Typography
             variant="h2"
-            color={colors.grey[100]}
             fontWeight="bold"
             mb={1}
           >
@@ -67,7 +66,7 @@ const ContentHeader = ({ title, subTitle, hideButtons, buttonProps }) => {
         </Button>
         <Button
           variant="contained"
-          color="info"
+          color="primary"
           disabled={defaultButtonProps.search.disabled}
           onClick={defaultButtonProps.search.onClick}
         >

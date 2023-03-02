@@ -40,9 +40,9 @@ const MyInfo = () => {
       >
         <Box display='flex' justifyContent='end' alignItems='center'>
           <Button
-            variant="outlined"
+            variant="contained"
             size="medium"
-            color="info"
+            color="primary"
             onClick={() => setOpenChangePwModal(true)}
           >
             비밀번호 변경
@@ -50,7 +50,7 @@ const MyInfo = () => {
           <Button
             variant="contained"
             size="medium"
-            color="warning"
+            color="error"
             sx={{ ml: 2 }}
             onClick={() => setOpenOutModal(true)}
           >
