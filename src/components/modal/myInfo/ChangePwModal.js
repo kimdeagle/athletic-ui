@@ -33,7 +33,7 @@ const ChangePwModal = ({open, setOpen}) => {
   const handleSubmit = async (values) => {
     try {
       //기존 비밀번호와 동일한지 체크
-      const response = await Apis.auth.changePassword(values)
+      const response = await Apis.admin.changePassword(values)
       if (response.code === 200) {
         enqueueSnackbar(makeSnackbarMessage(response.message), {
           variant: 'success',

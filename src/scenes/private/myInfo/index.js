@@ -13,7 +13,7 @@ import {
 import {tokens} from "../../../theme";
 import {useDispatch, useSelector} from "react-redux";
 import {useLayoutEffect, useState} from "react";
-import {getMyInfo, resetMyInfo} from "../../../redux/auth";
+import {getMyInfo, resetAdmin} from "../../../redux/admin";
 import ChangePwModal from "../../../components/modal/myInfo/ChangePwModal";
 import OutModal from "../../../components/modal/myInfo/OutModal";
 
@@ -21,14 +21,14 @@ const MyInfo = () => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
   const dispatch = useDispatch()
-  const admin = useSelector(state => state.auth.admin)
+  const admin = useSelector(state => state.admin.admin)
   const [openChangePwModal, setOpenChangePwModal] = useState(false)
   const [openOutModal, setOpenOutModal] = useState(false)
 
   useLayoutEffect(() => {
     dispatch(getMyInfo())
     return () => {
-      dispatch(resetMyInfo())
+      dispatch(resetAdmin())
     }
   }, [])
 

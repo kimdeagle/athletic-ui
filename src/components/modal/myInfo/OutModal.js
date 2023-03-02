@@ -51,7 +51,7 @@ const OutModal = ({open, setOpen}) => {
 
   const handleSubmit = async (values) => {
     try {
-      const response = await Apis.auth.out(values)
+      const response = await Apis.admin.out(values)
       if (response.code === 200) {
         enqueueSnackbar(makeSnackbarMessage(response.message), {
           variant: 'success',

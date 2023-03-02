@@ -29,30 +29,9 @@ export const reIssueAccessToken = async (params, thunkAPI) => {
   }, thunkAPI)
 }
 
-export const getMyInfo = async (params, thunkAPI) => {
-  return await apiService.GET({
-    url: '/admin/my',
-    params
-  }, thunkAPI)
-}
-
-export const changePassword = async (params, thunkAPI) => {
-  return await apiService.PUT({
-    url: '/admin/password',
-    params
-  }, thunkAPI)
-}
-
 export const logout = async (params, thunkAPI) => {
   return await apiService.POST({
     url: '/auth/logout',
-    params
-  }, thunkAPI)
-}
-
-export const out = async (params, thunkAPI) => {
-  return await apiService.POST({
-    url: '/auth/out',
     params
   }, thunkAPI)
 }

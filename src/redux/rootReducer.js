@@ -5,6 +5,7 @@ import common from "./common";
 import auth from "./auth";
 import menu from "./menu";
 import member from "./member";
+import admin from "./admin";
 
 const persistConfig = {
   key: 'menu',
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   auth,
   menu: persistReducer(persistConfig, menu),
   member,
+  admin,
 })
 
 export default rootReducer

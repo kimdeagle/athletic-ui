@@ -1,13 +1,9 @@
-import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import * as Apis from "../../apis"
-
-export const getMyInfo = createAsyncThunk('getMyInfo', Apis.auth.getMyInfo)
+import {createSlice} from "@reduxjs/toolkit";
 
 const initialState = {
   authenticated: false,
   accessToken: null,
   accessTokenExpiresIn: null,
-  admin: {}
 }
 
 export const authSlice = createSlice({
@@ -24,18 +20,9 @@ export const authSlice = createSlice({
       state.accessToken = null
       state.accessTokenExpiresIn = null
     },
-    resetMyInfo: (state) => {
-      state.admin = {}
-    }
   },
-  extraReducers: (builder) => {
-    builder
-      .addCase(getMyInfo.fulfilled, (state, action) => {
-        state.admin = action.payload
-      })
-  }
 })
 
-export const { setAccessToken, resetAccessToken, resetMyInfo } = authSlice.actions
+export const { setAccessToken, resetAccessToken } = authSlice.actions
 
 export default authSlice.reducer
