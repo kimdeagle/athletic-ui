@@ -21,6 +21,7 @@ root.render(
             <SnackbarProvider
               autoHideDuration={DEFAULT_AUTO_HIDE_DURATION_MS}
               anchorOrigin={{ horizontal: 'center', vertical: 'top' }}
+              style={{ minWidth: 'initial' }}
             >
               <App />
             </SnackbarProvider>

@@ -33,3 +33,10 @@ export const deleteMember = async (params, thunkAPI) => {
     params
   }, thunkAPI)
 }
+
+export const downloadExcel = async (params, thunkAPI) => {
+  return await apiService.DOWNLOAD_EXCEL({
+    url: '/member/excel',
+    params
+  }, thunkAPI)
+}

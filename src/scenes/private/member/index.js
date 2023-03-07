@@ -18,7 +18,7 @@ import {useSnackbar} from "notistack";
 /**
  * TODO
  * 1. 회원추가 -> 이메일, 휴대폰번호, 주소/상세주소, 입회일자 쪼개기 -> 일단 주소만...
- * 2. 엑셀 다운로드
+ * 2. 엑셀 다운로드 - 작업중
  * 3. 엑셀 업로드
  */
 const Member = () => {
@@ -47,8 +47,23 @@ const Member = () => {
     dispatch(getMemberList())
   }
 
-  const handleExcelDownload = () => {
-    alert(1)
+  const handleExcelDownload = async () => {
+    if (window.confirm("엑셀 다운로드 하시겠습니까? (총 " + memberList.length + "건)")) {
+      try {
+        const response = await Apis.member.downloadExcel()
+        if (response.code === 200) {
+          enqueueSnackbar(makeSnackbarMessage(response.message), {
+            variant: 'success',
+          })
+        }
+      } catch (e) {
+        console.log(e)
+        enqueueSnackbar(makeSnackbarMessage(e.response.data.message), {
+          variant: 'error',
+        })
+      }
+      await sleep(DEFAULT_SLEEP_MS)
+    }
   }
 
   const handleCallback = () => {
