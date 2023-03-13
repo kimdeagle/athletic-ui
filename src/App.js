@@ -16,12 +16,16 @@ import {
   IS_NOT_AUTHENTICATED_PATH_LIST,
   RE_ISSUE_ACCESS_TOKEN_INTERVAL_TIMEOUT
 } from "./utils/const";
+import ExcelUpload from "./components/modal/common/ExcelUpload";
+import {useSnackbar} from "notistack";
+import {makeSnackbarMessage} from "./utils/util";
 
 
 function App() {
   const [theme, colorMode] = useMode()
   const authenticated = useSelector(state => state.auth.authenticated)
   const dispatch = useDispatch()
+  const { enqueueSnackbar } = useSnackbar()
 
   /* re issue access token function */
   const reIssueAccessToken = async () => {
@@ -33,7 +37,7 @@ function App() {
         dispatch(setAccessToken({accessToken, accessTokenExpiresIn}))
         axios.defaults.headers.common[AUTHORIZATION_HEADER_NAME] = BEARER_PREFIX + accessToken
       } catch (e) {
-        console.log(e)
+        enqueueSnackbar(makeSnackbarMessage(e.response.data.message), { variant: 'error' })
       }
     }
   }
@@ -79,6 +83,7 @@ function App() {
                 <main className="content">
                   <Topbar />
                   <RouteList />
+                  <ExcelUpload />
                 </main>
               </ProSidebarProvider>
             </div>

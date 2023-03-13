@@ -25,7 +25,6 @@ export const reIssueAccessToken = async (params, thunkAPI) => {
   return await apiService.POST({
     url: '/auth/re-issue/access',
     headers:{Authorization: `Bearer ${params.refreshToken}`},
-    params
   }, thunkAPI)
 }
 

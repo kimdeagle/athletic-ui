@@ -66,3 +66,11 @@ export const DOWNLOAD_EXCEL = async (params, thunkAPI) => {
     ...params
   }, thunkAPI)
 }
+
+export const UPLOAD_EXCEL = async (params, thunkAPI) => {
+  return await request({
+    method: 'post',
+    headers: { 'Content-Type': 'multipart/form-data' },
+    ...params
+  }, thunkAPI)
+}

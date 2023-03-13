@@ -9,11 +9,12 @@ import AddMemberModal from "../../../components/modal/member/AddMemberModal";
 import {
   BUTTON_PROPS_DISABLED,
   BUTTON_PROPS_ON_CLICK,
-  BUTTONS_ADD, BUTTONS_EDIT, BUTTONS_EXCEL_DOWNLOAD, BUTTONS_SEARCH,
+  BUTTONS_ADD, BUTTONS_EDIT, BUTTONS_EXCEL_DOWNLOAD, BUTTONS_EXCEL_UPLOAD, BUTTONS_SEARCH,
   DATA_GRID_CELL_CLASS_NAME, DEFAULT_SLEEP_MS
 } from "../../../utils/const";
 import * as Apis from "../../../apis";
 import {useSnackbar} from "notistack";
+import {setExcelUploadModalProps, setOpenExcelUploadModal} from "../../../redux/common";
 
 /**
  * TODO
@@ -47,30 +48,56 @@ const Member = () => {
     dispatch(getMemberList())
   }
 
+  const handleExcelUpload = async () => {
+    const props = {
+      sampleUrl: '/excel/member/uploadMemberSample.xlsx',
+      uploadUrl: '/member/excel',
+      callback: callbackUpload
+    }
+    dispatch(setOpenExcelUploadModal(true))
+    dispatch(setExcelUploadModalProps(props))
+  }
+
+  const callbackUpload = () => {
+    handleSearch()
+  }
+
   const handleExcelDownload = async () => {
+    if (memberList.length === 0) {
+      alert("다운로드 할 데이터가 없습니다.")
+      return;
+    }
     if (window.confirm("엑셀 다운로드 하시겠습니까? (총 " + memberList.length + "건)")) {
       try {
-        const response = await Apis.member.downloadExcel()
+        const params = {
+          downloadUrl: '/member/excel'
+        }
+        const response = await Apis.common.downloadExcel(params)
         if (response.code === 200) {
           enqueueSnackbar(makeSnackbarMessage(response.message), {
             variant: 'success',
           })
         }
       } catch (e) {
-        console.log(e)
-        enqueueSnackbar(makeSnackbarMessage(e.response.data.message), {
-          variant: 'error',
-        })
+        enqueueSnackbar(makeSnackbarMessage(e.response.data.message), { variant: 'error' })
       }
       await sleep(DEFAULT_SLEEP_MS)
     }
   }
 
-  const handleCallback = () => {
+  const callbackAdd = () => {
     handleSearch()
   }
 
   const buttonProps = {
+    [BUTTONS_EXCEL_UPLOAD]: {
+      [BUTTON_PROPS_DISABLED]: false,
+      [BUTTON_PROPS_ON_CLICK]: handleExcelUpload
+    },
+    [BUTTONS_EXCEL_DOWNLOAD]: {
+      [BUTTON_PROPS_DISABLED]: false,
+      [BUTTON_PROPS_ON_CLICK]: handleExcelDownload
+    },
     [BUTTONS_ADD]: {
       [BUTTON_PROPS_DISABLED]: false,
       [BUTTON_PROPS_ON_CLICK]: handleAdd
@@ -79,10 +106,6 @@ const Member = () => {
       [BUTTON_PROPS_DISABLED]: false,
       [BUTTON_PROPS_ON_CLICK]: handleSearch
     },
-    [BUTTONS_EXCEL_DOWNLOAD]: {
-      [BUTTON_PROPS_DISABLED]: false,
-      [BUTTON_PROPS_ON_CLICK]: handleExcelDownload
-    }
   }
 
   const handleCellClick = async (params, event) => {
@@ -107,9 +130,7 @@ const Member = () => {
         }
       } catch (e) {
         console.log(e)
-        enqueueSnackbar(makeSnackbarMessage(e.response.data.message), {
-          variant: 'error',
-        })
+        enqueueSnackbar(makeSnackbarMessage(e.response.data.message), { variant: 'error' })
       }
       await sleep(DEFAULT_SLEEP_MS)
     }
@@ -148,7 +169,7 @@ const Member = () => {
         getRowId={(row) => row.memberNo}
       >
       </CustomGrid>
-      <AddMemberModal action={action} open={open} setOpen={setOpen} handleCallback={handleCallback} />
+      <AddMemberModal action={action} open={open} setOpen={setOpen} handleCallback={callbackAdd} />
     </Box>
   )
 }

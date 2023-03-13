@@ -34,10 +34,7 @@ const Logout = () => {
         }
       }
     } catch (e) {
-      console.log(e)
-      enqueueSnackbar(makeSnackbarMessage(e.response.data.message), {
-        variant: 'error',
-      })
+      enqueueSnackbar(makeSnackbarMessage(e.response.data.message), { variant: 'error' })
     }
   }
 

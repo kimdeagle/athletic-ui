@@ -36,7 +36,7 @@ const Join = () => {
       .max(VALIDATION_SCHEMA.ADMIN_NM.MAX.length, VALIDATION_SCHEMA.ADMIN_NM.MAX.message),
     email: Yup.string()
       .required(VALIDATION_SCHEMA.COMMON.requiredMessage)
-      .email(VALIDATION_SCHEMA.COMMON.emailMessage),
+      .matches(VALIDATION_SCHEMA.EMAIL.MATCHES.regex, VALIDATION_SCHEMA.EMAIL.MATCHES.message),
     mobileNo: Yup.string()
       .required(VALIDATION_SCHEMA.COMMON.requiredMessage)
       .matches(VALIDATION_SCHEMA.MOBILE_NO.MATCHES.regex, VALIDATION_SCHEMA.MOBILE_NO.MATCHES.message)
@@ -52,10 +52,7 @@ const Join = () => {
         })
       }
     } catch (e) {
-      console.log(e)
-      enqueueSnackbar(makeSnackbarMessage(e.response.data.message), {
-        variant: 'error',
-      })
+      enqueueSnackbar(makeSnackbarMessage(e.response.data.message), { variant: 'error' })
     }
     await sleep(DEFAULT_SLEEP_MS)
   }

@@ -59,10 +59,7 @@ const OutModal = ({open, setOpen}) => {
         })
       }
     } catch (e) {
-      console.log(e)
-      enqueueSnackbar(makeSnackbarMessage(e.response.data.message), {
-        variant: 'error',
-      })
+      enqueueSnackbar(makeSnackbarMessage(e.response.data.message), { variant: 'error' })
     }
     await sleep(DEFAULT_SLEEP_MS)
   }

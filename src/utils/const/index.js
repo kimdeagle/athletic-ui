@@ -45,8 +45,8 @@ export const DAUM_POSTCODE_SCRIPT_URL = 'https://t1.daumcdn.net/mapjsapi/bundle/
 export const VALIDATION_SCHEMA = {
   COMMON: {
     requiredMessage: '필수 입력 항목입니다.',
-    emailMessage: '이메일 형식이 아닙니다.',
     confirmPasswordMessage: '비밀번호 불일치',
+    fileRequiredMessage: '파일을 선택해주세요.',
   },
   LOGIN_ID: {
     MATCHES: {
@@ -75,21 +75,27 @@ export const VALIDATION_SCHEMA = {
   MOBILE_NO: {
     MATCHES: {
       regex: /^01[016789]-?[0-9]{3,4}-?[0-9]{4}$/g,
-      message: '올바르지 않은 휴대폰 번호입니다.',
+      message: '올바른 휴대폰 번호를 입력하세요.',
     }
   },
   BIRTHDAY: {
     MATCHES: {
       regex: /^(19[0-9][0-9]|20\d{2})-?(0[0-9]|1[0-2])-?(0[1-9]|[1-2][0-9]|3[0-1])$/g,
-      message: '올바른 8자리 생년월일을 입력해주세요.',
+      message: '올바른 8자리 생년월일을 입력하세요.',
     }
   },
   JOIN_DT: {
     MATCHES: {
       regex: /^(19[0-9][0-9]|20\d{2})-?(0[0-9]|1[0-2])-?(0[1-9]|[1-2][0-9]|3[0-1])$/g,
-      message: '올바른 8자리 입회일자를 입력해주세요.',
+      message: '올바른 8자리 입회일자를 입력하세요.',
     }
   },
+  EMAIL: {
+    MATCHES: {
+      regex: /^[a-zA-Z0-9+\-\\_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/g,
+      message: '올바른 이메일을 입력하세요.',
+    }
+  }
 }
 
 /* default auto hide duration ms */

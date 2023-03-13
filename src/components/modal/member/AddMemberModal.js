@@ -35,7 +35,7 @@ const AddMemberModal = ({action, open, setOpen, handleCallback}) => {
       .required(VALIDATION_SCHEMA.COMMON.requiredMessage)
       .max(VALIDATION_SCHEMA.MEMBER_NM.MAX.length, VALIDATION_SCHEMA.MEMBER_NM.MAX.message),
     email: Yup.string()
-      .email(VALIDATION_SCHEMA.COMMON.emailMessage),
+      .matches(VALIDATION_SCHEMA.EMAIL.MATCHES.regex, VALIDATION_SCHEMA.EMAIL.MATCHES.message),
     mobileNo: Yup.string()
       .required(VALIDATION_SCHEMA.COMMON.requiredMessage)
       .matches(VALIDATION_SCHEMA.MOBILE_NO.MATCHES.regex, VALIDATION_SCHEMA.MOBILE_NO.MATCHES.message),
@@ -78,10 +78,7 @@ const AddMemberModal = ({action, open, setOpen, handleCallback}) => {
             })
           }
       } catch (e) {
-        console.log(e)
-        enqueueSnackbar(makeSnackbarMessage(e.response.data.message), {
-          variant: 'error',
-        })
+        enqueueSnackbar(makeSnackbarMessage(e.response.data.message), { variant: 'error' })
       }
       await sleep(DEFAULT_SLEEP_MS)
     }

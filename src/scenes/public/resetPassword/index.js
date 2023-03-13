@@ -23,7 +23,7 @@ const ResetPassword = () => {
     loginId: Yup.string().required(VALIDATION_SCHEMA.COMMON.requiredMessage),
     email: Yup.string()
       .required(VALIDATION_SCHEMA.COMMON.requiredMessage)
-      .email(VALIDATION_SCHEMA.COMMON.emailMessage),
+      .matches(VALIDATION_SCHEMA.EMAIL.MATCHES.regex, VALIDATION_SCHEMA.EMAIL.MATCHES.message)
   })
 
   const handleSubmit = async (values) => {
@@ -36,10 +36,7 @@ const ResetPassword = () => {
         })
       }
     } catch (e) {
-      console.log(e)
-      enqueueSnackbar(e.response.data.message || '알 수 없는 오류', {
-        variant: 'error',
-      })
+      enqueueSnackbar(e.response.data.message, { variant: 'error' })
     }
     await sleep(DEFAULT_SLEEP_MS)
   }
