@@ -7,8 +7,8 @@ const downloadExcelResponse = { code: 200, message: '엑셀 다운로드를 성�
 
 const downloadExcel = (response) => {
   let filename = response.headers['content-disposition']
-  filename = filename.substring(filename.indexOf('filename=')).replace('filename=', '')
-  const blob = new Blob([response.data], { type: response.headers['content-type'], encoding: 'utf-8' })
+  filename = decodeURI(filename.substring(filename.indexOf('filename=')).replace('filename=', ''))
+  const blob = new Blob([response.data], { type: response.headers['content-type'] })
   saveAs(blob, filename)
 }
 
@@ -70,7 +70,6 @@ export const DOWNLOAD_EXCEL = async (params, thunkAPI) => {
 export const UPLOAD_EXCEL = async (params, thunkAPI) => {
   return await request({
     method: 'post',
-    headers: { 'Content-Type': 'multipart/form-data' },
     ...params
   }, thunkAPI)
 }
