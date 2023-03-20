@@ -20,7 +20,8 @@ const ResetPassword = () => {
   }
 
   const validationSchema = Yup.object().shape({
-    loginId: Yup.string().required(VALIDATION_SCHEMA.COMMON.requiredMessage),
+    loginId: Yup.string()
+      .required(VALIDATION_SCHEMA.COMMON.requiredMessage),
     email: Yup.string()
       .required(VALIDATION_SCHEMA.COMMON.requiredMessage)
       .matches(VALIDATION_SCHEMA.EMAIL.MATCHES.regex, VALIDATION_SCHEMA.EMAIL.MATCHES.message)
@@ -61,7 +62,7 @@ const ResetPassword = () => {
           비밀번호 초기화
         </Typography>
         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
-          {({ submitForm, isSubmitting }) => (
+          {({ isSubmitting }) => (
             <Form>
               <Field
                 component={TextField}
@@ -91,11 +92,11 @@ const ResetPassword = () => {
               <Button
                 fullWidth
                 variant='contained'
+                type='submit'
                 size='large'
                 color='warning'
                 sx={{ mt: 3 }}
                 disabled={isSubmitting}
-                onClick={submitForm}
               >
                 비밀번호 초기화
               </Button>

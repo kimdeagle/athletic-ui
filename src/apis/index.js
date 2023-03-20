@@ -3,6 +3,7 @@ import * as menu from "./menu";
 import * as member from "./member";
 import * as admin from "./admin";
 import * as common from "./common";
+import * as authority from "./authority";
 
 export {
   auth,
@@ -10,4 +11,5 @@ export {
   member,
   admin,
   common,
+  authority
 }

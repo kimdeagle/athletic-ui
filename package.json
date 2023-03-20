@@ -10,6 +10,7 @@
     "@fullcalendar/list": "^6.0.3",
     "@fullcalendar/timegrid": "^6.0.3",
     "@mui/icons-material": "^5.11.0",
+    "@mui/lab": "^5.0.0-alpha.122",
     "@mui/material": "^5.11.6",
     "@mui/x-data-grid": "^5.17.21",
     "@reduxjs/toolkit": "^1.9.2",

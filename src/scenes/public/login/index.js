@@ -11,7 +11,7 @@ import {useNavigate} from "react-router-dom";
 import * as Apis from "../../../apis";
 import {setAccessToken} from "../../../redux/auth";
 import jwtDecode from "jwt-decode";
-import {getMenuList} from "../../../redux/menu";
+import {getUseMenuList} from "../../../redux/menu";
 import {useDispatch} from "react-redux";
 import axios from "axios";
 import {Helmet} from "react-helmet-async";
@@ -41,8 +41,10 @@ const Login = () => {
   }
 
   const validationSchema = Yup.object().shape({
-    loginId: Yup.string().required(VALIDATION_SCHEMA.COMMON.requiredMessage),
-    loginPw: Yup.string().required(VALIDATION_SCHEMA.COMMON.requiredMessage)
+    loginId: Yup.string()
+      .required(VALIDATION_SCHEMA.COMMON.requiredMessage),
+    loginPw: Yup.string()
+      .required(VALIDATION_SCHEMA.COMMON.requiredMessage)
   })
 
   const handleSubmit = async (values) => {
@@ -55,7 +57,7 @@ const Login = () => {
       axios.defaults.headers.common[AUTHORIZATION_HEADER_NAME] = BEARER_PREFIX + accessToken
       const user = jwtDecode(accessToken)
       setUser({user, expires: refreshTokenExpiresIn})
-      dispatch(getMenuList())
+      dispatch(getUseMenuList())
 
       if (values.isRemember) {
         setRememberId(values.loginId)
@@ -90,7 +92,7 @@ const Login = () => {
           LOGIN
         </Typography>
         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
-          {({submitForm, isSubmitting}) => (
+          {({isSubmitting}) => (
             <Form>
               <Field
                 component={TextField}
@@ -128,11 +130,11 @@ const Login = () => {
               <Button
                 fullWidth
                 variant="contained"
+                type='submit'
                 size="large"
                 color='primary'
                 sx={{ mt: 3 }}
                 disabled={isSubmitting}
-                onClick={submitForm}
               >
                 LOGIN
               </Button>

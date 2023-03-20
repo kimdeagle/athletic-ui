@@ -9,7 +9,7 @@ import {
 import {useSnackbar} from "notistack";
 import {resetAccessToken} from "../../../redux/auth";
 import {removeRefreshToken, removeRememberId, removeUser} from "../../../utils/cookie";
-import {removeMenuList} from "../../../redux/menu";
+import {resetMenuState} from "../../../redux/menu";
 import axios from "axios";
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
@@ -43,7 +43,7 @@ const OutModal = ({open, setOpen}) => {
     dispatch(resetAccessToken())
     removeRefreshToken()
     removeUser()
-    dispatch(removeMenuList())
+    dispatch(resetMenuState())
     removeRememberId()
     axios.defaults.headers.common[AUTHORIZATION_HEADER_NAME] = null
     navigate(ROUTE_PATH_NAME.login, {replace: true})
@@ -67,7 +67,7 @@ const OutModal = ({open, setOpen}) => {
   return (
     <CustomModal width='500' title='계정삭제' subtitle='삭제를 원하시면 비밀번호 입력 후 계정삭제 버튼을 클릭하세요.' open={open} handleClose={handleClose}>
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
-        {({submitForm, isSubmitting}) => (
+        {({isSubmitting}) => (
           <Form>
             <Field
               component={TextField}
@@ -85,11 +85,11 @@ const OutModal = ({open, setOpen}) => {
             <Button
               fullWidth
               variant="contained"
+              type='submit'
               size="large"
               color="error"
               sx={{ mt: 3 }}
               disabled={isSubmitting}
-              onClick={submitForm}
             >
               계정삭제
             </Button>

@@ -3,7 +3,7 @@ import ExitToAppOutlinedIcon from "@mui/icons-material/ExitToAppOutlined";
 import {useNavigate} from "react-router-dom";
 import {resetAccessToken} from "../../../redux/auth";
 import {removeRefreshToken, removeUser} from "../../../utils/cookie";
-import {removeMenuList} from "../../../redux/menu";
+import {resetMenuState} from "../../../redux/menu";
 import {useDispatch} from "react-redux";
 import * as Apis from "../../../apis";
 import axios from "axios";
@@ -28,7 +28,7 @@ const Logout = () => {
           dispatch(resetAccessToken())
           removeRefreshToken()
           removeUser()
-          dispatch(removeMenuList())
+          dispatch(resetMenuState())
           axios.defaults.headers.common[AUTHORIZATION_HEADER_NAME] = null
           navigate(ROUTE_PATH_NAME.login, {replace: true})
         }

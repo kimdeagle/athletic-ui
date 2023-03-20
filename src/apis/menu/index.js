@@ -6,3 +6,24 @@ export const getMenuList = async (params, thunkAPI) => {
     params
   }, thunkAPI)
 }
+
+export const getUseMenuList = async (params, thunkAPI) => {
+  return await apiService.GET({
+    url: '/menu/use',
+    params
+  }, thunkAPI)
+}
+
+export const deleteMenu = async (params, thunkAPI) => {
+  return await apiService.DELETE({
+    url: '/menu',
+    params
+  }, thunkAPI)
+}
+
+export const saveMenu = async (params, thunkAPI) => {
+  return await apiService.POST({
+    url: '/menu',
+    params
+  }, thunkAPI)
+}

@@ -2,39 +2,39 @@ import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import * as Apis from "../../apis"
 
 export const getMenuList = createAsyncThunk('getMenuList', Apis.menu.getMenuList)
+export const getUseMenuList = createAsyncThunk('getUseMenuList', Apis.menu.getUseMenuList)
 
 const initialState = {
-  menuList: []
+  menuList: [],
+  useMenuList: []
 }
 
 export const menuSlice = createSlice({
   name: 'menu',
   initialState,
   reducers: {
-    setMenuList: (state, action) => {
-      state.menuList = action.payload
-    },
-    removeMenuList: (state) => {
+    resetMenuList: (state) => {
       state.menuList = []
     },
+    resetUseMenuList: (state) => {
+      state.useMenuList = []
+    },
+    resetMenuState: (state) => {
+      state.menuList = []
+      state.useMenuList = []
+    }
   },
   extraReducers: (builder) => {
     builder
       .addCase(getMenuList.fulfilled, (state, action) => {
-        state.menuList = processMenuList(action.payload).filter(menu => menu.upMenuNo === null)
+        state.menuList = action.payload
+      })
+      .addCase(getUseMenuList.fulfilled, (state, action) => {
+        state.useMenuList = action.payload
       })
   }
 })
 
-const processMenuList = (menuList) => {
-  menuList.map(menu => {
-    const children = menuList.filter(m => menu.menuNo === m.upMenuNo)
-    if (children)
-      menu.children = processMenuList(children)
-  })
-  return menuList.sort((a, b) => a.sortSeq - b.sortSeq)
-}
-
-export const { setMenuList, removeMenuList } = menuSlice.actions
+export const { resetMenuList, resetUseMenuList, resetMenuState } = menuSlice.actions
 
 export default menuSlice.reducer

@@ -23,11 +23,13 @@ const ChangePwModal = ({open, setOpen}) => {
   }
 
   const validationSchema = Yup.object().shape({
-    loginPw: Yup.string().required(VALIDATION_SCHEMA.COMMON.requiredMessage),
+    loginPw: Yup.string()
+      .required(VALIDATION_SCHEMA.COMMON.requiredMessage),
     changePw: Yup.string()
       .required(VALIDATION_SCHEMA.COMMON.requiredMessage)
       .matches(VALIDATION_SCHEMA.LOGIN_PW.MATCHES.regex, VALIDATION_SCHEMA.LOGIN_PW.MATCHES.message),
-    confirmChangePw: Yup.string().oneOf([Yup.ref('changePw'), null], VALIDATION_SCHEMA.COMMON.confirmPasswordMessage)
+    confirmChangePw: Yup.string()
+      .oneOf([Yup.ref('changePw'), null], VALIDATION_SCHEMA.COMMON.confirmPasswordMessage)
   })
 
   const handleSubmit = async (values) => {
@@ -49,7 +51,7 @@ const ChangePwModal = ({open, setOpen}) => {
   return (
     <CustomModal width='500' title='비밀번호 변경' open={open} handleClose={handleClose}>
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
-        {({submitForm, isSubmitting}) => (
+        {({isSubmitting}) => (
           <Form>
             <Field
               component={TextField}
@@ -91,11 +93,11 @@ const ChangePwModal = ({open, setOpen}) => {
             <Button
               fullWidth
               variant='contained'
+              type='submit'
               size='large'
               color='primary'
               sx={{ mt: 3 }}
               disabled={isSubmitting}
-              onClick={submitForm}
             >
               비밀번호 변경
             </Button>

@@ -47,6 +47,7 @@ export const VALIDATION_SCHEMA = {
     requiredMessage: '필수 입력 항목입니다.',
     confirmPasswordMessage: '비밀번호 불일치',
     fileRequiredMessage: '파일을 선택해주세요.',
+    numberTypeErrorMessage: '숫자만 입력하세요.',
   },
   LOGIN_ID: {
     MATCHES: {
@@ -95,6 +96,16 @@ export const VALIDATION_SCHEMA = {
       regex: /^[a-zA-Z0-9+\-\\_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/g,
       message: '올바른 이메일을 입력하세요.',
     }
+  },
+  SORT_SEQ: {
+    MIN: {
+      limit: 0,
+      message: '0보다 작을 수 없습니다.'
+    },
+    MAX: {
+      limit: 999,
+      message: '999보다 클 수 없습니다.'
+    }
   }
 }
 
@@ -103,3 +114,23 @@ export const DEFAULT_AUTO_HIDE_DURATION_MS = 2000
 
 /* default sleep ms */
 export const DEFAULT_SLEEP_MS = 2000
+
+export const NEW_MENU = {
+  menuNo: 'new',
+  menuNm: '새 메뉴',
+  upMenuNo: '',
+  upMenuNm: '',
+  menuUrl: '/new',
+  menuLevel: 0,
+  useYn: 'N',
+  sortSeq: 999,
+  iconNm: '',
+  children: [],
+  regId: '',
+  regDt: '',
+  modId: '',
+  modDt: '',
+  authNoList: []
+}
+
+export const ROOT_MENU = {...NEW_MENU, menuNo: 'root', menuNm: 'root', menuUrl: ''}

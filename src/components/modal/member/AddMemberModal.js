@@ -107,7 +107,7 @@ const AddMemberModal = ({action, open, setOpen, handleCallback}) => {
   return (
     <CustomModal width={500} title={action === BUTTONS_ADD ? '회원 추가' : '회원 상세'} open={open} handleClose={handleClose}>
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
-        {({values, setFieldValue, submitForm, isSubmitting}) => (
+        {({values, setFieldValue, isSubmitting}) => (
           <Form>
             <Field
               component={TextField}
@@ -210,11 +210,11 @@ const AddMemberModal = ({action, open, setOpen, handleCallback}) => {
             <Button
               fullWidth
               variant="contained"
+              type='submit'
               size="large"
               color="success"
               sx={{ mt: 3 }}
               disabled={isSubmitting}
-              onClick={submitForm}
             >
               {action === BUTTONS_ADD ? '회원 추가' : '회원 수정'}
             </Button>

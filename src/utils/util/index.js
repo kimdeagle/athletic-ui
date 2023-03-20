@@ -94,3 +94,23 @@ export const makeSnackbarMessage = (msg) => {
     <div dangerouslySetInnerHTML={{__html: message}}/>
   )
 }
+
+export const processMenu = (menus) => {
+  return menus.map(menu => {
+    const copyMenu = {...menu}
+    const children = menus.filter(m => copyMenu.menuNo === m.upMenuNo)
+    if (children.length)
+      copyMenu.children = processMenu(children)
+    else
+      copyMenu.children = []
+    return copyMenu
+  }).sort((a, b) => a.sortSeq - b.sortSeq)
+}
+
+export const getProcessedMenuList = (menus) => {
+  return processMenu(menus).filter(menu => menu.upMenuNo === null)
+}
+
+export const isEmptyObject = (obj) => {
+  return obj === null || obj === undefined || Object.keys(obj).length === 0
+}

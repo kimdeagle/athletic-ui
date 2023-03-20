@@ -91,7 +91,7 @@ const ExcelUpload = () => {
         </Button>
       </Box>
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
-        {({values, setFieldValue, submitForm, isSubmitting}) => (
+        {({values, setFieldValue, isSubmitting}) => (
           <Form>
             <Box display='flex' justifyContent='space-between' alignItems='center' mt={1}>
               <Field
@@ -120,11 +120,11 @@ const ExcelUpload = () => {
             <Button
               fullWidth
               variant="contained"
+              type='submit'
               size="large"
               color="success"
               sx={{ mt: 3 }}
               disabled={isSubmitting}
-              onClick={submitForm}
             >
               엑셀 업로드
             </Button>

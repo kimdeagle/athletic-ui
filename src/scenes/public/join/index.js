@@ -30,7 +30,8 @@ const Join = () => {
     loginPw: Yup.string()
       .required(VALIDATION_SCHEMA.COMMON.requiredMessage)
       .matches(VALIDATION_SCHEMA.LOGIN_PW.MATCHES.regex, VALIDATION_SCHEMA.LOGIN_PW.MATCHES.message),
-    confirmLoginPw: Yup.string().oneOf([Yup.ref('loginPw'), null], VALIDATION_SCHEMA.COMMON.confirmPasswordMessage),
+    confirmLoginPw: Yup.string()
+      .oneOf([Yup.ref('loginPw'), null], VALIDATION_SCHEMA.COMMON.confirmPasswordMessage),
     adminNm: Yup.string()
       .required(VALIDATION_SCHEMA.COMMON.requiredMessage)
       .max(VALIDATION_SCHEMA.ADMIN_NM.MAX.length, VALIDATION_SCHEMA.ADMIN_NM.MAX.message),
@@ -77,7 +78,7 @@ const Join = () => {
           계정생성
         </Typography>
         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
-          {({submitForm, isSubmitting}) => (
+          {({isSubmitting}) => (
             <Form>
               <Field
                 component={TextField}
@@ -155,11 +156,11 @@ const Join = () => {
               <Button
                 fullWidth
                 variant="contained"
+                type='submit'
                 size="large"
                 color="success"
                 sx={{ mt: 3 }}
                 disabled={isSubmitting}
-                onClick={submitForm}
               >
                 계정생성
               </Button>

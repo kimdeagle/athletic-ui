@@ -10,6 +10,7 @@ const Home = React.lazy(() => import("../scenes/private/home"))
 const Member = React.lazy(() => import("../scenes/private/member"))
 const NotFound = React.lazy(() => import("../scenes/global/notFound"))
 const MyInfo = React.lazy(() => import("../scenes/private/myInfo"))
+const SystemMenu = React.lazy(() => import("../scenes/private/system/menu"))
 
 export const ROUTE_PATH_NAME = {
   login: '/login',
@@ -18,6 +19,9 @@ export const ROUTE_PATH_NAME = {
   home: '/',
   member: '/member',
   myInfo: '/my',
+  system: {
+    menu: '/system/menu',
+  },
 }
 
 const RouteList = () => {
@@ -33,6 +37,7 @@ const RouteList = () => {
           <Route path={ROUTE_PATH_NAME.home} element={<Home />} />
           <Route path={ROUTE_PATH_NAME.member} element={<Member />} />
           <Route path={ROUTE_PATH_NAME.myInfo} element={<MyInfo />} />
+          <Route path={ROUTE_PATH_NAME.system.menu} element={<SystemMenu />} />
         </Route>
         <Route path='/*' element={<NotFound />} />
       </Routes>
