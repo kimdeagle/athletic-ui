@@ -4,13 +4,12 @@ import {tokens} from "../../../../theme";
 import ArrowCircleRightOutlinedIcon from '@mui/icons-material/ArrowCircleRightOutlined';
 import {getUser} from "../../../../utils/cookie";
 import {useProSidebar} from "react-pro-sidebar";
-import {ROLE_PREFIX} from "../../../../utils/const";
 
 const SidebarProfile = () => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
   const { collapsed } = useProSidebar()
-  const { adminNm, auth, loginAt } = getUser()
+  const { name, authorityDisplayName, loginAt } = getUser()
   return (
     !collapsed &&
     <Box mb="25px">
@@ -30,14 +29,14 @@ const SidebarProfile = () => {
           mt={2}
           mb={1}
         >
-          {adminNm || 'Username'}
+          {name || 'Username'}
         </Typography>
         <Typography
           variant="h5"
           color={colors.greenAccent[500]}
           mb={1}
         >
-          {auth.replace(ROLE_PREFIX, "")}
+          {authorityDisplayName}
         </Typography>
         <Box display="flex" justifyContent="center" alignItems="center" mr={2}>
           <ArrowCircleRightOutlinedIcon

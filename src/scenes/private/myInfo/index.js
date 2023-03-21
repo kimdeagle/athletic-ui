@@ -78,7 +78,7 @@ const MyInfo = () => {
               </TableRow>
               <TableRow>
                 <TableCell component='th' scope='row'>이름</TableCell>
-                <TableCell>{admin.adminNm}</TableCell>
+                <TableCell>{admin.name}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell component='th' scope='row'>이메일</TableCell>

@@ -18,7 +18,7 @@ const Join = () => {
     loginId: '',
     loginPw: '',
     confirmLoginPw: '',
-    adminNm: '',
+    name: '',
     email: '',
     mobileNo: '',
   }
@@ -32,9 +32,9 @@ const Join = () => {
       .matches(VALIDATION_SCHEMA.LOGIN_PW.MATCHES.regex, VALIDATION_SCHEMA.LOGIN_PW.MATCHES.message),
     confirmLoginPw: Yup.string()
       .oneOf([Yup.ref('loginPw'), null], VALIDATION_SCHEMA.COMMON.confirmPasswordMessage),
-    adminNm: Yup.string()
+    name: Yup.string()
       .required(VALIDATION_SCHEMA.COMMON.requiredMessage)
-      .max(VALIDATION_SCHEMA.ADMIN_NM.MAX.length, VALIDATION_SCHEMA.ADMIN_NM.MAX.message),
+      .max(VALIDATION_SCHEMA.NAME.MAX.length, VALIDATION_SCHEMA.NAME.MAX.message),
     email: Yup.string()
       .required(VALIDATION_SCHEMA.COMMON.requiredMessage)
       .matches(VALIDATION_SCHEMA.EMAIL.MATCHES.regex, VALIDATION_SCHEMA.EMAIL.MATCHES.message),
@@ -122,8 +122,8 @@ const Join = () => {
                 type='text'
                 fullWidth
                 required
-                id='adminNm'
-                name='adminNm'
+                id='name'
+                name='name'
                 label='이름'
                 color='primary'
                 variant='outlined'

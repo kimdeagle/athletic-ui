@@ -13,14 +13,14 @@ const SidebarMenu = () => {
 
   const renderMenu = (list) => {
     return list.map(menu => {
-      const { menuNo, menuUrl, menuNm, iconNm, children } = menu
+      const { id, menuUrl, name, iconNm, children } = menu
       const MenuIcon = isEmptyObject(iconNm) ? null : Icons[iconNm]
       return (
         children.length
           ?
           <ParentMenu
-            key={menuNo}
-            title={menuNm}
+            key={id}
+            title={name}
             icon={MenuIcon && <MenuIcon />}
             to={menuUrl}
           >
@@ -28,8 +28,8 @@ const SidebarMenu = () => {
           </ParentMenu>
           :
           <ChildMenu
-            key={menuNo}
-            title={menuNm}
+            key={id}
+            title={name}
             icon={MenuIcon && <MenuIcon />}
             to={menuUrl}
           />

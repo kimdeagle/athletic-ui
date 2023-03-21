@@ -9,7 +9,7 @@ import {
   TableRow,
   Typography, useTheme
 } from "@mui/material";
-import {Field, Form} from "formik";
+import {Field, Form, useFormikContext} from "formik";
 import {CheckboxWithLabel, RadioGroup, TextField} from "formik-mui";
 import {tokens} from "../../../../theme";
 import {NEW_MENU, ROOT_MENU} from "../../../../utils/const";
@@ -23,11 +23,13 @@ const HelperTextField = styled(Field)(() => ({
 
 const iconNmHelperText = '[아이콘명 입력 예시]\nimport AbcOutlinedIcon from \'@mui/icons-material/AbcOutlined\'; 에서\n@mui/icons-material/ 뒤에 아이콘명(AbcOutlined)만 입력하세요.;'
 
-const MenuDetail = ({selected, values, isSubmitting, handleDelete}) => {
+const MenuDetail = ({selected, handleDelete}) => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
 
   const authorityList = useSelector(state => state.authority.authorityList)
+
+  const { values, isSubmitting } = useFormikContext()
 
   return (
     <Box width='35%'>
@@ -50,7 +52,7 @@ const MenuDetail = ({selected, values, isSubmitting, handleDelete}) => {
               >
                 <TableRow>
                   <TableCell component='th' scope='row'>메뉴번호</TableCell>
-                  <TableCell>{values.menuNo}</TableCell>
+                  <TableCell>{values.id}</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell component='th' scope='row'>메뉴명 *</TableCell>
@@ -59,21 +61,21 @@ const MenuDetail = ({selected, values, isSubmitting, handleDelete}) => {
                       component={TextField}
                       fullWidth
                       size='small'
-                      id='menuNm'
-                      name='menuNm'
+                      id='name'
+                      name='name'
                       color='primary'
                       variant='outlined'
-                      disabled={selected === ROOT_MENU.menuNo}
+                      disabled={selected === ROOT_MENU.id}
                     />
                   </TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell component='th' scope='row'>상위메뉴번호</TableCell>
-                  <TableCell>{values.upMenuNo}</TableCell>
+                  <TableCell>{values.upMenuId}</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell component='th' scope='row'>상위메뉴명</TableCell>
-                  <TableCell>{values.upMenuNm}</TableCell>
+                  <TableCell>{values.upMenuName}</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell component='th' scope='row'>메뉴URL *</TableCell>
@@ -86,7 +88,7 @@ const MenuDetail = ({selected, values, isSubmitting, handleDelete}) => {
                       name='menuUrl'
                       color='primary'
                       variant='outlined'
-                      disabled={selected === ROOT_MENU.menuNo}
+                      disabled={selected === ROOT_MENU.id}
                     />
                   </TableCell>
                 </TableRow>
@@ -106,8 +108,8 @@ const MenuDetail = ({selected, values, isSubmitting, handleDelete}) => {
                       variant='outlined'
                       margin='normal'
                     >
-                      <FormControlLabel value='Y' label='사용' control={<Radio disabled={selected === ROOT_MENU.menuNo} />} />
-                      <FormControlLabel value='N' label='미사용' control={<Radio disabled={selected === ROOT_MENU.menuNo} />} />
+                      <FormControlLabel value='Y' label='사용' control={<Radio disabled={selected === ROOT_MENU.id} />} />
+                      <FormControlLabel value='N' label='미사용' control={<Radio disabled={selected === ROOT_MENU.id} />} />
                     </Field>
                   </TableCell>
                 </TableRow>
@@ -122,7 +124,7 @@ const MenuDetail = ({selected, values, isSubmitting, handleDelete}) => {
                       name='sortSeq'
                       color='primary'
                       variant='outlined'
-                      disabled={selected === ROOT_MENU.menuNo}
+                      disabled={selected === ROOT_MENU.id}
                     />
                   </TableCell>
                 </TableRow>
@@ -131,15 +133,15 @@ const MenuDetail = ({selected, values, isSubmitting, handleDelete}) => {
                   <TableCell>
                     {authorityList.length && authorityList.map(authority =>
                       <Field
-                        key={authority.authNo}
+                        key={authority.id}
                         component={CheckboxWithLabel}
                         type='checkbox'
-                        name='authNoList'
-                        checked={values.authNoList.includes(authority.authNo)}
-                        Label={{ label: authority.authNm }}
+                        name='authorities'
+                        checked={values.authorities.includes(authority.id)}
+                        Label={{ label: authority.name }}
                         color='primary'
-                        value={authority.authNo}
-                        disabled={selected === ROOT_MENU.menuNo}
+                        value={authority.id}
+                        disabled={selected === ROOT_MENU.id}
                       />
                     )}
                   </TableCell>
@@ -156,14 +158,14 @@ const MenuDetail = ({selected, values, isSubmitting, handleDelete}) => {
                         name='iconNm'
                         color='primary'
                         variant='outlined'
-                        disabled={selected === ROOT_MENU.menuNo}
+                        disabled={selected === ROOT_MENU.id}
                         helperText={iconNmHelperText}
                       />
                       <Button
                         variant='text'
                         size='medium'
                         color='info'
-                        disabled={isSubmitting || selected === ROOT_MENU.menuNo}
+                        disabled={isSubmitting || selected === ROOT_MENU.id}
                         onClick={() => window.open('https://mui.com/material-ui/material-icons/', '_blank')}
                       >
                         찾아보기
@@ -185,15 +187,15 @@ const MenuDetail = ({selected, values, isSubmitting, handleDelete}) => {
               size='small'
               color='success'
               sx={{ mr: 2 }}
-              disabled={isSubmitting || selected === ROOT_MENU.menuNo}
+              disabled={isSubmitting || selected === ROOT_MENU.id}
             >
-              {selected === NEW_MENU.menuNo ? '등록' : '수정'}
+              {selected === NEW_MENU.id ? '등록' : '수정'}
             </Button>
             <Button
               variant='contained'
               size='small'
               color='error'
-              disabled={isSubmitting || selected === ROOT_MENU.menuNo}
+              disabled={isSubmitting || selected === ROOT_MENU.id}
               onClick={handleDelete}
             >
               삭제

@@ -17,11 +17,8 @@ export const AUTH_INTERVAL_TIMEOUT = 1000
 /* re issue access token interval timeout (30 min) */
 export const RE_ISSUE_ACCESS_TOKEN_INTERVAL_TIMEOUT = 1000 * 60 * 30;
 
-/* role prefix */
-export const ROLE_PREFIX = "ROLE_"
-
 /* hide button pathname list */
-export const HIDE_BUTTON_PATHNAME_LIST = ['/', '/my', '/system']
+export const HIDE_BUTTON_PATHNAME_LIST = ['/', '/my', '/system', '/system/menu', '/system/admin']
 
 /* common button attributes */
 export const BUTTONS_EXCEL_UPLOAD = 'excelUpload'
@@ -61,13 +58,7 @@ export const VALIDATION_SCHEMA = {
       message: '8 ~ 20글자 이하의 영어/숫자/특수문자를 조합해서 입력하세요.',
     }
   },
-  ADMIN_NM: {
-    MAX: {
-      length: 10,
-      message: '10글자 이하로 입력하세요.',
-    }
-  },
-  MEMBER_NM: {
+  NAME: {
     MAX: {
       length: 10,
       message: '10글자 이하로 입력하세요.',
@@ -116,10 +107,10 @@ export const DEFAULT_AUTO_HIDE_DURATION_MS = 2000
 export const DEFAULT_SLEEP_MS = 2000
 
 export const NEW_MENU = {
-  menuNo: 'new',
-  menuNm: '새 메뉴',
-  upMenuNo: '',
-  upMenuNm: '',
+  id: 'new',
+  name: '새 메뉴',
+  upMenuId: '',
+  upMenuName: '',
   menuUrl: '/new',
   menuLevel: 0,
   useYn: 'N',
@@ -130,7 +121,7 @@ export const NEW_MENU = {
   regDt: '',
   modId: '',
   modDt: '',
-  authNoList: []
+  authorities: []
 }
 
-export const ROOT_MENU = {...NEW_MENU, menuNo: 'root', menuNm: 'root', menuUrl: ''}
+export const ROOT_MENU = {...NEW_MENU, id: 'root', name: 'root', menuUrl: ''}

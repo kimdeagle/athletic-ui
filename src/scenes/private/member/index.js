@@ -31,7 +31,7 @@ const Member = () => {
   const { enqueueSnackbar } = useSnackbar()
 
   const columns = [
-    { field: 'memberNm', headerName: '회원명', flex: 1, cellClassName: `${DATA_GRID_CELL_CLASS_NAME.GREEN_COLOR} ${DATA_GRID_CELL_CLASS_NAME.CURSOR_POINTER}`},
+    { field: 'name', headerName: '회원명', flex: 1, cellClassName: `${DATA_GRID_CELL_CLASS_NAME.GREEN_COLOR} ${DATA_GRID_CELL_CLASS_NAME.CURSOR_POINTER}`},
     { field: 'email', headerName: '이메일', flex: 1},
     { field: 'mobileNo', headerName: '휴대폰 번호', flex: 1},
     { field: 'age', headerName: '나이', flex: 1, valueGetter: (params) => getAgeFromBirthday(params.row.birthday)},
@@ -109,8 +109,8 @@ const Member = () => {
   }
 
   const handleCellClick = async (params, event) => {
-    if (params.field === 'memberNm') {
-      await dispatch(getMember(params.row.memberNo))
+    if (params.field === 'name') {
+      await dispatch(getMember(params.row.id))
       setAction(BUTTONS_EDIT)
       setOpen(true)
     }
@@ -144,7 +144,7 @@ const Member = () => {
 
   return (
     <Box m="20px">
-      <ContentHeader title='회원 관리' subTitle="Member Management" buttonProps={buttonProps} />
+      <ContentHeader title='회원 관리' subTitle="회원 관리" buttonProps={buttonProps} />
       <Box
         display='flex'
         justifyContent='start'
@@ -166,7 +166,7 @@ const Member = () => {
         checkboxSelection={true}
         selectionModel={selectionModel}
         setSelectionModel={setSelectionModel}
-        getRowId={(row) => row.memberNo}
+        getRowId={(row) => row.id}
       >
       </CustomGrid>
       <AddMemberModal action={action} open={open} setOpen={setOpen} handleCallback={callbackAdd} />

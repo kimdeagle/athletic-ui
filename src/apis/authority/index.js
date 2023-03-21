@@ -6,10 +6,3 @@ export const getAuthorityList = async (params, thunkAPI) => {
     params
   }, thunkAPI)
 }
-
-export const getAuthorityMenuList = async (params, thunkAPI) => {
-  return await apiService.GET({
-    url: '/authority/menu',
-    params
-  }, thunkAPI)
-}

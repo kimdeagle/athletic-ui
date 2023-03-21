@@ -8,38 +8,40 @@ import {useEffect, useState} from "react";
 import {useSnackbar} from "notistack";
 import {useSelector} from "react-redux";
 import {NEW_MENU, ROOT_MENU} from "../../../../utils/const";
+import {useFormikContext} from "formik";
 
-const MenuTree = ({selected, setSelected, entireMenuList, setEntireMenuList, processedRootMenu, setProcessedRootMenu, deleteAlreadyAddMenu, isSubmitting, setValues}) => {
+const MenuTree = ({selected, setSelected, entireMenuList, setEntireMenuList, processedRootMenu, setProcessedRootMenu, deleteAlreadyAddMenu}) => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
   const menuList = useSelector(state => state.menu.menuList)
-  const authorityMenuList = useSelector(state => state.authority.authorityMenuList)
 
-  const [expanded, setExpanded] = useState([ROOT_MENU.menuNo])
+  const [expanded, setExpanded] = useState([ROOT_MENU.id])
+
+  const { setValues, isSubmitting } = useFormikContext()
 
   const { enqueueSnackbar } = useSnackbar()
 
   /* 모두 펼치기 */
   const handleExpandClick = () => {
-    setExpanded(entireMenuList.map(menu => menu.menuNo))
+    setExpanded(entireMenuList.map(menu => menu.id))
   }
 
   /* 모두 숨기기 */
   const handleCollapseClick = () => {
     setExpanded([])
-    setSelected(ROOT_MENU.menuNo)
+    setSelected(ROOT_MENU.id)
     setValues(ROOT_MENU)
   }
 
   /* 추가 버튼 클릭 */
   const handleAddClick = () => {
-    const selectedMenu = entireMenuList.find(menu => menu.menuNo === selected)
+    const selectedMenu = entireMenuList.find(menu => menu.id === selected)
     if (selectedMenu.menuLevel === 2) {
       enqueueSnackbar(makeSnackbarMessage('현재 2depth에 메뉴를 추가할 수 없습니다.\n추후 변경 예정입니다.'), { variant: 'error' })
       return;
     }
 
-    const alreadyAddMenu = entireMenuList.find(menu => menu.menuNo === NEW_MENU.menuNo)
+    const alreadyAddMenu = entireMenuList.find(menu => menu.id === NEW_MENU.id)
     if (isEmptyObject(alreadyAddMenu)) {
       addNewMenu()
     } else {
@@ -52,26 +54,26 @@ const MenuTree = ({selected, setSelected, entireMenuList, setEntireMenuList, pro
 
   /* 새 메뉴 추가 */
   const addNewMenu = () => {
-    const selectedMenu = entireMenuList.find(menu => menu.menuNo === selected)
+    const selectedMenu = entireMenuList.find(menu => menu.id === selected)
     const addMenu = {
       ...NEW_MENU,
-      upMenuNo: selected !== ROOT_MENU.menuNo ? selectedMenu.menuNo : null,
-      upMenuNm: selected !== ROOT_MENU.menuNo ? selectedMenu.menuNm : null,
+      upMenuId: selected !== ROOT_MENU.id ? selectedMenu.id : null,
+      upMenuName: selected !== ROOT_MENU.id ? selectedMenu.name : null,
       menuUrl: selectedMenu.menuUrl + NEW_MENU.menuUrl,
       menuLevel: selectedMenu.menuLevel + 1
     }
     const childrenList = [...menuList, addMenu]
     setEntireMenuList([ROOT_MENU, ...childrenList])
     setProcessedRootMenu({...ROOT_MENU, children: getProcessedMenuList(childrenList)})
-    setExpanded([...expanded, selectedMenu.menuNo])
-    setSelected(NEW_MENU.menuNo)
+    setExpanded([...expanded, selectedMenu.id])
+    setSelected(NEW_MENU.id)
     setValues(addMenu)
   }
 
   /* 메뉴 선택 */
   const handleSelect = (event, nodeId) => {
     if (nodeId !== selected) {
-      if (selected === NEW_MENU.menuNo) {
+      if (selected === NEW_MENU.id) {
         if (window.confirm("작업중인 추가 메뉴가 있습니다.\n삭제하고 이동하시겠습니까?")) {
           deleteAlreadyAddMenu()
           setProcessedRootMenu({...ROOT_MENU, children: getProcessedMenuList(menuList)})
@@ -79,28 +81,27 @@ const MenuTree = ({selected, setSelected, entireMenuList, setEntireMenuList, pro
           return;
         }
       }
-      const authNoList = authorityMenuList.filter(authorityMenu => authorityMenu.menuNo === nodeId).map(authorityMenu => authorityMenu.authNo)
       setSelected(nodeId)
-      setValues({...entireMenuList.find(menu => menu.menuNo === nodeId), authNoList})
+      setValues(entireMenuList.find(menu => menu.id === nodeId))
     }
   }
 
   /* 메뉴 토글 */
   const handleToggle = (event, nodeIds) => {
-    if (selected !== NEW_MENU.menuNo)
+    if (selected !== NEW_MENU.id)
       setExpanded(nodeIds)
   }
 
   /* 메뉴 렌더링 */
   const renderMenu = () => (
-    <TreeItem nodeId={processedRootMenu.menuNo} label={processedRootMenu.menuNm}>
+    <TreeItem nodeId={processedRootMenu.id} label={processedRootMenu.name}>
       {processedRootMenu.children ? renderChildren(processedRootMenu.children) : null}
     </TreeItem>
   )
 
   const renderChildren = (children) => (
     children.map(child => (
-      <TreeItem key={child.menuNo} nodeId={child.menuNo} label={child.menuNm}>
+      <TreeItem key={child.id} nodeId={child.id} label={child.name}>
         {child.children ? renderChildren(child.children) : null}
       </TreeItem>
     ))

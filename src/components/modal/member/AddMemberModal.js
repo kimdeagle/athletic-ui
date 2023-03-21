@@ -31,9 +31,9 @@ const AddMemberModal = ({action, open, setOpen, handleCallback}) => {
   const [initialValues, setInitialValues] = useState({})
 
   const validationSchema = Yup.object().shape({
-    memberNm: Yup.string()
+    name: Yup.string()
       .required(VALIDATION_SCHEMA.COMMON.requiredMessage)
-      .max(VALIDATION_SCHEMA.MEMBER_NM.MAX.length, VALIDATION_SCHEMA.MEMBER_NM.MAX.message),
+      .max(VALIDATION_SCHEMA.NAME.MAX.length, VALIDATION_SCHEMA.NAME.MAX.message),
     email: Yup.string()
       .matches(VALIDATION_SCHEMA.EMAIL.MATCHES.regex, VALIDATION_SCHEMA.EMAIL.MATCHES.message),
     mobileNo: Yup.string()
@@ -87,8 +87,8 @@ const AddMemberModal = ({action, open, setOpen, handleCallback}) => {
   useLayoutEffect(() => {
     if (action === BUTTONS_ADD) {
       setInitialValues({
-        memberNo: '',
-        memberNm: '',
+        id: '',
+        name: '',
         email: '',
         mobileNo: '',
         birthday: '',
@@ -116,8 +116,8 @@ const AddMemberModal = ({action, open, setOpen, handleCallback}) => {
               fullWidth
               required={action === BUTTONS_ADD}
               disabled={action === BUTTONS_EDIT}
-              id='memberNm'
-              name='memberNm'
+              id='name'
+              name='name'
               label='회원명'
               color='primary'
               variant='outlined'

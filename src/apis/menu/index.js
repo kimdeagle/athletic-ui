@@ -14,10 +14,9 @@ export const getUseMenuList = async (params, thunkAPI) => {
   }, thunkAPI)
 }
 
-export const deleteMenu = async (params, thunkAPI) => {
+export const deleteMenu = async (id, thunkAPI) => {
   return await apiService.DELETE({
-    url: '/menu',
-    params
+    url: `/menu/${id}`,
   }, thunkAPI)
 }
 

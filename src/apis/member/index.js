@@ -14,9 +14,9 @@ export const addMember = async (params, thunkAPI) => {
   }, thunkAPI)
 }
 
-export const getMember = async (memberNo, thunkAPI) => {
+export const getMember = async (id, thunkAPI) => {
   return await apiService.GET({
-    url: `/member/${memberNo}`
+    url: `/member/${id}`
   }, thunkAPI)
 }
 

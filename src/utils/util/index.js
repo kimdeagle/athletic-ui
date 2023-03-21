@@ -98,7 +98,7 @@ export const makeSnackbarMessage = (msg) => {
 export const processMenu = (menus) => {
   return menus.map(menu => {
     const copyMenu = {...menu}
-    const children = menus.filter(m => copyMenu.menuNo === m.upMenuNo)
+    const children = menus.filter(m => copyMenu.id === m.upMenuId)
     if (children.length)
       copyMenu.children = processMenu(children)
     else
@@ -108,7 +108,7 @@ export const processMenu = (menus) => {
 }
 
 export const getProcessedMenuList = (menus) => {
-  return processMenu(menus).filter(menu => menu.upMenuNo === null)
+  return processMenu(menus).filter(menu => menu.upMenuId === null)
 }
 
 export const isEmptyObject = (obj) => {
