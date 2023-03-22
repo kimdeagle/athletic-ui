@@ -1,5 +1,5 @@
-import {Box, Button, Typography, useTheme} from "@mui/material";
-import {TreeItem, TreeView} from "@mui/lab";
+import {Box, Button, styled, Typography, useTheme} from "@mui/material";
+import {TreeItem, TreeView, useTreeItem} from "@mui/lab";
 import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
 import ChevronRightOutlinedIcon from "@mui/icons-material/ChevronRightOutlined";
 import {getProcessedMenuList, isEmptyObject, makeSnackbarMessage} from "../../../../utils/util";
@@ -9,6 +9,140 @@ import {useSnackbar} from "notistack";
 import {useSelector} from "react-redux";
 import {NEW_MENU, ROOT_MENU} from "../../../../utils/const";
 import {useFormikContext} from "formik";
+import PropTypes from "prop-types";
+import * as Icons from "@mui/icons-material";
+import React from "react";
+import clsx from "clsx";
+
+const CustomContentRoot = styled('div')(({ theme }) => ({
+  /*
+  * root: "MuiTreeItem-content" (based)
+  * selected: "Mui-selected"
+  * expanded: "Mui-expanded"
+  * focused: "Mui-focused"
+  * iconContainer: "MuiTreeItem-iconContainer"
+  * label: "MuiTreeItem-label"
+  * */
+
+  cursor: 'default !important',
+  '&:hover': {
+    backgroundColor: 'transparent !important',
+  },
+  '&.Mui-focused, &.Mui-selected.Mui-focused': {
+    backgroundColor: 'transparent !important',
+  },
+  '&.Mui-selected': {
+    backgroundColor: 'transparent !important',
+    '& .MuiTreeItem-label': {
+      backgroundColor: theme.palette.action.selected,
+      borderTopRightRadius: theme.spacing(2),
+      borderBottomRightRadius: theme.spacing(2),
+      '&:hover': {
+        backgroundColor: theme.palette.action.selected,
+      },
+      '& .MuiTypography-root': {
+        fontWeight: theme.typography.fontWeightBold
+      },
+    },
+  },
+  '& .MuiTreeItem-label': {
+    display: 'flex',
+    alignItems: 'center',
+    padding: '5px !important',
+    cursor: 'pointer !important',
+    '&:hover': {
+      backgroundColor: theme.palette.action.hover,
+      borderTopRightRadius: theme.spacing(2),
+      borderBottomRightRadius: theme.spacing(2),
+      '& .MuiTypography-root': {
+        fontWeight: theme.typography.fontWeightBold
+      },
+    },
+    '& .MuiSvgIcon-root': {
+      fontSize: '18px !important',
+      color: theme.palette.mode === 'dark' ? '#59d0ff' : '#0098e5',
+      marginRight: '8px !important',
+    },
+    '& .MuiTypography-root': {
+      fontSize: '14px !important',
+    },
+  },
+}))
+
+const CustomContent = React.forwardRef(function CustomContent(props, ref) {
+  const {
+    className,
+    classes,
+    label,
+    nodeId,
+    icon,
+    expansionIcon,
+  } = props
+
+  const {
+    disabled,
+    expanded,
+    selected,
+    focused,
+    handleExpansion,
+    handleSelection,
+    preventSelection,
+  } = useTreeItem(nodeId)
+
+  const handleMouseDown = (event) => {
+    preventSelection(event)
+  }
+
+  const handleExpansionClick = (event) => {
+    handleExpansion(event)
+  }
+
+  const handleSelectionClick = (event) => {
+    handleSelection(event)
+  }
+
+  const LabelIcon = isEmptyObject(icon) ? null : Icons[icon]
+
+  return (
+      <CustomContentRoot
+        className={clsx(className, classes.root, {
+          'Mui-expanded': expanded,
+          'Mui-selected': selected,
+          'Mui-focused': focused,
+          'Mui-disabled': disabled,
+        })}
+        onMouseDown={handleMouseDown}
+        ref={ref}
+      >
+        {/* expansion icon area */}
+        <Box
+          className={classes.iconContainer}
+          sx={{ cursor: expansionIcon ? 'pointer' : 'inherit' }}
+          onClick={handleExpansionClick}
+        >
+          {expansionIcon}
+        </Box>
+        {/* label area */}
+        <Box
+          className={classes.label}
+          onClick={handleSelectionClick}
+          ml={LabelIcon ? 'inherit' : '26px'}
+        >
+          {LabelIcon && <Box component={LabelIcon} />}
+          <Typography>{label}</Typography>
+        </Box>
+      </CustomContentRoot>
+    )
+})
+
+CustomContent.propTypes = {
+  classes: PropTypes.object.isRequired,
+  className: PropTypes.string,
+  icon: PropTypes.node,
+  expansionIcon: PropTypes.node,
+  label: PropTypes.string.isRequired,
+  nodeId: PropTypes.string.isRequired
+}
 
 const MenuTree = ({selected, setSelected, entireMenuList, setEntireMenuList, processedRootMenu, setProcessedRootMenu, deleteAlreadyAddMenu}) => {
   const theme = useTheme()
@@ -94,17 +228,19 @@ const MenuTree = ({selected, setSelected, entireMenuList, setEntireMenuList, pro
 
   /* 메뉴 렌더링 */
   const renderMenu = () => (
-    <TreeItem nodeId={processedRootMenu.id} label={processedRootMenu.name}>
+    <TreeItem ContentComponent={CustomContent} nodeId={processedRootMenu.id} icon={'ClearAllOutlined'} label={processedRootMenu.name}>
       {processedRootMenu.children ? renderChildren(processedRootMenu.children) : null}
     </TreeItem>
   )
 
   const renderChildren = (children) => (
-    children.map(child => (
-      <TreeItem key={child.id} nodeId={child.id} label={child.name}>
+    children.map(child => {
+      return (
+        <TreeItem ContentComponent={CustomContent} key={child.id} nodeId={child.id} icon={child.iconNm} label={child.name}>
         {child.children ? renderChildren(child.children) : null}
       </TreeItem>
-    ))
+      )
+    })
   )
 
   useEffect(() => {

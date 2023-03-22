@@ -46,7 +46,7 @@ const MenuDetail = ({selected, handleDelete}) => {
               <TableBody
                 sx={{
                   "& th": { backgroundColor: colors.grey[700], width: '20%', textAlign: 'center', fontWeight: 800, borderRight: `1px solid ${colors.grey[200]}` },
-                  "& td": { width: '80%', pl: '20px' },
+                  "& td": { backgroundColor: colors.grey[800], width: '80%', pl: '20px' },
                   "& tr:last-child th, & tr:last-child td": { borderBottom: 0 },
                 }}
               >
