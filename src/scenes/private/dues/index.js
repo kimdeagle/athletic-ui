@@ -137,6 +137,7 @@ const Dues = () => {
         if (response.code === 200) {
           enqueueSnackbar(makeSnackbarMessage(response.message), { variant: 'success' })
         }
+        handleSearch()
       } catch (e) {
         selected.revert()
       }
@@ -245,6 +246,7 @@ const Dues = () => {
             /* today */
             '& .fc .fc-daygrid-day.fc-day-today': {
               backgroundColor: `${colors.green[900]}80`,
+              border: `3px solid ${colors.greenAccent[400]}`
             },
 
             /* highlight */
@@ -254,7 +256,7 @@ const Dues = () => {
 
             /* other days */
             '& .fc-day.fc-day-other': {
-              backgroundColor: colors.grey[800],
+              backgroundColor: colors.grey[900],
             },
 
             /* list - th */
