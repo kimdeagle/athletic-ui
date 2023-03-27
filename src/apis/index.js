@@ -4,6 +4,7 @@ import * as member from "./member";
 import * as admin from "./admin";
 import * as common from "./common";
 import * as authority from "./authority";
+import * as dues from "./dues";
 
 export {
   auth,
@@ -11,5 +12,6 @@ export {
   member,
   admin,
   common,
-  authority
+  authority,
+  dues,
 }

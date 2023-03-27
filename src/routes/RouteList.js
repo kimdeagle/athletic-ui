@@ -8,6 +8,7 @@ const Join = React.lazy(() => import("../scenes/public/join"))
 const ResetPassword = React.lazy(() => import("../scenes/public/resetPassword"))
 const Home = React.lazy(() => import("../scenes/private/home"))
 const Member = React.lazy(() => import("../scenes/private/member"))
+const Dues = React.lazy(() => import("../scenes/private/dues"))
 const NotFound = React.lazy(() => import("../scenes/global/notFound"))
 const MyInfo = React.lazy(() => import("../scenes/private/myInfo"))
 const SystemMenu = React.lazy(() => import("../scenes/private/system/menu"))
@@ -18,6 +19,7 @@ export const ROUTE_PATH_NAME = {
   resetPassword: '/reset-password',
   home: '/',
   member: '/member',
+  dues: '/dues',
   myInfo: '/my',
   system: {
     menu: '/system/menu',
@@ -36,6 +38,7 @@ const RouteList = () => {
         <Route element={<AuthRoute requireAuth={true} />}>
           <Route path={ROUTE_PATH_NAME.home} element={<Home />} />
           <Route path={ROUTE_PATH_NAME.member} element={<Member />} />
+          <Route path={ROUTE_PATH_NAME.dues} element={<Dues />} />
           <Route path={ROUTE_PATH_NAME.myInfo} element={<MyInfo />} />
           <Route path={ROUTE_PATH_NAME.system.menu} element={<SystemMenu />} />
         </Route>

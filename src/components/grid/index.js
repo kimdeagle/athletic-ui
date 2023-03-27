@@ -1,11 +1,18 @@
 import {DataGrid} from "@mui/x-data-grid";
-import {Box, styled, useTheme} from "@mui/material";
+import {Box, Button, styled, useTheme} from "@mui/material";
 import {tokens} from "../../theme";
 import {DATA_GRID_CELL_CLASS_NAME} from "../../utils/const";
 
-const CustomGrid = ({rows, columns, onCellClick, selectionModel, setSelectionModel, checkboxSelection, getRowId}) => {
+const CustomGrid = ({rows, columns, onCellClick, selectionModel, setSelectionModel, checkboxSelection, getRowId, handleDelete}) => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
+
+  const headerAlignColumns = [...columns]
+
+  headerAlignColumns.forEach(column => {
+    column.align = column.align ? column.align : 'center'
+    column.headerAlign = column.headerAlign ? column.headerAlign : 'center'
+  })
 
   const CustomBox = styled(Box)`
     & .MuiDataGrid-root {
@@ -37,22 +44,40 @@ const CustomGrid = ({rows, columns, onCellClick, selectionModel, setSelectionMod
     }
   `
   return (
-    <CustomBox
-      mt={1}
-      height='75vh'
-    >
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        onCellClick={onCellClick}
-        disableColumnMenu={true}
-        disableSelectionOnClick={true}
-        checkboxSelection={checkboxSelection}
-        selectionModel={selectionModel}
-        onSelectionModelChange={(newSelectionModel) => {setSelectionModel(newSelectionModel)}}
-        getRowId={getRowId}
-      />
-    </CustomBox>
+    <Box>
+      <Box
+        display='flex'
+        justifyContent='start'
+        alignItems='center'
+      >
+        {handleDelete &&
+          <Button
+            variant="contained"
+            color="error"
+            disabled={!selectionModel.length}
+            onClick={handleDelete}
+          >
+            선택삭제
+          </Button>
+        }
+      </Box>
+      <CustomBox
+        mt={1}
+        height='75vh'
+      >
+        <DataGrid
+          rows={rows}
+          columns={headerAlignColumns}
+          onCellClick={onCellClick}
+          disableColumnMenu={true}
+          disableSelectionOnClick={true}
+          checkboxSelection={checkboxSelection}
+          selectionModel={selectionModel}
+          onSelectionModelChange={(newSelectionModel) => {setSelectionModel(newSelectionModel)}}
+          getRowId={getRowId}
+        />
+      </CustomBox>
+    </Box>
   )
 }
 

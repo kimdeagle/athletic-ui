@@ -27,6 +27,7 @@ export const BUTTONS_ADD = 'add'
 export const BUTTONS_SEARCH = 'search'
 export const BUTTONS_EDIT = 'edit'
 export const BUTTON_PROPS_DISABLED = 'disabled'
+export const BUTTON_PROPS_PARAMETERS = 'params'
 export const BUTTON_PROPS_ON_CLICK = 'onClick'
 
 /* data grid cell class name */
@@ -42,6 +43,7 @@ export const DAUM_POSTCODE_SCRIPT_URL = 'https://t1.daumcdn.net/mapjsapi/bundle/
 export const VALIDATION_SCHEMA = {
   COMMON: {
     requiredMessage: '필수 입력 항목입니다.',
+    requiredSelectedMessage: '필수 선택 항목입니다.',
     confirmPasswordMessage: '비밀번호 불일치',
     fileRequiredMessage: '파일을 선택해주세요.',
     numberTypeErrorMessage: '숫자만 입력하세요.',
@@ -97,7 +99,10 @@ export const VALIDATION_SCHEMA = {
       limit: 999,
       message: '999보다 클 수 없습니다.'
     }
-  }
+  },
+  END_DT: {
+    MinMessage: '종료일자는 시작일자보다 작을 수 없습니다.',
+  },
 }
 
 /* default auto hide duration ms */
@@ -125,3 +130,15 @@ export const NEW_MENU = {
 }
 
 export const ROOT_MENU = {...NEW_MENU, id: 'root', name: 'root', menuUrl: ''}
+
+
+export const COMMON_CODE = {
+  DUES: {
+    IN_CODE: 'IN',
+    IN_NAME: '입금',
+    OUT_CODE: 'OUT',
+    OUT_NAME: '출금',
+    REST_CODE: 'REST',
+    REST_NAME: '잔액',
+  },
+}

@@ -109,7 +109,7 @@ const Menu = () => {
 
   return (
     <Box m="20px">
-      <ContentHeader title='메뉴 관리' hideButtons={true} />
+      <ContentHeader title='메뉴 관리' subTitle='메뉴 관리' hideButtons={true} />
       <Formik initialValues={ROOT_MENU} validationSchema={validationSchema} onSubmit={handleSubmit}>
         {({setSubmitting, setValues}) => (
           <Box

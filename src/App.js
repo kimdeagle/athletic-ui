@@ -19,6 +19,9 @@ import {
 import ExcelUpload from "./components/modal/common/ExcelUpload";
 import {useSnackbar} from "notistack";
 import {makeSnackbarMessage} from "./utils/util";
+import {LocalizationProvider} from "@mui/x-date-pickers";
+import {AdapterDateFns} from "@mui/x-date-pickers/AdapterDateFns";
+import ko from "date-fns/locale/ko";
 
 
 function App() {
@@ -81,9 +84,11 @@ function App() {
               <ProSidebarProvider>
                 {authenticated && <ProSidebar />}
                 <main className="content">
-                  <Topbar />
-                  <RouteList />
-                  <ExcelUpload />
+                  <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={ko}>
+                    <Topbar />
+                    <RouteList />
+                    <ExcelUpload />
+                  </LocalizationProvider>
                 </main>
               </ProSidebarProvider>
             </div>

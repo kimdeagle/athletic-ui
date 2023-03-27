@@ -1,5 +1,5 @@
 import ContentHeader from "../../../components/content/ContentHeader";
-import {Box, Button} from "@mui/material";
+import {Box} from "@mui/material";
 import {getAgeFromBirthday, makeSnackbarMessage, sleep} from "../../../utils/util";
 import CustomGrid from "../../../components/grid";
 import {useEffect, useState} from "react";
@@ -8,20 +8,13 @@ import {getMember, getMemberList, resetMemberList} from "../../../redux/member";
 import AddMemberModal from "../../../components/modal/member/AddMemberModal";
 import {
   BUTTON_PROPS_DISABLED,
-  BUTTON_PROPS_ON_CLICK,
+  BUTTON_PROPS_ON_CLICK, BUTTON_PROPS_PARAMETERS,
   BUTTONS_ADD, BUTTONS_EDIT, BUTTONS_EXCEL_DOWNLOAD, BUTTONS_EXCEL_UPLOAD, BUTTONS_SEARCH,
   DATA_GRID_CELL_CLASS_NAME, DEFAULT_SLEEP_MS
 } from "../../../utils/const";
 import * as Apis from "../../../apis";
 import {useSnackbar} from "notistack";
-import {setExcelUploadModalProps, setOpenExcelUploadModal} from "../../../redux/common";
 
-/**
- * TODO
- * 1. 회원추가 -> 이메일, 휴대폰번호, 주소/상세주소, 입회일자 쪼개기 -> 일단 주소만...
- * 2. 엑셀 다운로드 - 작업중
- * 3. 엑셀 업로드
- */
 const Member = () => {
   const dispatch = useDispatch()
   const memberList = useSelector(state => state.member.memberList)
@@ -48,55 +41,25 @@ const Member = () => {
     dispatch(getMemberList())
   }
 
-  const handleExcelUpload = async () => {
-    const props = {
-      sampleUrl: '/excel/member/uploadMemberSample.xlsx',
-      uploadUrl: '/member/excel',
-      callback: callbackUpload
-    }
-    dispatch(setOpenExcelUploadModal(true))
-    dispatch(setExcelUploadModalProps(props))
+  const excelUploadParams = {
+    sampleUrl: '/excel/member/uploadMemberSample.xlsx',
+    uploadUrl: '/member/excel',
+    callback: handleSearch
   }
 
-  const callbackUpload = () => {
-    handleSearch()
-  }
-
-  const handleExcelDownload = async () => {
-    if (memberList.length === 0) {
-      alert("다운로드 할 데이터가 없습니다.")
-      return;
-    }
-    if (window.confirm("엑셀 다운로드 하시겠습니까? (총 " + memberList.length + "건)")) {
-      try {
-        const params = {
-          downloadUrl: '/member/excel'
-        }
-        const response = await Apis.common.downloadExcel(params)
-        if (response.code === 200) {
-          enqueueSnackbar(makeSnackbarMessage(response.message), {
-            variant: 'success',
-          })
-        }
-      } catch (e) {
-        enqueueSnackbar(makeSnackbarMessage(e.response.data.message), { variant: 'error' })
-      }
-      await sleep(DEFAULT_SLEEP_MS)
-    }
-  }
-
-  const callbackAdd = () => {
-    handleSearch()
+  const excelDownloadParams = {
+    length: memberList.length,
+    downloadUrl: '/member/excel',
   }
 
   const buttonProps = {
     [BUTTONS_EXCEL_UPLOAD]: {
       [BUTTON_PROPS_DISABLED]: false,
-      [BUTTON_PROPS_ON_CLICK]: handleExcelUpload
+      [BUTTON_PROPS_PARAMETERS]: excelUploadParams
     },
     [BUTTONS_EXCEL_DOWNLOAD]: {
       [BUTTON_PROPS_DISABLED]: false,
-      [BUTTON_PROPS_ON_CLICK]: handleExcelDownload
+      [BUTTON_PROPS_PARAMETERS]: excelDownloadParams
     },
     [BUTTONS_ADD]: {
       [BUTTON_PROPS_DISABLED]: false,
@@ -129,7 +92,6 @@ const Member = () => {
           handleSearch()
         }
       } catch (e) {
-        console.log(e)
         enqueueSnackbar(makeSnackbarMessage(e.response.data.message), { variant: 'error' })
       }
       await sleep(DEFAULT_SLEEP_MS)
@@ -145,20 +107,6 @@ const Member = () => {
   return (
     <Box m="20px">
       <ContentHeader title='회원 관리' subTitle="회원 관리" buttonProps={buttonProps} />
-      <Box
-        display='flex'
-        justifyContent='start'
-        alignItems='center'
-      >
-        <Button
-          variant="contained"
-          color="error"
-          disabled={!selectionModel.length}
-          onClick={handleDelete}
-        >
-          선택삭제
-        </Button>
-      </Box>
       <CustomGrid
         rows={memberList}
         columns={columns}
@@ -167,9 +115,10 @@ const Member = () => {
         selectionModel={selectionModel}
         setSelectionModel={setSelectionModel}
         getRowId={(row) => row.id}
+        handleDelete={handleDelete}
       >
       </CustomGrid>
-      <AddMemberModal action={action} open={open} setOpen={setOpen} handleCallback={callbackAdd} />
+      <AddMemberModal action={action} open={open} setOpen={setOpen} handleCallback={handleSearch} />
     </Box>
   )
 }

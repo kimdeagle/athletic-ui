@@ -7,6 +7,7 @@ import menu from "./menu";
 import member from "./member";
 import admin from "./admin";
 import authority from "./authority";
+import dues from "./dues";
 
 import autoMergeLevel1 from "redux-persist/es/stateReconciler/autoMergeLevel1";
 
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
   member,
   admin,
   authority,
+  dues,
 })
 
 export default rootReducer

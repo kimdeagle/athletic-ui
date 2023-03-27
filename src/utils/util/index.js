@@ -1,4 +1,4 @@
-import {format} from "date-fns";
+import {addDays, format, subDays} from "date-fns";
 
 export const isBlank = (value) => {
   if (typeof value === 'object')
@@ -104,7 +104,7 @@ export const processMenu = (menus) => {
     else
       copyMenu.children = []
     return copyMenu
-  }).sort((a, b) => a.sortSeq - b.sortSeq)
+  }).sort((a, b) => a.sortSeq - b.sortSeq === 0 ? parseInt(a.id) - parseInt(b.id) : a.sortSeq - b.sortSeq)
 }
 
 export const getProcessedMenuList = (menus) => {
@@ -113,4 +113,20 @@ export const getProcessedMenuList = (menus) => {
 
 export const isEmptyObject = (obj) => {
   return obj === null || obj === undefined || Object.keys(obj).length === 0
+}
+
+export const getStringDate = (date) => {
+  return format(new Date(date), 'yyyy-MM-dd')
+}
+
+export const getStringDateTime = (date) => {
+  return format(new Date(date), 'yyyy-MM-dd HH:mm:ss')
+}
+
+export const getStringDateAddOneDays = (date) => {
+  return getStringDate(addDays(new Date(date), 1))
+}
+
+export const getDateSubOneDays = (date) => {
+  return subDays(date, 1)
 }
