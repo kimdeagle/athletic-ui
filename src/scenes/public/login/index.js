@@ -11,7 +11,7 @@ import {useNavigate} from "react-router-dom";
 import * as Apis from "../../../apis";
 import {setAccessToken} from "../../../redux/auth";
 import jwtDecode from "jwt-decode";
-import {getUseMenuList} from "../../../redux/menu";
+import {getUseMenuList} from "../../../redux/system/menu";
 import {useDispatch} from "react-redux";
 import axios from "axios";
 import {Helmet} from "react-helmet-async";

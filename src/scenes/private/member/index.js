@@ -83,7 +83,7 @@ const Member = () => {
     const count = selectionModel.length
     if (window.confirm("선택한 " + count + "명의 회원을 삭제하시겠습니까?")) {
       try {
-        const response = await Apis.member.deleteMember(selectionModel)
+        const response = await Apis.member.deleteMembers(selectionModel)
         if (response.code === 200) {
           setSelectionModel([])
           enqueueSnackbar(makeSnackbarMessage(response.message), {
@@ -114,7 +114,6 @@ const Member = () => {
         checkboxSelection={true}
         selectionModel={selectionModel}
         setSelectionModel={setSelectionModel}
-        getRowId={(row) => row.id}
         handleDelete={handleDelete}
       >
       </CustomGrid>

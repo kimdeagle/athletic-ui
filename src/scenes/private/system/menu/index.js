@@ -7,7 +7,7 @@ import {getProcessedMenuList, isEmptyObject, makeSnackbarMessage, sleep} from ".
 import { Formik } from "formik";
 import * as Yup from "yup";
 import * as Apis from "../../../../apis";
-import {getMenuList, getUseMenuList} from "../../../../redux/menu";
+import {getMenuList, getUseMenuList} from "../../../../redux/system/menu";
 import {DEFAULT_SLEEP_MS, NEW_MENU, ROOT_MENU, VALIDATION_SCHEMA} from "../../../../utils/const";
 import MenuTree from "./MenuTree";
 import MenuDetail from "./MenuDetail";
@@ -20,7 +20,7 @@ const Menu = () => {
 
   const dispatch = useDispatch()
 
-  const menuList = useSelector(state => state.menu.menuList)
+  const menuList = useSelector(state => state.system.menu.menuList)
 
   const { enqueueSnackbar } = useSnackbar()
 
@@ -43,7 +43,7 @@ const Menu = () => {
       const parentMenu = entireMenuList.find(menu => menu.id === parentMenuId)
       try {
         const params = {...values, ...(selected === NEW_MENU.id ? {id: null} : null)}
-        const response = await Apis.menu.saveMenu(params)
+        const response = await Apis.system.menu.saveMenu(params)
         if (response.code === 200) {
           enqueueSnackbar(makeSnackbarMessage(response.message), {
             variant: 'success',
@@ -72,7 +72,7 @@ const Menu = () => {
         deleteAlreadyAddMenu()
       } else {
         try {
-          const response = await Apis.menu.deleteMenu(selected)
+          const response = await Apis.system.menu.deleteMenu(selected)
           if (response.code === 200) {
             enqueueSnackbar(makeSnackbarMessage(response.message), {
               variant: 'success',

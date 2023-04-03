@@ -1,5 +1,6 @@
 import axios from "axios";
 import { saveAs } from "file-saver";
+import qs from "qs";
 
 const ACTIONS_DOWNLOAD_EXCEL = 'downloadExcel'
 
@@ -19,7 +20,7 @@ const request = async (data, thunkAPI) => {
     url: data.url,
     ...(data.action === ACTIONS_DOWNLOAD_EXCEL && {responseType: 'blob'}),
     ...(data.headers && {headers: data.headers}),
-    [data.method === 'get' ? 'params' : 'data']: data.params,
+    data: data.params,
   }, thunkAPI)
     .then(res => {
       if (data.action === ACTIONS_DOWNLOAD_EXCEL) {
@@ -31,45 +32,45 @@ const request = async (data, thunkAPI) => {
     })
 }
 
-export const GET = async (params, thunkAPI) => {
+export const GET = async (data, thunkAPI) => {
   return await request({
     method: 'get',
-    ...params
+    url: data.url + (data.params ? '?' + qs.stringify(data.params, {arrayFormat: 'repeat'}) : '')
   }, thunkAPI)
 }
 
-export const POST = async (params, thunkAPI) => {
+export const POST = async (data, thunkAPI) => {
   return await request({
     method: 'post',
-    ...params
+    ...data
   }, thunkAPI)
 }
 
-export const PUT = async (params, thunkAPI) => {
+export const PUT = async (data, thunkAPI) => {
   return await request({
     method: 'put',
-    ...params
+    ...data
   }, thunkAPI)
 }
 
-export const DELETE = async (params, thunkAPI) => {
+export const DELETE = async (data, thunkAPI) => {
   return await request({
     method: 'delete',
-    ...params
+    ...data
   }, thunkAPI)
 }
 
-export const DOWNLOAD_EXCEL = async (params, thunkAPI) => {
+export const DOWNLOAD_EXCEL = async (data, thunkAPI) => {
   return await request({
     method: 'get',
     action: ACTIONS_DOWNLOAD_EXCEL,
-    ...params
+    ...data
   }, thunkAPI)
 }
 
-export const UPLOAD_EXCEL = async (params, thunkAPI) => {
+export const UPLOAD_EXCEL = async (data, thunkAPI) => {
   return await request({
     method: 'post',
-    ...params
+    ...data
   }, thunkAPI)
 }

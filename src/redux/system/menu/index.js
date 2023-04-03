@@ -1,8 +1,8 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import * as Apis from "../../apis"
+import * as Apis from "../../../apis"
 
-export const getMenuList = createAsyncThunk('getMenuList', Apis.menu.getMenuList)
-export const getUseMenuList = createAsyncThunk('getUseMenuList', Apis.menu.getUseMenuList)
+export const getMenuList = createAsyncThunk('getMenuList', Apis.system.menu.getMenuList)
+export const getUseMenuList = createAsyncThunk('getUseMenuList', Apis.system.menu.getUseMenuList)
 
 const initialState = {
   menuList: [],
@@ -10,7 +10,7 @@ const initialState = {
 }
 
 export const menuSlice = createSlice({
-  name: 'menu',
+  name: 'system/menu',
   initialState,
   reducers: {
     resetMenuList: (state) => {

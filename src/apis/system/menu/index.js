@@ -1,28 +1,28 @@
-import * as apiService from "../apiService";
+import * as apiService from "../../apiService";
 
 export const getMenuList = async (params, thunkAPI) => {
   return await apiService.GET({
-    url: '/menu',
+    url: '/system/menu',
     params
   }, thunkAPI)
 }
 
 export const getUseMenuList = async (params, thunkAPI) => {
   return await apiService.GET({
-    url: '/menu/use',
+    url: '/system/menu/use',
     params
   }, thunkAPI)
 }
 
 export const deleteMenu = async (id, thunkAPI) => {
   return await apiService.DELETE({
-    url: `/menu/${id}`,
+    url: `/system/menu/${id}`,
   }, thunkAPI)
 }
 
 export const saveMenu = async (params, thunkAPI) => {
   return await apiService.POST({
-    url: '/menu',
+    url: '/system/menu',
     params
   }, thunkAPI)
 }

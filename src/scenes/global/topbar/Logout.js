@@ -3,7 +3,7 @@ import ExitToAppOutlinedIcon from "@mui/icons-material/ExitToAppOutlined";
 import {useNavigate} from "react-router-dom";
 import {resetAccessToken} from "../../../redux/auth";
 import {removeRefreshToken, removeUser} from "../../../utils/cookie";
-import {resetMenuState} from "../../../redux/menu";
+import {resetMenuState} from "../../../redux/system/menu";
 import {useDispatch} from "react-redux";
 import * as Apis from "../../../apis";
 import axios from "axios";

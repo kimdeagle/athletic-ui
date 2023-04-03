@@ -9,7 +9,7 @@ import {
 import {useSnackbar} from "notistack";
 import {resetAccessToken} from "../../../redux/auth";
 import {removeRefreshToken, removeRememberId, removeUser} from "../../../utils/cookie";
-import {resetMenuState} from "../../../redux/menu";
+import {resetMenuState} from "../../../redux/system/menu";
 import axios from "axios";
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";

@@ -27,7 +27,7 @@ export const updateMember = async (params, thunkAPI) => {
   }, thunkAPI)
 }
 
-export const deleteMember = async (params, thunkAPI) => {
+export const deleteMembers = async (params, thunkAPI) => {
   return await apiService.DELETE({
     url: '/member',
     params

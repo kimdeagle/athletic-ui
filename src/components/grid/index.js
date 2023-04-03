@@ -72,9 +72,9 @@ const CustomGrid = ({rows, columns, onCellClick, selectionModel, setSelectionMod
           disableColumnMenu={true}
           disableSelectionOnClick={true}
           checkboxSelection={checkboxSelection}
-          selectionModel={selectionModel}
-          onSelectionModelChange={(newSelectionModel) => {setSelectionModel(newSelectionModel)}}
-          getRowId={getRowId}
+          rowSelectionModel={selectionModel}
+          onRowSelectionModelChange={(newSelectionModel) => {setSelectionModel(newSelectionModel)}}
+          getRowId={(row) => row.id}
         />
       </CustomBox>
     </Box>

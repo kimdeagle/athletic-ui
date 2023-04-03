@@ -147,7 +147,7 @@ CustomContent.propTypes = {
 const MenuTree = ({selected, setSelected, entireMenuList, setEntireMenuList, processedRootMenu, setProcessedRootMenu, deleteAlreadyAddMenu}) => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
-  const menuList = useSelector(state => state.menu.menuList)
+  const menuList = useSelector(state => state.system.menu.menuList)
 
   const [expanded, setExpanded] = useState([ROOT_MENU.id])
 
