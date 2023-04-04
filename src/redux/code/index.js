@@ -1,7 +1,7 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import * as Apis from "../../apis";
 
-export const getCodeListByGroupIds = createAsyncThunk('getCodeListByGroupIds', Apis.code.getCodeListByGroupIds)
+export const getCodeListByGroupCodes = createAsyncThunk('getCodeListByGroupCodes', Apis.code.getCodeListByGroupCodes)
 
 const initialState = {
   codeList: [],
@@ -17,7 +17,7 @@ export const codeSlice = createSlice({
   },
   extraReducers: builder => {
     builder
-      .addCase(getCodeListByGroupIds.fulfilled, (state, action) => {
+      .addCase(getCodeListByGroupCodes.fulfilled, (state, action) => {
         state.codeList = action.payload
       })
   }

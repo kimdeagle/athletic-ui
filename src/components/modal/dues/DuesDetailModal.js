@@ -134,8 +134,8 @@ const DuesDetailModal = ({action, open, setOpen, dues, setDues, handleCallback})
                 sx={{ width: '200px' }}
                 onChange={() => setFieldValue('inOutDtlCd', '')}
               >
-                {codeList.filter(code => code.id !== COMMON_CODE.DUES.REST).map(code => (
-                  <MenuItem key={code.id} value={code.id}>{code.displayName}</MenuItem>
+                {codeList.filter(data => data.code !== COMMON_CODE.DUES.REST).map(data => (
+                  <MenuItem key={data.code} value={data.code}>{data.name}</MenuItem>
                 ))}
               </Field>
               {!isEmptyObject(values.inOutCd) &&
@@ -143,13 +143,13 @@ const DuesDetailModal = ({action, open, setOpen, dues, setDues, handleCallback})
                   component={Select}
                   id='inOutDtlCd'
                   name='inOutDtlCd'
-                  label={codeList.find(code => code.id === values.inOutCd).displayName + '상세 *'}
+                  label={codeList.find(data => data.code === values.inOutCd).name + '상세 *'}
                   color='primary'
                   variant='outlined'
                   sx={{ width: '200px' }}
                 >
-                  {codeList.find(code => code.id === values.inOutCd).detailList.map(detail => (
-                    <MenuItem key={detail.id} value={detail.id}>{detail.displayName}</MenuItem>
+                  {codeList.find(data => data.code === values.inOutCd).detailList.map(detail => (
+                    <MenuItem key={detail.code} value={detail.code}>{detail.name}</MenuItem>
                   ))}
                 </Field>
               }

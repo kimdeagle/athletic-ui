@@ -38,14 +38,13 @@ import {tokens} from "../../../theme";
 import koLocale from "@fullcalendar/core/locales/ko";
 import DuesDetailModal from "../../../components/modal/dues/DuesDetailModal";
 import {format} from "date-fns";
-import {getCodeListByGroupIds, resetCodeList} from "../../../redux/code";
+import {getCodeListByGroupCodes, resetCodeList} from "../../../redux/code";
 
-const groupIds = [COMMON_CODE.DUES.IN, COMMON_CODE.DUES.OUT, COMMON_CODE.DUES.REST]
+const groupCodes = [COMMON_CODE.DUES.IN, COMMON_CODE.DUES.OUT, COMMON_CODE.DUES.REST]
 
 const Dues = () => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
-  // const [currentEvents, setCurrentEvents] = useState([])
   const dispatch = useDispatch()
   const duesList = useSelector(state => state.dues.duesList)
   const codeList = useSelector(state => state.code.codeList)
@@ -56,14 +55,14 @@ const Dues = () => {
   const { enqueueSnackbar } = useSnackbar()
   const [eventList, setEventList] = useState([])
 
+  /* 회비 현황 렌더링 */
   const renderAmountThisMonth = () => {
-    return codeList.map(code => {
-      const { id, displayName } = code
-      const data = amountThisMonth.find(amount => amount.inOutCd === id)
-      const amount = data?.amount || 0
-      const backgroundColor = id === COMMON_CODE.DUES.IN ? colors.blue[700] : id === COMMON_CODE.DUES.OUT ? colors.orange[700] : colors.green[700]
+    return codeList.map(data => {
+      const { code, name } = data
+      const amount = amountThisMonth.find(amount => amount.inOutCd === code)?.amount || 0
+      const backgroundColor = code === COMMON_CODE.DUES.IN ? colors.blue[700] : code === COMMON_CODE.DUES.OUT ? colors.orange[700] : colors.green[700]
       return (
-        <React.Fragment key={id}>
+        <React.Fragment key={code}>
           <TableCell
             component='th'
             scope='row'
@@ -76,7 +75,7 @@ const Dues = () => {
               backgroundColor
             }}
           >
-            {displayName}
+            {name}
           </TableCell>
           <TableCell
             sx={{
@@ -93,8 +92,10 @@ const Dues = () => {
     })
   }
 
-  const getDisplayTitle = (inOutCd, oriTitle, amount) => {
-    return '(' + (inOutCd === COMMON_CODE.DUES.IN ? '입' : '출') + ')' + oriTitle + ' ' + amount.toLocaleString()
+  const getDisplayTitle = (inOutCd, inOutDtlCd, oriTitle, amount) => {
+    const inOutName = (codeList.find(data => data.code === inOutCd)?.name).substring(0, 1)
+    const inOutDtlName = codeList.find(data => data.code === inOutCd)?.detailList.find(detail => detail.code === inOutDtlCd)?.name
+    return '(' + inOutName + '-' + inOutDtlName + ')' + oriTitle + ' ' + amount.toLocaleString()
   }
 
   const getDisplayDues = (dues) => {
@@ -105,7 +106,7 @@ const Dues = () => {
       inOutDtlCd,
       start: getStringDate(start),
       end: getStringDateAddOneDays(end),
-      title: getDisplayTitle(inOutCd, oriTitle, amount),
+      title: getDisplayTitle(inOutCd, inOutDtlCd, oriTitle, amount),
       description,
       amount,
       oriTitle,
@@ -115,10 +116,15 @@ const Dues = () => {
     }
   }
 
+  const handleSearch = () => {
+    dispatch(getAmountThisMonth())
+    dispatch(getDuesList())
+  }
+
   const excelUploadParams = {
     sampleUrl: '/excel/dues/uploadDuesSample.xlsx',
     uploadUrl: '/dues/excel',
-    callback: () => dispatch(getDuesList())
+    callback: handleSearch
   }
 
   const excelDownloadParams = {
@@ -146,10 +152,14 @@ const Dues = () => {
     setOpen(true)
   }
 
-  const handleEventClick = (selected) => {
+  const getSelectedParams = (selected) => {
     const { id, start:startDt, end:endDt} = selected.event
     const { inOutCd, inOutDtlCd, description, amount, oriTitle:title } = selected.event.extendedProps
-    const params = {id, inOutCd, inOutDtlCd, startDt, endDt: getDateSubOneDays(endDt), title, description, amount}
+    return {id, inOutCd, inOutDtlCd, startDt, endDt, title, description, amount}
+  }
+
+  const handleEventClick = (selected) => {
+    const params = {...getSelectedParams(selected), endDt: getDateSubOneDays(selected.event.end)}
     setSelectedDues(params)
     setAction(BUTTONS_EDIT)
     setTimeout(() => setOpen(true), 100)
@@ -158,9 +168,7 @@ const Dues = () => {
   const handleChange = async (selected) => {
     if (window.confirm("회비를 이동하시겠습니까?")) {
       try {
-        const { id, start:startDt, end:endDt} = selected.event
-        const { inOutCd, inOutDtlCd, description, amount, oriTitle:title } = selected.event.extendedProps
-        const params = {id, inOutCd, inOutDtlCd, startDt: getStringDateTime(startDt), endDt: getStringDateTime(getDateSubOneDays(endDt)), title, description, amount}
+        const params = {...getSelectedParams(selected), startDt: getStringDateTime(selected.event.start), endDt: getStringDateTime(getDateSubOneDays(selected.event.end))}
         const response = await Apis.dues.updateDues(params)
         if (response.code === 200) {
           enqueueSnackbar(makeSnackbarMessage(response.message), { variant: 'success' })
@@ -174,19 +182,14 @@ const Dues = () => {
     }
   }
 
-  const handleSearch = () => {
-    dispatch(getAmountThisMonth())
-    dispatch(getDuesList())
-  }
-
   useLayoutEffect(() => {
+    dispatch(getCodeListByGroupCodes({groupCodes}))
     dispatch(getAmountThisMonth())
     dispatch(getDuesList())
-    dispatch(getCodeListByGroupIds({groupIds}))
     return () => {
+      dispatch(resetCodeList())
       dispatch(resetAmountThisMonth())
       dispatch(resetDuesList())
-      dispatch(resetCodeList())
     }
   }, [])
 
@@ -325,7 +328,6 @@ const Dues = () => {
             select={handleDateSelect}
             eventClick={handleEventClick}
             eventChange={handleChange}
-            // eventsSet={(events) => setCurrentEvents(events)}
             events={eventList}
           />
         </Box>

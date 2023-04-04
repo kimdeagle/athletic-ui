@@ -134,8 +134,8 @@ export const ROOT_MENU = {...NEW_MENU, id: 'root', name: 'root', menuUrl: ''}
 
 export const COMMON_CODE = {
   DUES: {
-    IN: 'DUES_IN',
-    OUT: 'DUES_OUT',
-    REST: 'DUES_REST',
+    IN: 'IN',
+    OUT: 'OUT',
+    REST: 'REST',
   },
 }
