@@ -85,10 +85,9 @@ const Join = () => {
                 type='text'
                 autoFocus
                 fullWidth
-                required
                 id='loginId'
                 name='loginId'
-                label='아이디'
+                label='아이디 *'
                 color='primary'
                 variant='outlined'
                 margin='normal'
@@ -97,10 +96,9 @@ const Join = () => {
                 component={TextField}
                 type='password'
                 fullWidth
-                required
                 id='loginPw'
                 name='loginPw'
-                label='비밀번호'
+                label='비밀번호 *'
                 color='primary'
                 variant='outlined'
                 margin='normal'
@@ -109,10 +107,9 @@ const Join = () => {
                 component={TextField}
                 type='password'
                 fullWidth
-                required
                 id='confirmLoginPw'
                 name='confirmLoginPw'
-                label='비밀번호 확인'
+                label='비밀번호 확인 *'
                 color='primary'
                 variant='outlined'
                 margin='normal'
@@ -121,10 +118,9 @@ const Join = () => {
                 component={TextField}
                 type='text'
                 fullWidth
-                required
                 id='name'
                 name='name'
-                label='이름'
+                label='이름 *'
                 color='primary'
                 variant='outlined'
                 margin='normal'
@@ -133,10 +129,9 @@ const Join = () => {
                 component={TextField}
                 type='text'
                 fullWidth
-                required
                 id='email'
                 name='email'
-                label='이메일'
+                label='이메일 *'
                 color='primary'
                 variant='outlined'
                 margin='normal'
@@ -145,10 +140,9 @@ const Join = () => {
                 component={TextField}
                 type='text'
                 fullWidth
-                required
                 id='mobileNo'
                 name='mobileNo'
-                label='휴대폰 번호'
+                label='휴대폰 번호 *'
                 color='primary'
                 variant='outlined'
                 margin='normal'

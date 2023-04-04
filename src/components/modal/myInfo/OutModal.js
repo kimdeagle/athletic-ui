@@ -74,10 +74,9 @@ const OutModal = ({open, setOpen}) => {
               type='password'
               autoFocus={open}
               fullWidth
-              required
               id='loginPw'
               name='loginPw'
-              label='비밀번호'
+              label='비밀번호 *'
               color='primary'
               variant='outlined'
               margin='normal'

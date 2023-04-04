@@ -100,6 +100,7 @@ const ExcelUpload = () => {
                 disabled
                 id='filename'
                 name='filename'
+                label='파일명 *'
                 color='primary'
                 variant='outlined'
                 value={values.filename}

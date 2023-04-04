@@ -32,9 +32,9 @@ const DuesDetailModal = ({action, open, setOpen, dues, setDues, handleCallback})
   const codeList = useSelector(state => state.code.codeList)
 
   const validationSchema = Yup.object().shape({
-    inOut: Yup.string()
+    inOutCd: Yup.string()
       .required(VALIDATION_SCHEMA.COMMON.requiredSelectedMessage),
-    inOutDtl: Yup.string()
+    inOutDtlCd: Yup.string()
       .required(VALIDATION_SCHEMA.COMMON.requiredSelectedMessage),
     title: Yup.string()
       .required(VALIDATION_SCHEMA.COMMON.requiredMessage),
@@ -101,8 +101,8 @@ const DuesDetailModal = ({action, open, setOpen, dues, setDues, handleCallback})
     if (action === BUTTONS_ADD) {
       setInitialValues({
         id: '',
-        inOut: '',
-        inOutDtl: '',
+        inOutCd: '',
+        inOutDtlCd: '',
         startDt: dues.startDt,
         endDt: dues.endDt,
         title: '',
@@ -126,29 +126,29 @@ const DuesDetailModal = ({action, open, setOpen, dues, setDues, handleCallback})
             >
               <Field
                 component={Select}
-                id='inOut'
-                name='inOut'
-                label='입출구분'
+                id='inOutCd'
+                name='inOutCd'
+                label='입출구분 *'
                 color='primary'
                 variant='outlined'
                 sx={{ width: '200px' }}
-                onChange={() => setFieldValue('inOutDtl', '')}
+                onChange={() => setFieldValue('inOutDtlCd', '')}
               >
                 {codeList.filter(code => code.id !== COMMON_CODE.DUES.REST).map(code => (
                   <MenuItem key={code.id} value={code.id}>{code.displayName}</MenuItem>
                 ))}
               </Field>
-              {!isEmptyObject(values.inOut) &&
+              {!isEmptyObject(values.inOutCd) &&
                 <Field
                   component={Select}
-                  id='inOutDtl'
-                  name='inOutDtl'
-                  label={codeList.find(code => code.id === values.inOut).displayName + '상세'}
+                  id='inOutDtlCd'
+                  name='inOutDtlCd'
+                  label={codeList.find(code => code.id === values.inOutCd).displayName + '상세 *'}
                   color='primary'
                   variant='outlined'
                   sx={{ width: '200px' }}
                 >
-                  {codeList.find(code => code.id === values.inOut).detailList.map(detail => (
+                  {codeList.find(code => code.id === values.inOutCd).detailList.map(detail => (
                     <MenuItem key={detail.id} value={detail.id}>{detail.displayName}</MenuItem>
                   ))}
                 </Field>
@@ -158,7 +158,7 @@ const DuesDetailModal = ({action, open, setOpen, dues, setDues, handleCallback})
               component={DatePicker}
               id='startDt'
               name='startDt'
-              label='시작일자'
+              label='시작일자 *'
               value={values.startDt}
               onChange={(value) => setFieldValue('startDt', value)}
               slotProps={{
@@ -172,7 +172,7 @@ const DuesDetailModal = ({action, open, setOpen, dues, setDues, handleCallback})
               component={DatePicker}
               id='endDt'
               name='endDt'
-              label='종료일자'
+              label='종료일자 *'
               minDate={values.startDt}
               value={values.endDt}
               onChange={(value) => setFieldValue('endDt', value)}
@@ -191,7 +191,7 @@ const DuesDetailModal = ({action, open, setOpen, dues, setDues, handleCallback})
               fullWidth
               id='title'
               name='title'
-              label='회비명'
+              label='회비명 *'
               color='primary'
               variant='outlined'
               margin='normal'
@@ -213,7 +213,7 @@ const DuesDetailModal = ({action, open, setOpen, dues, setDues, handleCallback})
               fullWidth
               id='amount'
               name='amount'
-              label='입출금액'
+              label='입출금액 *'
               color='primary'
               variant='outlined'
               margin='normal'

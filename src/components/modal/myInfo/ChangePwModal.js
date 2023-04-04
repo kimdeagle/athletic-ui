@@ -58,10 +58,9 @@ const ChangePwModal = ({open, setOpen}) => {
               type='password'
               autoFocus={open}
               fullWidth
-              required
               id='loginPw'
               name='loginPw'
-              label='현재 비밀번호'
+              label='현재 비밀번호 *'
               color='primary'
               variant='outlined'
               margin='normal'
@@ -70,10 +69,9 @@ const ChangePwModal = ({open, setOpen}) => {
               component={TextField}
               type='password'
               fullWidth
-              required
               id='changePw'
               name='changePw'
-              label='변경 비밀번호'
+              label='변경 비밀번호 *'
               color='primary'
               variant='outlined'
               margin='normal'
@@ -82,10 +80,9 @@ const ChangePwModal = ({open, setOpen}) => {
               component={TextField}
               type='password'
               fullWidth
-              required
               id='confirmChangePw'
               name='confirmChangePw'
-              label='변경 비밀번호 확인'
+              label='변경 비밀번호 확인 *'
               color='primary'
               variant='outlined'
               margin='normal'

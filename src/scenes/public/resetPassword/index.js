@@ -69,10 +69,9 @@ const ResetPassword = () => {
                 type='text'
                 autoFocus
                 fullWidth
-                required
                 id='loginId'
                 name='loginId'
-                label='아이디'
+                label='아이디 *'
                 color='primary'
                 variant='outlined'
                 margin='normal'
@@ -81,10 +80,9 @@ const ResetPassword = () => {
                 component={TextField}
                 type='text'
                 fullWidth
-                required
                 id='email'
                 name='email'
-                label='이메일'
+                label='이메일 *'
                 color='primary'
                 variant='outlined'
                 margin='normal'

@@ -114,11 +114,10 @@ const AddMemberModal = ({action, open, setOpen, handleCallback}) => {
               type='text'
               autoFocus={open && action === BUTTONS_ADD}
               fullWidth
-              required={action === BUTTONS_ADD}
               disabled={action === BUTTONS_EDIT}
               id='name'
               name='name'
-              label='회원명'
+              label='회원명 *'
               color='primary'
               variant='outlined'
               margin='normal'
@@ -138,10 +137,9 @@ const AddMemberModal = ({action, open, setOpen, handleCallback}) => {
               component={TextField}
               type='text'
               fullWidth
-              required
               id='mobileNo'
               name='mobileNo'
-              label='휴대폰 번호'
+              label='휴대폰 번호 *'
               color='primary'
               variant='outlined'
               margin='normal'
@@ -199,10 +197,9 @@ const AddMemberModal = ({action, open, setOpen, handleCallback}) => {
               component={TextField}
               type='text'
               fullWidth
-              required
               id='joinDt'
               name='joinDt'
-              label='입회일자'
+              label='입회일자 *'
               color='primary'
               variant='outlined'
               margin='normal'

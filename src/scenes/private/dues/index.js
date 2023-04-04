@@ -59,7 +59,7 @@ const Dues = () => {
   const renderAmountThisMonth = () => {
     return codeList.map(code => {
       const { id, displayName } = code
-      const data = amountThisMonth.find(amount => amount.inOut === id)
+      const data = amountThisMonth.find(amount => amount.inOutCd === id)
       const amount = data?.amount || 0
       const backgroundColor = id === COMMON_CODE.DUES.IN ? colors.blue[700] : id === COMMON_CODE.DUES.OUT ? colors.orange[700] : colors.green[700]
       return (
@@ -93,25 +93,25 @@ const Dues = () => {
     })
   }
 
-  const getDisplayTitle = (inOut, oriTitle, amount) => {
-    return '(' + (inOut === COMMON_CODE.DUES.IN ? '입' : '출') + ')' + oriTitle + ' ' + amount.toLocaleString()
+  const getDisplayTitle = (inOutCd, oriTitle, amount) => {
+    return '(' + (inOutCd === COMMON_CODE.DUES.IN ? '입' : '출') + ')' + oriTitle + ' ' + amount.toLocaleString()
   }
 
   const getDisplayDues = (dues) => {
-    const { id, inOut, inOutDtl, startDt:start, endDt:end, title:oriTitle, description, amount } = dues
+    const { id, inOutCd, inOutDtlCd, startDt:start, endDt:end, title:oriTitle, description, amount } = dues
     return {
       id,
-      inOut,
-      inOutDtl,
+      inOutCd,
+      inOutDtlCd,
       start: getStringDate(start),
       end: getStringDateAddOneDays(end),
-      title: getDisplayTitle(inOut, oriTitle, amount),
+      title: getDisplayTitle(inOutCd, oriTitle, amount),
       description,
       amount,
       oriTitle,
       textColor: colors.grey[100],
-      backgroundColor: inOut === COMMON_CODE.DUES.IN ? colors.blue[700] : colors.orange[700],
-      borderColor: inOut === COMMON_CODE.DUES.IN ? colors.blue[700] : colors.orange[700], //include list dot color
+      backgroundColor: inOutCd === COMMON_CODE.DUES.IN ? colors.blue[700] : colors.orange[700],
+      borderColor: inOutCd === COMMON_CODE.DUES.IN ? colors.blue[700] : colors.orange[700], //include list dot color
     }
   }
 
@@ -148,8 +148,8 @@ const Dues = () => {
 
   const handleEventClick = (selected) => {
     const { id, start:startDt, end:endDt} = selected.event
-    const { inOut, inOutDtl, description, amount, oriTitle:title } = selected.event.extendedProps
-    const params = {id, inOut, inOutDtl, startDt, endDt: getDateSubOneDays(endDt), title, description, amount}
+    const { inOutCd, inOutDtlCd, description, amount, oriTitle:title } = selected.event.extendedProps
+    const params = {id, inOutCd, inOutDtlCd, startDt, endDt: getDateSubOneDays(endDt), title, description, amount}
     setSelectedDues(params)
     setAction(BUTTONS_EDIT)
     setTimeout(() => setOpen(true), 100)
@@ -159,8 +159,8 @@ const Dues = () => {
     if (window.confirm("회비를 이동하시겠습니까?")) {
       try {
         const { id, start:startDt, end:endDt} = selected.event
-        const { inOut, inOutDtl, description, amount, oriTitle:title } = selected.event.extendedProps
-        const params = {id, inOut, inOutDtl, startDt: getStringDateTime(startDt), endDt: getStringDateTime(getDateSubOneDays(endDt)), title, description, amount}
+        const { inOutCd, inOutDtlCd, description, amount, oriTitle:title } = selected.event.extendedProps
+        const params = {id, inOutCd, inOutDtlCd, startDt: getStringDateTime(startDt), endDt: getStringDateTime(getDateSubOneDays(endDt)), title, description, amount}
         const response = await Apis.dues.updateDues(params)
         if (response.code === 200) {
           enqueueSnackbar(makeSnackbarMessage(response.message), { variant: 'success' })

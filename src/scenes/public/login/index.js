@@ -99,10 +99,9 @@ const Login = () => {
                 type='text'
                 autoFocus
                 fullWidth
-                required
                 id='loginId'
                 name='loginId'
-                label='아이디'
+                label='아이디 *'
                 color='primary'
                 variant='outlined'
                 margin='normal'
@@ -111,10 +110,9 @@ const Login = () => {
                 component={TextField}
                 type='password'
                 fullWidth
-                required
                 id='loginPw'
                 name='loginPw'
-                label='비밀번호'
+                label='비밀번호 *'
                 color='primary'
                 variant='outlined'
                 margin='normal'
