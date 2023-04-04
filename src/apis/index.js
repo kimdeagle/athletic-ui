@@ -5,6 +5,7 @@ import * as admin from "./admin";
 import * as common from "./common";
 import * as authority from "./authority";
 import * as dues from "./dues";
+import * as code from "./code";
 
 const system = {
   menu,
@@ -18,4 +19,5 @@ export {
   authority,
   dues,
   system,
+  code,
 }

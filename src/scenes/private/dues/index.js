@@ -38,6 +38,9 @@ import {tokens} from "../../../theme";
 import koLocale from "@fullcalendar/core/locales/ko";
 import DuesDetailModal from "../../../components/modal/dues/DuesDetailModal";
 import {format} from "date-fns";
+import {getCodeListByGroupIds, resetCodeList} from "../../../redux/code";
+
+const groupIds = [COMMON_CODE.DUES.IN, COMMON_CODE.DUES.OUT, COMMON_CODE.DUES.REST]
 
 const Dues = () => {
   const theme = useTheme()
@@ -45,6 +48,7 @@ const Dues = () => {
   // const [currentEvents, setCurrentEvents] = useState([])
   const dispatch = useDispatch()
   const duesList = useSelector(state => state.dues.duesList)
+  const codeList = useSelector(state => state.code.codeList)
   const amountThisMonth = useSelector(state => state.dues.amountThisMonth)
   const [open, setOpen] = useState(false)
   const [action, setAction] = useState(null)
@@ -52,29 +56,53 @@ const Dues = () => {
   const { enqueueSnackbar } = useSnackbar()
   const [eventList, setEventList] = useState([])
 
-  const renderAmountThisMonth = (list) => {
-    return list.map(data => {
-      const { inOut, amount } = data
-      const inOutName = inOut === COMMON_CODE.DUES.IN_CODE ? COMMON_CODE.DUES.IN_NAME : inOut === COMMON_CODE.DUES.OUT_CODE ? COMMON_CODE.DUES.OUT_NAME : COMMON_CODE.DUES.REST_NAME
-      const backgroundColor = inOut === COMMON_CODE.DUES.IN_CODE ? colors.blue[700] : inOut === COMMON_CODE.DUES.OUT_CODE ? colors.orange[700] : colors.green[700]
+  const renderAmountThisMonth = () => {
+    return codeList.map(code => {
+      const { id, displayName } = code
+      const data = amountThisMonth.find(amount => amount.inOut === id)
+      const amount = data?.amount || 0
+      const backgroundColor = id === COMMON_CODE.DUES.IN ? colors.blue[700] : id === COMMON_CODE.DUES.OUT ? colors.orange[700] : colors.green[700]
       return (
-        <React.Fragment key={inOut}>
-          <TableCell component='th' scope='row' sx={{backgroundColor}}>{inOutName}</TableCell>
-          <TableCell>{amount.toLocaleString()}</TableCell>
+        <React.Fragment key={id}>
+          <TableCell
+            component='th'
+            scope='row'
+            sx={{
+              width: '5%',
+              textAlign: 'center',
+              fontWeight: 700,
+              fontSize: '13px',
+              border: `1px solid ${colors.grey[100]}`,
+              backgroundColor
+            }}
+          >
+            {displayName}
+          </TableCell>
+          <TableCell
+            sx={{
+              width: '28%',
+              px: '20px',
+              fontSize: '13px',
+              border: `1px solid ${colors.grey[100]}`,
+            }}
+          >
+            {amount.toLocaleString()}
+          </TableCell>
         </React.Fragment>
       )
     })
   }
 
   const getDisplayTitle = (inOut, oriTitle, amount) => {
-    return '(' + (inOut === COMMON_CODE.DUES.IN_CODE ? '입' : '출') + ')' + oriTitle + ' ' + amount.toLocaleString()
+    return '(' + (inOut === COMMON_CODE.DUES.IN ? '입' : '출') + ')' + oriTitle + ' ' + amount.toLocaleString()
   }
 
   const getDisplayDues = (dues) => {
-    const { id, inOut, startDt:start, endDt:end, title:oriTitle, description, amount } = dues
+    const { id, inOut, inOutDtl, startDt:start, endDt:end, title:oriTitle, description, amount } = dues
     return {
       id,
       inOut,
+      inOutDtl,
       start: getStringDate(start),
       end: getStringDateAddOneDays(end),
       title: getDisplayTitle(inOut, oriTitle, amount),
@@ -82,8 +110,8 @@ const Dues = () => {
       amount,
       oriTitle,
       textColor: colors.grey[100],
-      backgroundColor: inOut === COMMON_CODE.DUES.IN_CODE ? colors.blue[700] : colors.orange[700],
-      borderColor: inOut === COMMON_CODE.DUES.IN_CODE ? colors.blue[700] : colors.orange[700], //include list dot color
+      backgroundColor: inOut === COMMON_CODE.DUES.IN ? colors.blue[700] : colors.orange[700],
+      borderColor: inOut === COMMON_CODE.DUES.IN ? colors.blue[700] : colors.orange[700], //include list dot color
     }
   }
 
@@ -120,8 +148,8 @@ const Dues = () => {
 
   const handleEventClick = (selected) => {
     const { id, start:startDt, end:endDt} = selected.event
-    const { inOut, description, amount, oriTitle:title } = selected.event.extendedProps
-    const params = {id, inOut, startDt, endDt: getDateSubOneDays(endDt), title, description, amount}
+    const { inOut, inOutDtl, description, amount, oriTitle:title } = selected.event.extendedProps
+    const params = {id, inOut, inOutDtl, startDt, endDt: getDateSubOneDays(endDt), title, description, amount}
     setSelectedDues(params)
     setAction(BUTTONS_EDIT)
     setTimeout(() => setOpen(true), 100)
@@ -131,8 +159,8 @@ const Dues = () => {
     if (window.confirm("회비를 이동하시겠습니까?")) {
       try {
         const { id, start:startDt, end:endDt} = selected.event
-        const { inOut, description, amount, oriTitle:title } = selected.event.extendedProps
-        const params = {id, inOut, startDt: getStringDateTime(startDt), endDt: getStringDateTime(getDateSubOneDays(endDt)), title, description, amount}
+        const { inOut, inOutDtl, description, amount, oriTitle:title } = selected.event.extendedProps
+        const params = {id, inOut, inOutDtl, startDt: getStringDateTime(startDt), endDt: getStringDateTime(getDateSubOneDays(endDt)), title, description, amount}
         const response = await Apis.dues.updateDues(params)
         if (response.code === 200) {
           enqueueSnackbar(makeSnackbarMessage(response.message), { variant: 'success' })
@@ -154,9 +182,11 @@ const Dues = () => {
   useLayoutEffect(() => {
     dispatch(getAmountThisMonth())
     dispatch(getDuesList())
+    dispatch(getCodeListByGroupIds({groupIds}))
     return () => {
-      dispatch(resetDuesList())
       dispatch(resetAmountThisMonth())
+      dispatch(resetDuesList())
+      dispatch(resetCodeList())
     }
   }, [])
 
@@ -169,7 +199,7 @@ const Dues = () => {
       <ContentHeader title='회비 관리' subTitle="회비 관리" buttonProps={buttonProps} />
       <Box p={2}>
         {/* this month data */}
-        {amountThisMonth.length &&
+        {amountThisMonth.length && codeList.length &&
           <Box
             display='flex'
             justifyContent='center'
@@ -180,23 +210,8 @@ const Dues = () => {
             <Typography variant='h4' fontWeight='bold' mb={1}>{format(new Date(), 'yyyy년 M월 회비 현황')}</Typography>
             <TableContainer component={Paper}>
               <Table>
-                <TableBody
-                  sx={{
-                    "& th": {
-                      width: '5%',
-                      textAlign: 'center',
-                      fontWeight: 800,
-                      fontSize: '14px',
-                      border: `1px solid ${colors.grey[100]}`,
-                    },
-                    "& td": {
-                      pl: '20px',
-                      fontSize: '14px',
-                      border: `1px solid ${colors.grey[100]}`,
-                    },
-                  }}
-                >
-                  <TableRow>{renderAmountThisMonth(amountThisMonth)}</TableRow>
+                <TableBody>
+                  <TableRow>{renderAmountThisMonth()}</TableRow>
                 </TableBody>
               </Table>
             </TableContainer>
@@ -246,7 +261,15 @@ const Dues = () => {
             /* today */
             '& .fc .fc-daygrid-day.fc-day-today': {
               backgroundColor: `${colors.green[900]}80`,
-              border: `3px solid ${colors.greenAccent[400]}`
+              border: `3px solid ${colors.greenAccent[400]}`,
+              '& .fc-daygrid-day-top': {
+                justifyContent: 'space-between',
+                '&:after': {
+                  content: "'today'",
+                  padding: '4px',
+                  color: colors.grey[300],
+                }
+              }
             },
 
             /* highlight */
@@ -268,6 +291,12 @@ const Dues = () => {
             '& .fc .fc-list-event:hover td': {
               cursor: 'pointer',
               backgroundColor: `${colors.green[900]}60`,
+            },
+
+            /* list - today */
+            '& .fc .fc-list-day.fc-day-today .fc-list-day-text:after': {
+              content: "' (today) '",
+              fontWeight: 'bold'
             },
           }}
         >

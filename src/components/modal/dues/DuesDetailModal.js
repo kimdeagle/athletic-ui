@@ -5,11 +5,11 @@ import {
 } from "@mui/material";
 import {useLayoutEffect, useState} from "react";
 import CustomModal from "../index";
-import {getStringDateTime, makeSnackbarMessage, sleep} from "../../../utils/util";
+import {getStringDateTime, isEmptyObject, makeSnackbarMessage, sleep} from "../../../utils/util";
 import * as Apis from "../../../apis";
 import {
   BUTTONS_ADD,
-  BUTTONS_EDIT,
+  BUTTONS_EDIT, COMMON_CODE,
   DEFAULT_SLEEP_MS,
   VALIDATION_SCHEMA
 } from "../../../utils/const";
@@ -19,6 +19,7 @@ import {useSnackbar} from "notistack";
 import * as Yup from "yup";
 import {DatePicker} from "@mui/x-date-pickers";
 import {format} from "date-fns";
+import {useSelector} from "react-redux";
 
 const isMinEndDt = (values) => {
   const { startDt, endDt } = values
@@ -28,10 +29,13 @@ const isMinEndDt = (values) => {
 const DuesDetailModal = ({action, open, setOpen, dues, setDues, handleCallback}) => {
   const { enqueueSnackbar } = useSnackbar()
   const [initialValues, setInitialValues] = useState({})
+  const codeList = useSelector(state => state.code.codeList)
 
   const validationSchema = Yup.object().shape({
     inOut: Yup.string()
-      .required(VALIDATION_SCHEMA.COMMON.requiredMessage),
+      .required(VALIDATION_SCHEMA.COMMON.requiredSelectedMessage),
+    inOutDtl: Yup.string()
+      .required(VALIDATION_SCHEMA.COMMON.requiredSelectedMessage),
     title: Yup.string()
       .required(VALIDATION_SCHEMA.COMMON.requiredMessage),
     amount: Yup.number()
@@ -74,7 +78,8 @@ const DuesDetailModal = ({action, open, setOpen, dues, setDues, handleCallback})
     }
   }
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id, setSubmitting) => {
+    setSubmitting(true)
     if (window.confirm("삭제하시겠습니까?")) {
       try {
         const response = await Apis.dues.deleteDues(id)
@@ -89,6 +94,7 @@ const DuesDetailModal = ({action, open, setOpen, dues, setDues, handleCallback})
       }
       await sleep(DEFAULT_SLEEP_MS)
     }
+    setSubmitting(false)
   }
 
   useLayoutEffect(() => {
@@ -96,6 +102,7 @@ const DuesDetailModal = ({action, open, setOpen, dues, setDues, handleCallback})
       setInitialValues({
         id: '',
         inOut: '',
+        inOutDtl: '',
         startDt: dues.startDt,
         endDt: dues.endDt,
         title: '',
@@ -110,7 +117,7 @@ const DuesDetailModal = ({action, open, setOpen, dues, setDues, handleCallback})
   return (
     <CustomModal width={500} title={action === BUTTONS_ADD ? '회비 추가' : '회비 상세'} open={open} handleClose={handleClose}>
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
-        {({values, setFieldValue, isSubmitting}) => (
+        {({values, setFieldValue, isSubmitting, setSubmitting}) => (
           <Form>
             <Box
               display='flex'
@@ -125,20 +132,26 @@ const DuesDetailModal = ({action, open, setOpen, dues, setDues, handleCallback})
                 color='primary'
                 variant='outlined'
                 sx={{ width: '200px' }}
+                onChange={() => setFieldValue('inOutDtl', '')}
               >
-                <MenuItem value='IN'>입금</MenuItem>
-                <MenuItem value='OUT'>출금</MenuItem>
+                {codeList.filter(code => code.id !== COMMON_CODE.DUES.REST).map(code => (
+                  <MenuItem key={code.id} value={code.id}>{code.displayName}</MenuItem>
+                ))}
               </Field>
-              {action === BUTTONS_EDIT &&
-                <Button
-                  variant="contained"
-                  size="medium"
-                  color="error"
-                  disabled={isSubmitting}
-                  onClick={() => handleDelete(values.id)}
+              {!isEmptyObject(values.inOut) &&
+                <Field
+                  component={Select}
+                  id='inOutDtl'
+                  name='inOutDtl'
+                  label={codeList.find(code => code.id === values.inOut).displayName + '상세'}
+                  color='primary'
+                  variant='outlined'
+                  sx={{ width: '200px' }}
                 >
-                  회비 삭제
-                </Button>
+                  {codeList.find(code => code.id === values.inOut).detailList.map(detail => (
+                    <MenuItem key={detail.id} value={detail.id}>{detail.displayName}</MenuItem>
+                  ))}
+                </Field>
               }
             </Box>
             <Field
@@ -216,6 +229,19 @@ const DuesDetailModal = ({action, open, setOpen, dues, setDues, handleCallback})
             >
               {action === BUTTONS_ADD ? '회비 추가' : '회비 수정'}
             </Button>
+            {action === BUTTONS_EDIT &&
+              <Button
+                fullWidth
+                variant="contained"
+                size="large"
+                color="error"
+                disabled={isSubmitting}
+                onClick={() => handleDelete(values.id, setSubmitting)}
+                sx={{ mt: 2 }}
+              >
+                회비 삭제
+              </Button>
+            }
           </Form>
         )}
       </Formik>

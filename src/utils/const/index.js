@@ -134,11 +134,8 @@ export const ROOT_MENU = {...NEW_MENU, id: 'root', name: 'root', menuUrl: ''}
 
 export const COMMON_CODE = {
   DUES: {
-    IN_CODE: 'IN',
-    IN_NAME: '입금',
-    OUT_CODE: 'OUT',
-    OUT_NAME: '출금',
-    REST_CODE: 'REST',
-    REST_NAME: '잔액',
+    IN: 'DUES_IN',
+    OUT: 'DUES_OUT',
+    REST: 'DUES_REST',
   },
 }
