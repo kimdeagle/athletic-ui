@@ -268,9 +268,8 @@ const Dues = () => {
               '& .fc-daygrid-day-top': {
                 justifyContent: 'space-between',
                 '&:after': {
-                  content: "'today'",
+                  content: "'(today)'",
                   padding: '4px',
-                  color: colors.grey[300],
                 }
               }
             },
