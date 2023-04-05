@@ -6,11 +6,10 @@ import {
   BUTTON_PROPS_PARAMETERS,
   BUTTONS_EXCEL_DOWNLOAD, BUTTONS_EXCEL_DOWNLOAD_SEARCH_CONDITION,
   BUTTONS_EXCEL_UPLOAD,
-  DEFAULT_SLEEP_MS
 } from "../../utils/const";
 import {useSnackbar} from "notistack";
 import * as Apis from "../../apis";
-import {makeSnackbarMessage, sleep} from "../../utils/util";
+import {makeSnackbarMessage} from "../../utils/util";
 import {useState} from "react";
 import SearchConditionModal from "../modal/common/SearchConditionModal";
 
@@ -28,6 +27,8 @@ const ContentHeader = ({ title, subTitle, hideButtons, buttonProps }) => {
     search: buttonProps === undefined || buttonProps.search === undefined ? { disabled: true, onClick: null } : buttonProps.search,
   }
 
+  const { length, downloadUrl } = defaultButtonProps[BUTTONS_EXCEL_DOWNLOAD][BUTTON_PROPS_PARAMETERS]
+
   const handleExcelUpload = () => {
     const params = defaultButtonProps[BUTTONS_EXCEL_UPLOAD][BUTTON_PROPS_PARAMETERS]
     dispatch(setOpenExcelUploadModal(true))
@@ -39,22 +40,22 @@ const ContentHeader = ({ title, subTitle, hideButtons, buttonProps }) => {
     if (searchConditionList) {
       setOpen(true)
     } else {
-      const { length, downloadUrl } = defaultButtonProps[BUTTONS_EXCEL_DOWNLOAD][BUTTON_PROPS_PARAMETERS]
       if (length === 0) {
         alert('다운로드 할 데이터가 없습니다.')
         return;
       }
       if (window.confirm('엑셀 다운로드 하시겠습니까? (총 ' + length + '건)')) {
-        const { code, message } = await Apis.common.downloadExcel({downloadUrl})
-        const variant = code === 200 ? 'success' : 'error'
-        enqueueSnackbar(makeSnackbarMessage(message), { variant })
+        await downloadExcel({downloadUrl})
       }
     }
   }
 
   const handleModalCallback = async (searchParams) => {
-    const { downloadUrl } = defaultButtonProps[BUTTONS_EXCEL_DOWNLOAD][BUTTON_PROPS_PARAMETERS]
-    const { code, message } = await Apis.common.downloadExcel({downloadUrl, ...searchParams})
+    await downloadExcel({downloadUrl, ...searchParams})
+  }
+
+  const downloadExcel = async (params) => {
+    const { code, message } = await Apis.common.downloadExcel(params)
     const variant = code === 200 ? 'success' : 'error'
     enqueueSnackbar(makeSnackbarMessage(message), { variant })
   }

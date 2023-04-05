@@ -33,7 +33,20 @@ const request = async (data, thunkAPI) => {
     .catch(async (e) => {
       /* responseType: blob 일 때, error 처리 */
       const { status:code, message } = data.action === ACTIONS_DOWNLOAD_EXCEL ? JSON.parse(await e.response.data.text()) : e.response.data
+      
+      /* 에러 처리 방법 */
+      /* 1. Apis 직접 호출할 경우
+       *   - try catch 제거 및 단순화 작업
+       */
       return { code, message }
+      
+      /* 2. redux에서 호출할 경우 (rejected)
+       *   - redux state (code, message) 추가
+       *   - 호출 파일에 useSelector (code, message) 추가, dispatch로 호출, useEffect에서 code, message로 snackbar 호출
+       *   - 수정 범위가 너무 크다...
+       *   - (일단 1번 방법으로 수정 작업)
+       */
+      // return thunkAPI.rejectWithValue({code, message})
     })
 }
 
