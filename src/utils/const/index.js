@@ -23,12 +23,14 @@ export const HIDE_BUTTON_PATHNAME_LIST = ['/', '/my', '/system', '/system/menu',
 /* common button attributes */
 export const BUTTONS_EXCEL_UPLOAD = 'excelUpload'
 export const BUTTONS_EXCEL_DOWNLOAD = 'excelDownload'
+export const BUTTONS_EXCEL_DOWNLOAD_SEARCH_CONDITION = 'excelDownloadSearchCondition'
 export const BUTTONS_ADD = 'add'
 export const BUTTONS_SEARCH = 'search'
 export const BUTTONS_EDIT = 'edit'
 export const BUTTON_PROPS_DISABLED = 'disabled'
 export const BUTTON_PROPS_PARAMETERS = 'params'
 export const BUTTON_PROPS_ON_CLICK = 'onClick'
+export const SEARCH_CONDITION_PERIOD = 'period'
 
 /* data grid cell class name */
 export const DATA_GRID_CELL_CLASS_NAME = {

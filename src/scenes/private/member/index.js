@@ -43,13 +43,13 @@ const Member = () => {
 
   const excelUploadParams = {
     sampleUrl: '/excel/member/uploadMemberSample.xlsx',
-    uploadUrl: '/member/excel',
+    uploadUrl: '/member/excel/upload',
     callback: handleSearch
   }
 
   const excelDownloadParams = {
     length: memberList.length,
-    downloadUrl: '/member/excel',
+    downloadUrl: '/member/excel/download',
   }
 
   const buttonProps = {

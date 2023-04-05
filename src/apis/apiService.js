@@ -30,6 +30,11 @@ const request = async (data, thunkAPI) => {
         return res.data
       }
     })
+    .catch(async (e) => {
+      /* responseType: blob 일 때, error 처리 */
+      const { status:code, message } = data.action === ACTIONS_DOWNLOAD_EXCEL ? JSON.parse(await e.response.data.text()) : e.response.data
+      return { code, message }
+    })
 }
 
 export const GET = async (data, thunkAPI) => {
@@ -62,9 +67,9 @@ export const DELETE = async (data, thunkAPI) => {
 
 export const DOWNLOAD_EXCEL = async (data, thunkAPI) => {
   return await request({
-    method: 'get',
+    method: 'post',
+    ...data,
     action: ACTIONS_DOWNLOAD_EXCEL,
-    ...data
   }, thunkAPI)
 }
 

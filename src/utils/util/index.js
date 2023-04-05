@@ -130,3 +130,8 @@ export const getStringDateAddOneDays = (date) => {
 export const getDateSubOneDays = (date) => {
   return subDays(date, 1)
 }
+
+export const isMinEndDt = (values) => {
+  const { startDt, endDt } = values
+  return format(startDt, 'yyyyMMdd') > format(endDt, 'yyyyMMdd')
+}

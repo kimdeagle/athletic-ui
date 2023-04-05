@@ -5,7 +5,7 @@ import {
 } from "@mui/material";
 import {useLayoutEffect, useState} from "react";
 import CustomModal from "../index";
-import {getStringDateTime, isEmptyObject, makeSnackbarMessage, sleep} from "../../../utils/util";
+import {getStringDateTime, isEmptyObject, isMinEndDt, makeSnackbarMessage, sleep} from "../../../utils/util";
 import * as Apis from "../../../apis";
 import {
   BUTTONS_ADD,
@@ -18,13 +18,7 @@ import {Select, TextField} from "formik-mui";
 import {useSnackbar} from "notistack";
 import * as Yup from "yup";
 import {DatePicker} from "@mui/x-date-pickers";
-import {format} from "date-fns";
 import {useSelector} from "react-redux";
-
-const isMinEndDt = (values) => {
-  const { startDt, endDt } = values
-  return format(startDt, 'yyyyMMdd') > format(endDt, 'yyyyMMdd')
-}
 
 const DuesDetailModal = ({action, open, setOpen, dues, setDues, handleCallback}) => {
   const { enqueueSnackbar } = useSnackbar()

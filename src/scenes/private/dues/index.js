@@ -11,8 +11,8 @@ import {
 import {
   BUTTON_PROPS_DISABLED,
   BUTTON_PROPS_PARAMETERS, BUTTONS_ADD, BUTTONS_EDIT,
-  BUTTONS_EXCEL_DOWNLOAD,
-  BUTTONS_EXCEL_UPLOAD, COMMON_CODE
+  BUTTONS_EXCEL_DOWNLOAD, BUTTONS_EXCEL_DOWNLOAD_SEARCH_CONDITION,
+  BUTTONS_EXCEL_UPLOAD, COMMON_CODE, SEARCH_CONDITION_PERIOD
 } from "../../../utils/const";
 import {useDispatch, useSelector} from "react-redux";
 import * as Apis from "../../../apis";
@@ -123,14 +123,12 @@ const Dues = () => {
 
   const excelUploadParams = {
     sampleUrl: '/excel/dues/uploadDuesSample.xlsx',
-    uploadUrl: '/dues/excel',
+    uploadUrl: '/dues/excel/upload',
     callback: handleSearch
   }
 
   const excelDownloadParams = {
-    //TODO 변경
-    length: duesList.length,
-    downloadUrl: '/dues/excel',
+    downloadUrl: '/dues/excel/download',
   }
 
   const buttonProps = {
@@ -140,6 +138,7 @@ const Dues = () => {
     },
     [BUTTONS_EXCEL_DOWNLOAD]: {
       [BUTTON_PROPS_DISABLED]: false,
+      [BUTTONS_EXCEL_DOWNLOAD_SEARCH_CONDITION]: [SEARCH_CONDITION_PERIOD],
       [BUTTON_PROPS_PARAMETERS]: excelDownloadParams
     },
   }
@@ -167,14 +166,13 @@ const Dues = () => {
 
   const handleChange = async (selected) => {
     if (window.confirm("회비를 이동하시겠습니까?")) {
-      try {
-        const params = {...getSelectedParams(selected), startDt: getStringDateTime(selected.event.start), endDt: getStringDateTime(getDateSubOneDays(selected.event.end))}
-        const response = await Apis.dues.updateDues(params)
-        if (response.code === 200) {
-          enqueueSnackbar(makeSnackbarMessage(response.message), { variant: 'success' })
-        }
+      const params = {...getSelectedParams(selected), startDt: getStringDateTime(selected.event.start), endDt: getStringDateTime(getDateSubOneDays(selected.event.end))}
+      const { code, message } = await Apis.dues.updateDues(params)
+      const variant = code === 200 ? 'success' : 'error'
+      enqueueSnackbar(makeSnackbarMessage(message), { variant })
+      if (code === 200) {
         handleSearch()
-      } catch (e) {
+      } else {
         selected.revert()
       }
     } else {

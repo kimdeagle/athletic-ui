@@ -4,18 +4,21 @@ import {setExcelUploadModalProps, setOpenExcelUploadModal} from "../../redux/com
 import {useDispatch} from "react-redux";
 import {
   BUTTON_PROPS_PARAMETERS,
-  BUTTONS_EXCEL_DOWNLOAD,
+  BUTTONS_EXCEL_DOWNLOAD, BUTTONS_EXCEL_DOWNLOAD_SEARCH_CONDITION,
   BUTTONS_EXCEL_UPLOAD,
   DEFAULT_SLEEP_MS
 } from "../../utils/const";
 import {useSnackbar} from "notistack";
 import * as Apis from "../../apis";
 import {makeSnackbarMessage, sleep} from "../../utils/util";
+import {useState} from "react";
+import SearchConditionModal from "../modal/common/SearchConditionModal";
 
 const ContentHeader = ({ title, subTitle, hideButtons, buttonProps }) => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
   const dispatch = useDispatch()
+  const [open, setOpen] = useState(false)
   const { enqueueSnackbar } = useSnackbar()
 
   const defaultButtonProps = {
@@ -32,22 +35,28 @@ const ContentHeader = ({ title, subTitle, hideButtons, buttonProps }) => {
   }
 
   const handleExcelDownload = async () => {
-    const { length, downloadUrl } = defaultButtonProps[BUTTONS_EXCEL_DOWNLOAD][BUTTON_PROPS_PARAMETERS]
-    if (length === 0) {
-      alert('다운로드 할 데이터가 없습니다.')
-      return;
-    }
-    if (window.confirm('엑셀 다운로드 하시겠습니까? (총 ' + length + '건)')) {
-      try {
-        const response = await Apis.common.downloadExcel({downloadUrl})
-        if (response.code === 200) {
-          enqueueSnackbar(makeSnackbarMessage(response.message), { variant: 'success' })
-        }
-      } catch (e) {
-        enqueueSnackbar(makeSnackbarMessage(e.response.data.message), { variant: 'error' })
+    const searchConditionList = defaultButtonProps[BUTTONS_EXCEL_DOWNLOAD][BUTTONS_EXCEL_DOWNLOAD_SEARCH_CONDITION]
+    if (searchConditionList) {
+      setOpen(true)
+    } else {
+      const { length, downloadUrl } = defaultButtonProps[BUTTONS_EXCEL_DOWNLOAD][BUTTON_PROPS_PARAMETERS]
+      if (length === 0) {
+        alert('다운로드 할 데이터가 없습니다.')
+        return;
       }
-      await sleep(DEFAULT_SLEEP_MS)
+      if (window.confirm('엑셀 다운로드 하시겠습니까? (총 ' + length + '건)')) {
+        const { code, message } = await Apis.common.downloadExcel({downloadUrl})
+        const variant = code === 200 ? 'success' : 'error'
+        enqueueSnackbar(makeSnackbarMessage(message), { variant })
+      }
     }
+  }
+
+  const handleModalCallback = async (searchParams) => {
+    const { downloadUrl } = defaultButtonProps[BUTTONS_EXCEL_DOWNLOAD][BUTTON_PROPS_PARAMETERS]
+    const { code, message } = await Apis.common.downloadExcel({downloadUrl, ...searchParams})
+    const variant = code === 200 ? 'success' : 'error'
+    enqueueSnackbar(makeSnackbarMessage(message), { variant })
   }
 
   return (
@@ -111,6 +120,7 @@ const ContentHeader = ({ title, subTitle, hideButtons, buttonProps }) => {
           조회
         </Button>
       </Box>}
+      <SearchConditionModal open={open} setOpen={setOpen} searchCondition={defaultButtonProps[BUTTONS_EXCEL_DOWNLOAD][BUTTONS_EXCEL_DOWNLOAD_SEARCH_CONDITION]} handleCallback={handleModalCallback} />
     </Box>
   )
 }
