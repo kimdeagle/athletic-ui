@@ -27,8 +27,6 @@ const ContentHeader = ({ title, subTitle, hideButtons, buttonProps }) => {
     search: buttonProps === undefined || buttonProps.search === undefined ? { disabled: true, onClick: null } : buttonProps.search,
   }
 
-  const { length, downloadUrl } = defaultButtonProps[BUTTONS_EXCEL_DOWNLOAD][BUTTON_PROPS_PARAMETERS]
-
   const handleExcelUpload = () => {
     const params = defaultButtonProps[BUTTONS_EXCEL_UPLOAD][BUTTON_PROPS_PARAMETERS]
     dispatch(setOpenExcelUploadModal(true))
@@ -40,6 +38,7 @@ const ContentHeader = ({ title, subTitle, hideButtons, buttonProps }) => {
     if (searchConditionList) {
       setOpen(true)
     } else {
+      const { length, downloadUrl } = defaultButtonProps[BUTTONS_EXCEL_DOWNLOAD][BUTTON_PROPS_PARAMETERS]
       if (length === 0) {
         alert('다운로드 할 데이터가 없습니다.')
         return;
@@ -51,6 +50,7 @@ const ContentHeader = ({ title, subTitle, hideButtons, buttonProps }) => {
   }
 
   const handleModalCallback = async (searchParams) => {
+    const { downloadUrl } = defaultButtonProps[BUTTONS_EXCEL_DOWNLOAD][BUTTON_PROPS_PARAMETERS]
     await downloadExcel({downloadUrl, ...searchParams})
   }
 

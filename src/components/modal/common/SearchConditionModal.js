@@ -9,10 +9,13 @@ import {
 import {getStringDateTime, isMinEndDt} from "../../../utils/util";
 import {DatePicker} from "@mui/x-date-pickers";
 
+const PERIOD_ALL = 'all'
+const PERIOD_SELECT = 'select'
+
 const SearchConditionModal = ({open, setOpen, searchCondition, handleCallback}) => {
 
   const initialValues = {
-    period: 'all',
+    period: PERIOD_ALL,
     startDt: new Date(),
     endDt: new Date(),
   }
@@ -27,8 +30,8 @@ const SearchConditionModal = ({open, setOpen, searchCondition, handleCallback}) 
     if (window.confirm("엑셀 다운로드 하시겠습니까?")) {
       const params = {
         ...values,
-        startDt: values.period === 'all' ? null : getStringDateTime(values.startDt),
-        endDt: values.period === 'all' ? null : getStringDateTime(values.endDt),
+        startDt: values.period === PERIOD_ALL ? null : getStringDateTime(values.startDt),
+        endDt: values.period === PERIOD_ALL ? null : getStringDateTime(values.endDt),
       }
       handleCallback(params)
       handleClose()
@@ -61,11 +64,11 @@ const SearchConditionModal = ({open, setOpen, searchCondition, handleCallback}) 
                     variant='outlined'
                     margin='normal'
                   >
-                    <FormControlLabel value='all' label='전체' control={<Radio />} />
-                    <FormControlLabel value='select' label='지정일자' control={<Radio />} />
+                    <FormControlLabel value={PERIOD_ALL} label='전체' control={<Radio />} />
+                    <FormControlLabel value={PERIOD_SELECT} label='지정일자' control={<Radio />} />
                   </Field>
                 </Box>
-                {values.period === 'select' &&
+                {values.period === PERIOD_SELECT &&
                   <Box
                     display='flex'
                     justifyContent='space-between'
@@ -104,6 +107,9 @@ const SearchConditionModal = ({open, setOpen, searchCondition, handleCallback}) 
                 }
               </Box>
             }
+            {/* other search conditions */}
+
+            {/* excel download button */}
             <Button
               fullWidth
               variant='contained'

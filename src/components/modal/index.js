@@ -22,24 +22,30 @@ const CustomModal = ({width, title, subtitle, open, handleClose, children}) => {
       >
         <Box
           display='flex'
-          justifyContent='space-between'
-          alignItems='center'
+          flexDirection='column'
           mb={2}
         >
           {title &&
-            <Typography id="modal-title" variant="h3">
-              {title}
+            <Box
+              display='flex'
+              justifyContent='space-between'
+              alignItems='center'
+              mb={1}
+            >
+              <Typography id="modal-title" variant="h3">
+                {title}
+              </Typography>
+              <IconButton onClick={handleClose}>
+                <CloseOutlinedIcon />
+              </IconButton>
+            </Box>
+          }
+          {subtitle &&
+            <Typography id="modal-subtitle" variant="h5">
+              {subtitle}
             </Typography>
           }
-          <IconButton onClick={handleClose}>
-            <CloseOutlinedIcon />
-          </IconButton>
         </Box>
-        {subtitle &&
-          <Typography id="modal-subtitle" variant="h5" mb={2}>
-            {subtitle}
-          </Typography>
-        }
         {children}
       </Box>
     </Modal>
