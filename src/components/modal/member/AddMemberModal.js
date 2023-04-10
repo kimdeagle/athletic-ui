@@ -15,7 +15,7 @@ import {
   BUTTONS_ADD,
   BUTTONS_EDIT,
   DAUM_POSTCODE_SCRIPT_URL,
-  DEFAULT_SLEEP_MS,
+  DEFAULT_SLEEP_MS, STATUS_SUCCESS,
   VALIDATION_SCHEMA
 } from "../../../utils/const";
 import { Formik, Form, Field } from "formik";
@@ -69,18 +69,16 @@ const AddMemberModal = ({action, open, setOpen, handleCallback}) => {
 
   const handleSubmit = async (values) => {
     if (window.confirm(action === BUTTONS_ADD ? "추가하시겠습니까?" : "수정하시겠습니까?")) {
-      try {
-          const response = action === BUTTONS_ADD ? await Apis.member.addMember(values) : await Apis.member.updateMember(values)
-          if (response.code === 200) {
-            enqueueSnackbar(makeSnackbarMessage(response.message), {
-              variant: 'success',
-              onExit: handleExit,
-            })
-          }
-      } catch (e) {
-        enqueueSnackbar(makeSnackbarMessage(e.response.data.message), { variant: 'error' })
+      const { status, message } = action === BUTTONS_ADD ? await Apis.member.addMember(values) : await Apis.member.updateMember(values)
+      if (status === STATUS_SUCCESS) {
+        enqueueSnackbar(makeSnackbarMessage(message), {
+          variant: 'success',
+          onExit: handleExit,
+        })
+        await sleep(DEFAULT_SLEEP_MS)
+      } else {
+        enqueueSnackbar(makeSnackbarMessage(message), { variant: 'error' })
       }
-      await sleep(DEFAULT_SLEEP_MS)
     }
   }
 

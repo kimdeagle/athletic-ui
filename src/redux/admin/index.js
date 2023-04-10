@@ -18,7 +18,7 @@ export const adminSlice = createSlice({
   extraReducers: builder => {
     builder
       .addCase(getMyInfo.fulfilled, (state, action) => {
-        state.admin = action.payload
+        state.admin = action.payload.data
       })
   }
 })

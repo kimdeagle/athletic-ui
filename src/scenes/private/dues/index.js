@@ -12,7 +12,7 @@ import {
   BUTTON_PROPS_DISABLED,
   BUTTON_PROPS_PARAMETERS, BUTTONS_ADD, BUTTONS_EDIT,
   BUTTONS_EXCEL_DOWNLOAD, BUTTONS_EXCEL_DOWNLOAD_SEARCH_CONDITION,
-  BUTTONS_EXCEL_UPLOAD, COMMON_CODE, SEARCH_CONDITION_PERIOD
+  BUTTONS_EXCEL_UPLOAD, COMMON_CODE, SEARCH_CONDITION_PERIOD, STATUS_SUCCESS
 } from "../../../utils/const";
 import {useDispatch, useSelector} from "react-redux";
 import * as Apis from "../../../apis";
@@ -122,7 +122,7 @@ const Dues = () => {
   }
 
   const excelUploadParams = {
-    sampleUrl: '/excel/dues/uploadDuesSample.xlsx',
+    sampleName: 'dues',
     uploadUrl: '/dues/excel/upload',
     callback: handleSearch
   }
@@ -167,10 +167,10 @@ const Dues = () => {
   const handleChange = async (selected) => {
     if (window.confirm("회비를 이동하시겠습니까?")) {
       const params = {...getSelectedParams(selected), startDt: getStringDateTime(selected.event.start), endDt: getStringDateTime(getDateSubOneDays(selected.event.end))}
-      const { code, message } = await Apis.dues.updateDues(params)
-      const variant = code === 200 ? 'success' : 'error'
+      const { status, message } = await Apis.dues.updateDues(params)
+      const variant = status === STATUS_SUCCESS ? 'success' : 'error'
       enqueueSnackbar(makeSnackbarMessage(message), { variant })
-      if (code === 200) {
+      if (status === STATUS_SUCCESS) {
         handleSearch()
       } else {
         selected.revert()

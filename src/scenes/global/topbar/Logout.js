@@ -9,7 +9,7 @@ import * as Apis from "../../../apis";
 import axios from "axios";
 import {useSnackbar} from "notistack";
 import {makeSnackbarMessage} from "../../../utils/util";
-import {AUTHORIZATION_HEADER_NAME} from "../../../utils/const";
+import {AUTHORIZATION_HEADER_NAME, STATUS_SUCCESS} from "../../../utils/const";
 import {ROUTE_PATH_NAME} from "../../../routes/RouteList";
 
 const Logout = () => {
@@ -18,23 +18,21 @@ const Logout = () => {
   const { enqueueSnackbar } = useSnackbar()
 
   const handleLogout = async () => {
-    try {
-      if (window.confirm("로그아웃 하시겠습니까?")) {
-        const response = await Apis.auth.logout()
-        if (response.code === 200) {
-          alert(response.message)
-          clearInterval('authInterval')
-          clearInterval('reIssueInterval')
-          dispatch(resetAccessToken())
-          removeRefreshToken()
-          removeUser()
-          dispatch(resetMenuState())
-          axios.defaults.headers.common[AUTHORIZATION_HEADER_NAME] = null
-          navigate(ROUTE_PATH_NAME.login, {replace: true})
-        }
+    if (window.confirm("로그아웃 하시겠습니까?")) {
+      const { status, message } = await Apis.auth.logout()
+      if (status === STATUS_SUCCESS) {
+        alert(message)
+        clearInterval('authInterval')
+        clearInterval('reIssueInterval')
+        dispatch(resetAccessToken())
+        removeRefreshToken()
+        removeUser()
+        dispatch(resetMenuState())
+        axios.defaults.headers.common[AUTHORIZATION_HEADER_NAME] = null
+        navigate(ROUTE_PATH_NAME.login, {replace: true})
+      } else {
+        enqueueSnackbar(makeSnackbarMessage(message), { variant: 'error' })
       }
-    } catch (e) {
-      enqueueSnackbar(makeSnackbarMessage(e.response.data.message), { variant: 'error' })
     }
   }
 

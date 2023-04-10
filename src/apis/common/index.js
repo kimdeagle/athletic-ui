@@ -5,13 +5,13 @@ export const uploadExcel = async (params, thunkAPI) => {
   return await apiService.UPLOAD_EXCEL({
     url,
     params: file,
-    headers: { 'Content-Type': 'multipart/form-data' },
+    headers: { 'content-type': 'multipart/form-data' },
   }, thunkAPI)
 }
 
-export const downloadExcel = async (params, thunkAPI) => {
+export const downloadFile = async (params, thunkAPI) => {
   const {downloadUrl:url, ...other} = params
-  return await apiService.DOWNLOAD_EXCEL({
+  return await apiService.DOWNLOAD_FILE({
     url,
     params: other,
   }, thunkAPI)

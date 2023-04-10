@@ -8,7 +8,7 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import * as Apis from "../../../../apis";
 import {getMenuList, getUseMenuList} from "../../../../redux/system/menu";
-import {DEFAULT_SLEEP_MS, NEW_MENU, ROOT_MENU, VALIDATION_SCHEMA} from "../../../../utils/const";
+import {DEFAULT_SLEEP_MS, NEW_MENU, ROOT_MENU, STATUS_SUCCESS, VALIDATION_SCHEMA} from "../../../../utils/const";
 import MenuTree from "./MenuTree";
 import MenuDetail from "./MenuDetail";
 import {getAuthorityList} from "../../../../redux/authority";
@@ -41,19 +41,17 @@ const Menu = () => {
     if (window.confirm(selected === NEW_MENU.id ? '등록하시겠습니까?' : '수정하시겠습니까?')) {
       const parentMenuId = entireMenuList.find(menu => menu.id === selected).upMenuId
       const parentMenu = entireMenuList.find(menu => menu.id === parentMenuId)
-      try {
-        const params = {...values, ...(selected === NEW_MENU.id ? {id: null} : null)}
-        const response = await Apis.system.menu.saveMenu(params)
-        if (response.code === 200) {
-          enqueueSnackbar(makeSnackbarMessage(response.message), {
-            variant: 'success',
-            onExit: handleSuccess
-          })
-        }
-      } catch (e) {
-        enqueueSnackbar(makeSnackbarMessage(e.response.data.message), { variant: 'error' })
+      const params = {...values, ...(selected === NEW_MENU.id ? {id: null} : null)}
+      const { status, message } = await Apis.system.menu.saveMenu(params)
+      if (status === STATUS_SUCCESS) {
+        enqueueSnackbar(makeSnackbarMessage(message), {
+          variant: 'success',
+          onExit: handleSuccess
+        })
+        await sleep(DEFAULT_SLEEP_MS)
+      } else {
+        enqueueSnackbar(makeSnackbarMessage(message), { variant: 'error' })
       }
-      await sleep(DEFAULT_SLEEP_MS)
       setProcessedRootMenu({...ROOT_MENU, children: getProcessedMenuList(menuList)})
       setSelected(isEmptyObject(parentMenuId) ? ROOT_MENU.id : parentMenuId)
       setValues(isEmptyObject(parentMenu) ? ROOT_MENU : parentMenu)
@@ -66,23 +64,21 @@ const Menu = () => {
     const childMenu = entireMenuList.filter(menu => menu.upMenuId === selected)
     const confirmMessage = childMenu.length ? "하위 메뉴들도 같이 삭제됩니다.\n삭제하시겠습니까?" : "메뉴를 삭제하시겠습니까?"
     if (window.confirm(confirmMessage)) {
-        const parentMenuId = entireMenuList.find(menu => menu.id === selected).upMenuId
-        const parentMenu = entireMenuList.find(menu => menu.id === parentMenuId)
+      const parentMenuId = entireMenuList.find(menu => menu.id === selected).upMenuId
+      const parentMenu = entireMenuList.find(menu => menu.id === parentMenuId)
       if (selected === NEW_MENU.id) {
         deleteAlreadyAddMenu()
       } else {
-        try {
-          const response = await Apis.system.menu.deleteMenu(selected)
-          if (response.code === 200) {
-            enqueueSnackbar(makeSnackbarMessage(response.message), {
-              variant: 'success',
-              onExit: handleSuccess
-            })
-          }
-        } catch (e) {
-          enqueueSnackbar(makeSnackbarMessage(e.response.data.message), { variant: 'error' })
+        const { status, message } = await Apis.system.menu.deleteMenu(selected)
+        if (status === STATUS_SUCCESS) {
+          enqueueSnackbar(makeSnackbarMessage(message), {
+            variant: 'success',
+            onExit: handleSuccess
+          })
+          await sleep(DEFAULT_SLEEP_MS)
+        } else {
+          enqueueSnackbar(makeSnackbarMessage(message), { variant: 'error' })
         }
-        await sleep(DEFAULT_SLEEP_MS)
       }
       setProcessedRootMenu({...ROOT_MENU, children: getProcessedMenuList(menuList)})
       setSelected(isEmptyObject(parentMenuId) ? ROOT_MENU.id : parentMenuId)

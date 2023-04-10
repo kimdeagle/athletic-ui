@@ -28,13 +28,13 @@ export const duesSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getDuesList.fulfilled, (state, action) => {
-        state.duesList = action.payload
+        state.duesList = action.payload.data
       })
       .addCase(getDues.fulfilled, (state, action) => {
-        state.dues = action.payload
+        state.dues = action.payload.data
       })
       .addCase(getAmountThisMonth.fulfilled, (state, action) => {
-        state.amountThisMonth = action.payload
+        state.amountThisMonth = action.payload.data
       })
   }
 })

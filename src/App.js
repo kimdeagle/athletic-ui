@@ -14,7 +14,7 @@ import {Helmet} from "react-helmet-async";
 import {
   AUTH_INTERVAL_TIMEOUT, AUTHORIZATION_HEADER_NAME, BEARER_PREFIX,
   IS_NOT_AUTHENTICATED_PATH_LIST,
-  RE_ISSUE_ACCESS_TOKEN_INTERVAL_TIMEOUT
+  RE_ISSUE_ACCESS_TOKEN_INTERVAL_TIMEOUT, STATUS_SUCCESS
 } from "./utils/const";
 import ExcelUpload from "./components/modal/common/ExcelUpload";
 import {useSnackbar} from "notistack";
@@ -34,13 +34,13 @@ function App() {
   const reIssueAccessToken = async () => {
     const refreshToken = getRefreshToken()
     if (refreshToken) {
-      try {
-        const token = await Apis.auth.reIssueAccessToken({refreshToken})
+      const { status, message, data:token } = await Apis.auth.reIssueAccessToken({refreshToken})
+      if (status === STATUS_SUCCESS) {
         const { accessToken, accessTokenExpiresIn } = token
         dispatch(setAccessToken({accessToken, accessTokenExpiresIn}))
         axios.defaults.headers.common[AUTHORIZATION_HEADER_NAME] = BEARER_PREFIX + accessToken
-      } catch (e) {
-        enqueueSnackbar(makeSnackbarMessage(e.response.data.message), { variant: 'error' })
+      } else {
+        enqueueSnackbar(makeSnackbarMessage(message), { variant: 'error' })
       }
     }
   }

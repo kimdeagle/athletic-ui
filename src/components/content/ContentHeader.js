@@ -5,7 +5,7 @@ import {useDispatch} from "react-redux";
 import {
   BUTTON_PROPS_PARAMETERS,
   BUTTONS_EXCEL_DOWNLOAD, BUTTONS_EXCEL_DOWNLOAD_SEARCH_CONDITION,
-  BUTTONS_EXCEL_UPLOAD,
+  BUTTONS_EXCEL_UPLOAD, STATUS_SUCCESS,
 } from "../../utils/const";
 import {useSnackbar} from "notistack";
 import * as Apis from "../../apis";
@@ -55,8 +55,8 @@ const ContentHeader = ({ title, subTitle, hideButtons, buttonProps }) => {
   }
 
   const downloadExcel = async (params) => {
-    const { code, message } = await Apis.common.downloadExcel(params)
-    const variant = code === 200 ? 'success' : 'error'
+    const { status, message } = await Apis.common.downloadFile(params)
+    const variant = status === STATUS_SUCCESS ? 'success' : 'error'
     enqueueSnackbar(makeSnackbarMessage(message), { variant })
   }
 

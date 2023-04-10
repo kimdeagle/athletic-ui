@@ -10,7 +10,7 @@ import {
   BUTTON_PROPS_DISABLED,
   BUTTON_PROPS_ON_CLICK, BUTTON_PROPS_PARAMETERS,
   BUTTONS_ADD, BUTTONS_EDIT, BUTTONS_EXCEL_DOWNLOAD, BUTTONS_EXCEL_UPLOAD, BUTTONS_SEARCH,
-  DATA_GRID_CELL_CLASS_NAME, DEFAULT_SLEEP_MS
+  DATA_GRID_CELL_CLASS_NAME, DEFAULT_SLEEP_MS, STATUS_SUCCESS
 } from "../../../utils/const";
 import * as Apis from "../../../apis";
 import {useSnackbar} from "notistack";
@@ -42,7 +42,7 @@ const Member = () => {
   }
 
   const excelUploadParams = {
-    sampleUrl: '/excel/member/uploadMemberSample.xlsx',
+    sampleName: 'member',
     uploadUrl: '/member/excel/upload',
     callback: handleSearch
   }
@@ -82,19 +82,14 @@ const Member = () => {
   const handleDelete = async () => {
     const count = selectionModel.length
     if (window.confirm("선택한 " + count + "명의 회원을 삭제하시겠습니까?")) {
-      try {
-        const response = await Apis.member.deleteMembers(selectionModel)
-        if (response.code === 200) {
-          setSelectionModel([])
-          enqueueSnackbar(makeSnackbarMessage(response.message), {
-            variant: 'success',
-          })
-          handleSearch()
-        }
-      } catch (e) {
-        enqueueSnackbar(makeSnackbarMessage(e.response.data.message), { variant: 'error' })
+      const { status, message } = await Apis.member.deleteMembers(selectionModel)
+      if (status === STATUS_SUCCESS) {
+        setSelectionModel([])
+        enqueueSnackbar(makeSnackbarMessage(message), { variant: 'success' })
+        handleSearch()
+      } else {
+        enqueueSnackbar(makeSnackbarMessage(message), { variant: 'error' })
       }
-      await sleep(DEFAULT_SLEEP_MS)
     }
   }
 

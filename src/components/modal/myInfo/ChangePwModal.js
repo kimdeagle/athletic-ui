@@ -6,7 +6,7 @@ import { Formik, Form, Field } from "formik";
 import { TextField } from "formik-mui";
 import {useSnackbar} from "notistack";
 import * as Yup from "yup";
-import {DEFAULT_SLEEP_MS, VALIDATION_SCHEMA} from "../../../utils/const";
+import {DEFAULT_SLEEP_MS, STATUS_SUCCESS, VALIDATION_SCHEMA} from "../../../utils/const";
 import {ROUTE_PATH_NAME} from "../../../routes/RouteList";
 
 const ChangePwModal = ({open, setOpen}) => {
@@ -33,19 +33,16 @@ const ChangePwModal = ({open, setOpen}) => {
   })
 
   const handleSubmit = async (values) => {
-    try {
-      //기존 비밀번호와 동일한지 체크
-      const response = await Apis.admin.changePassword(values)
-      if (response.code === 200) {
-        enqueueSnackbar(makeSnackbarMessage(response.message), {
-          variant: 'success',
-          onExit: () => window.location.replace(ROUTE_PATH_NAME.myInfo),
-        })
-      }
-    } catch (e) {
-      enqueueSnackbar(makeSnackbarMessage(e.response.data.message), { variant: 'error' })
+    const { status, message } = await Apis.admin.changePassword(values)
+    if (status === STATUS_SUCCESS) {
+      enqueueSnackbar(makeSnackbarMessage(message), {
+        variant: 'success',
+        onExit: () => window.location.replace(ROUTE_PATH_NAME.myInfo),
+      })
+      await sleep(DEFAULT_SLEEP_MS)
+    } else {
+      enqueueSnackbar(makeSnackbarMessage(message), { variant: 'error' })
     }
-    await sleep(DEFAULT_SLEEP_MS)
   }
 
   return (

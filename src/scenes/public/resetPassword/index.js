@@ -6,7 +6,7 @@ import {useSnackbar} from "notistack";
 import { Formik, Form, Field } from "formik";
 import { TextField } from "formik-mui";
 import * as Yup from "yup";
-import {DEFAULT_SLEEP_MS, VALIDATION_SCHEMA} from "../../../utils/const";
+import {DEFAULT_SLEEP_MS, STATUS_SUCCESS, VALIDATION_SCHEMA} from "../../../utils/const";
 import {makeSnackbarMessage, sleep} from "../../../utils/util";
 import {ROUTE_PATH_NAME} from "../../../routes/RouteList";
 
@@ -28,18 +28,15 @@ const ResetPassword = () => {
   })
 
   const handleSubmit = async (values) => {
-    try {
-      const response = await Apis.auth.resetPassword(values)
-      if (response.code === 200) {
-        enqueueSnackbar(makeSnackbarMessage(response.message), {
-          variant: 'success',
-          onClose: () => navigate(ROUTE_PATH_NAME.login, { replace: true }),
-        })
-      }
-    } catch (e) {
-      enqueueSnackbar(e.response.data.message, { variant: 'error' })
+    const { status, message } = await Apis.auth.resetPassword(values)
+    if (status === STATUS_SUCCESS) {
+      enqueueSnackbar(makeSnackbarMessage(message), {
+        variant: 'success',
+        onClose: () => navigate(ROUTE_PATH_NAME.login, { replace: true }),
+      })
+    } else {
+      enqueueSnackbar(message, { variant: 'error' })
     }
-    await sleep(DEFAULT_SLEEP_MS)
   }
 
   return (

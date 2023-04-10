@@ -3,7 +3,7 @@ import * as Apis from "../../../apis";
 import CustomModal from "../index";
 import {
   AUTHORIZATION_HEADER_NAME,
-  DEFAULT_SLEEP_MS,
+  DEFAULT_SLEEP_MS, STATUS_SUCCESS,
   VALIDATION_SCHEMA
 } from "../../../utils/const";
 import {useSnackbar} from "notistack";
@@ -50,18 +50,16 @@ const OutModal = ({open, setOpen}) => {
   }
 
   const handleSubmit = async (values) => {
-    try {
-      const response = await Apis.admin.out(values)
-      if (response.code === 200) {
-        enqueueSnackbar(makeSnackbarMessage(response.message), {
-          variant: 'success',
-          onExit: outProcess,
-        })
-      }
-    } catch (e) {
-      enqueueSnackbar(makeSnackbarMessage(e.response.data.message), { variant: 'error' })
+    const { status, message } = await Apis.admin.out(values)
+    if (status === STATUS_SUCCESS) {
+      enqueueSnackbar(makeSnackbarMessage(message), {
+        variant: 'success',
+        onExit: outProcess,
+      })
+      await sleep(DEFAULT_SLEEP_MS)
+    } else {
+      enqueueSnackbar(makeSnackbarMessage(message), { variant: 'error' })
     }
-    await sleep(DEFAULT_SLEEP_MS)
   }
 
   return (

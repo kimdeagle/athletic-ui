@@ -1,4 +1,7 @@
 
+/* success status */
+export const STATUS_SUCCESS = 200
+
 /* authorization header name */
 export const AUTHORIZATION_HEADER_NAME = 'Authorization'
 

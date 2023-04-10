@@ -23,14 +23,10 @@ export const memberSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getMemberList.fulfilled, (state, action) => {
-        state.memberList = action.payload
-      })
-      .addCase(getMemberList.rejected, (state, action) => {
+        state.memberList = action.payload.data
       })
       .addCase(getMember.fulfilled, (state, action) => {
-        state.member = action.payload
-      })
-      .addCase(getMember.rejected, (state, action) => {
+        state.member = action.payload.data
       })
   }
 })

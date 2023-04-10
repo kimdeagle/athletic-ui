@@ -21,7 +21,7 @@ import {CheckboxWithLabel, TextField} from "formik-mui";
 import * as Yup from "yup";
 import {
   AUTHORIZATION_HEADER_NAME, BEARER_PREFIX,
-  DEFAULT_SLEEP_MS,
+  DEFAULT_SLEEP_MS, STATUS_SUCCESS,
   VALIDATION_SCHEMA
 } from "../../../utils/const";
 import {makeSnackbarMessage, sleep} from "../../../utils/util";
@@ -48,10 +48,9 @@ const Login = () => {
   })
 
   const handleSubmit = async (values) => {
-    try {
-      const token = await Apis.auth.login(values)
+    const { status, message, data:token } = await Apis.auth.login(values)
+    if (status === STATUS_SUCCESS) {
       const {accessToken, accessTokenExpiresIn, refreshToken, refreshTokenExpiresIn} = token
-
       dispatch(setAccessToken({accessToken, accessTokenExpiresIn}))
       setRefreshToken({refreshToken, refreshTokenExpiresIn})
       axios.defaults.headers.common[AUTHORIZATION_HEADER_NAME] = BEARER_PREFIX + accessToken
@@ -64,12 +63,11 @@ const Login = () => {
       } else {
         removeRememberId()
       }
+      await sleep(DEFAULT_SLEEP_MS)
       navigate(ROUTE_PATH_NAME.home, {replace: true})
-
-    } catch (e) {
-      enqueueSnackbar(makeSnackbarMessage(e.response.data.message), { variant: 'error' })
+    } else {
+      enqueueSnackbar(makeSnackbarMessage(message), { variant: 'error' })
     }
-    await sleep(DEFAULT_SLEEP_MS)
   }
 
   return (

@@ -10,7 +10,7 @@ import * as Apis from "../../../apis";
 import {
   BUTTONS_ADD,
   BUTTONS_EDIT, COMMON_CODE,
-  DEFAULT_SLEEP_MS,
+  DEFAULT_SLEEP_MS, STATUS_SUCCESS,
   VALIDATION_SCHEMA
 } from "../../../utils/const";
 import { Formik, Form, Field } from "formik";
@@ -51,42 +51,38 @@ const DuesDetailModal = ({action, open, setOpen, dues, setDues, handleCallback})
 
   const handleSubmit = async (values) => {
     if (window.confirm(action === BUTTONS_ADD ? "추가하시겠습니까?" : "수정하시겠습니까?")) {
-      try {
-        const params = {
-          ...values,
-          startDt: getStringDateTime(values.startDt),
-          endDt: getStringDateTime(values.endDt),
-          amount: parseInt(values.amount)
-        }
-        const response = action === BUTTONS_ADD ? await Apis.dues.addDues(params) : await Apis.dues.updateDues(params)
-        if (response.code === 200) {
-          enqueueSnackbar(makeSnackbarMessage(response.message), {
-            variant: 'success',
-            onExit: handleExit,
-          })
-        }
-      } catch (e) {
-        enqueueSnackbar(makeSnackbarMessage(e.response.data.message), { variant: 'error' })
+      const params = {
+        ...values,
+        startDt: getStringDateTime(values.startDt),
+        endDt: getStringDateTime(values.endDt),
+        amount: parseInt(values.amount)
       }
-      await sleep(DEFAULT_SLEEP_MS)
+      const { status, message } = action === BUTTONS_ADD ? await Apis.dues.addDues(params) : await Apis.dues.updateDues(params)
+      if (status === STATUS_SUCCESS) {
+        enqueueSnackbar(makeSnackbarMessage(message), {
+          variant: 'success',
+          onExit: handleExit,
+        })
+        await sleep(DEFAULT_SLEEP_MS)
+      } else {
+        enqueueSnackbar(makeSnackbarMessage(message), { variant: 'error' })
+      }
     }
   }
 
   const handleDelete = async (id, setSubmitting) => {
     setSubmitting(true)
     if (window.confirm("삭제하시겠습니까?")) {
-      try {
-        const response = await Apis.dues.deleteDues(id)
-        if (response.code === 200) {
-          enqueueSnackbar(makeSnackbarMessage(response.message), {
-            variant: 'success',
-            onExit: handleExit,
-          })
-        }
-      } catch (e) {
-        enqueueSnackbar(makeSnackbarMessage(e.response.data.message), { variant: 'error' })
+      const { status, message } = await Apis.dues.deleteDues(id)
+      if (status === STATUS_SUCCESS) {
+        enqueueSnackbar(makeSnackbarMessage(message), {
+          variant: 'success',
+          onExit: handleExit,
+        })
+        await sleep(DEFAULT_SLEEP_MS)
+      } else {
+        enqueueSnackbar(makeSnackbarMessage(message), { variant: 'error' })
       }
-      await sleep(DEFAULT_SLEEP_MS)
     }
     setSubmitting(false)
   }
@@ -196,7 +192,7 @@ const DuesDetailModal = ({action, open, setOpen, dues, setDues, handleCallback})
               fullWidth
               id='description'
               name='description'
-              label='회비내용'
+              label='상세내용'
               color='primary'
               variant='outlined'
               margin='normal'

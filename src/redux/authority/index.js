@@ -18,7 +18,7 @@ export const authoritySlice = createSlice({
   extraReducers: builder => {
     builder
       .addCase(getAuthorityList.fulfilled, (state, action) => {
-        state.authorityList = action.payload
+        state.authorityList = action.payload.data
       })
   }
 })

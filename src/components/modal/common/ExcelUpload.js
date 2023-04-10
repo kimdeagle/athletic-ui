@@ -5,13 +5,12 @@ import {
   resetExcelUploadModalProps,
 } from "../../../redux/common";
 import {Box, Button} from "@mui/material";
-import {saveAs} from "file-saver";
 import {useSnackbar} from "notistack";
 import * as Apis from "../../../apis";
 import { Formik, Form, Field } from "formik";
 import { TextField } from "formik-mui";
 import {makeSnackbarMessage, sleep} from "../../../utils/util";
-import {DEFAULT_SLEEP_MS, VALIDATION_SCHEMA} from "../../../utils/const";
+import {DEFAULT_SLEEP_MS, STATUS_SUCCESS, VALIDATION_SCHEMA} from "../../../utils/const";
 import * as Yup from "yup";
 
 const ExcelUpload = () => {
@@ -38,13 +37,17 @@ const ExcelUpload = () => {
     const filename = e.target.value.substring(e.target.value.lastIndexOf('\\') + 1)
     setFieldValue('file', e.target.files[0])
     setFieldValue('filename', filename)
-    e.target.value = ''; //reset value (동일 이름 파일 업로드 할 수 있게)
+    e.target.value = '' //reset value (동일 이름 파일 업로드 할 수 있게)
   }
 
-  const downloadSample = () => {
-    const sampleFilename = props.sampleUrl.substring(props.sampleUrl.lastIndexOf('/') + 1)
-    saveAs(props.sampleUrl, sampleFilename)
-    enqueueSnackbar('샘플 다운로드 완료', { variant: 'success' })
+  const downloadSample = async () => {
+    const params = {
+      sampleName: props.sampleName,
+      downloadUrl: '/file/sample',
+    }
+    const { status, message } = await Apis.common.downloadFile(params)
+    const variant = status === STATUS_SUCCESS ? 'success' : 'error'
+    enqueueSnackbar(makeSnackbarMessage(message), { variant })
   }
 
   const handleSuccess = () => {
@@ -59,40 +62,39 @@ const ExcelUpload = () => {
       uploadUrl: props.uploadUrl,
       file: formData
     }
-    try {
-      const response = await Apis.common.uploadExcel(params)
-      if (response.code === 200) {
-        enqueueSnackbar(makeSnackbarMessage(response.message), {
-          variant: 'success',
-          onExit: handleSuccess
-        })
-      }
-    } catch (e) {
-      enqueueSnackbar(makeSnackbarMessage(e.response.data.message), {
+    const { status, message } = await Apis.common.uploadExcel(params)
+    if (status === STATUS_SUCCESS) {
+      enqueueSnackbar(makeSnackbarMessage(message), {
+        variant: 'success',
+        onExit: handleSuccess
+      })
+    } else {
+      enqueueSnackbar(makeSnackbarMessage(message), {
         variant: 'error',
         persist: true,
-        onClose: () => closeSnackbar()
+        onEnter: () => window.addEventListener('mousedown', () => closeSnackbar()),
+        onExit: () => window.removeEventListener('mousedown', () => closeSnackbar()),
       })
       resetForm()
     }
-    await sleep(DEFAULT_SLEEP_MS)
   }
 
   return (
     <CustomModal width='500' title='엑셀 업로드' open={open} handleClose={handleClose}>
-      <Box display='flex' justifyContent='start' alignItems='center' mt={2}>
-        <Button
-          variant='contained'
-          size='medium'
-          color='warning'
-          onClick={downloadSample}
-        >
-          샘플 다운로드
-        </Button>
-      </Box>
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
         {({values, setFieldValue, isSubmitting}) => (
           <Form>
+            <Box display='flex' justifyContent='start' alignItems='center' mt={2}>
+              <Button
+                variant='contained'
+                size='medium'
+                color='warning'
+                disabled={isSubmitting}
+                onClick={downloadSample}
+              >
+                샘플 다운로드
+              </Button>
+            </Box>
             <Box display='flex' justifyContent='space-between' alignItems='center' mt={1}>
               <Field
                 component={TextField}

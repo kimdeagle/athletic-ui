@@ -18,7 +18,7 @@ export const codeSlice = createSlice({
   extraReducers: builder => {
     builder
       .addCase(getCodeListByGroupCodes.fulfilled, (state, action) => {
-        state.codeList = action.payload
+        state.codeList = action.payload.data
       })
   }
 })
