@@ -1,46 +1,32 @@
-import {
-  Box,
-  Button,
-  MenuItem,
-} from "@mui/material";
+import {Button} from "@mui/material";
 import {useLayoutEffect, useState} from "react";
 import CustomModal from "../index";
-import {getStringDateTime, isEmptyObject, isMinEndDt, makeSnackbarMessage, sleep} from "../../../utils/util";
+import {getStringDateTime, isMinEndDt, makeSnackbarMessage, sleep} from "../../../utils/util";
 import * as Apis from "../../../apis";
 import {
   BUTTONS_ADD,
-  BUTTONS_EDIT, COMMON_CODE,
+  BUTTONS_EDIT,
   DEFAULT_SLEEP_MS, STATUS_SUCCESS,
   VALIDATION_SCHEMA
 } from "../../../utils/const";
 import { Formik, Form, Field } from "formik";
-import {Select, TextField} from "formik-mui";
+import {TextField} from "formik-mui";
 import {useSnackbar} from "notistack";
 import * as Yup from "yup";
 import {DatePicker} from "@mui/x-date-pickers";
-import {useSelector} from "react-redux";
 
-const DuesDetailModal = ({action, open, setOpen, dues, setDues, handleCallback}) => {
+const ScheduleDetailModal = ({action, open, setOpen, schedule, setSchedule, handleCallback}) => {
   const { enqueueSnackbar } = useSnackbar()
   const [initialValues, setInitialValues] = useState({})
-  const codeList = useSelector(state => state.code.codeList)
 
   const validationSchema = Yup.object().shape({
-    inOutCd: Yup.string()
-      .required(VALIDATION_SCHEMA.COMMON.requiredSelectedMessage),
-    inOutDtlCd: Yup.string()
-      .required(VALIDATION_SCHEMA.COMMON.requiredSelectedMessage),
     title: Yup.string()
       .required(VALIDATION_SCHEMA.COMMON.requiredMessage),
-    amount: Yup.number()
-      .typeError(VALIDATION_SCHEMA.COMMON.numberTypeErrorMessage)
-      .required(VALIDATION_SCHEMA.COMMON.requiredMessage)
-      .min(1, '0원 이상의 금액을 입력하세요.'),
   })
 
   const handleClose = () => {
     setInitialValues({})
-    setDues({})
+    setSchedule({})
     setOpen(false)
   }
 
@@ -55,9 +41,8 @@ const DuesDetailModal = ({action, open, setOpen, dues, setDues, handleCallback})
         ...values,
         startDt: getStringDateTime(values.startDt),
         endDt: getStringDateTime(values.endDt),
-        amount: parseInt(values.amount)
       }
-      const { status, message } = action === BUTTONS_ADD ? await Apis.dues.addDues(params) : await Apis.dues.updateDues(params)
+      const { status, message } = action === BUTTONS_ADD ? await Apis.schedule.addSchedule(params) : await Apis.schedule.updateSchedule(params)
       if (status === STATUS_SUCCESS) {
         enqueueSnackbar(makeSnackbarMessage(message), {
           variant: 'success',
@@ -73,7 +58,7 @@ const DuesDetailModal = ({action, open, setOpen, dues, setDues, handleCallback})
   const handleDelete = async (id, setSubmitting) => {
     setSubmitting(true)
     if (window.confirm("삭제하시겠습니까?")) {
-      const { status, message } = await Apis.dues.deleteDues(id)
+      const { status, message } = await Apis.schedule.deleteSchedule(id)
       if (status === STATUS_SUCCESS) {
         enqueueSnackbar(makeSnackbarMessage(message), {
           variant: 'success',
@@ -91,59 +76,21 @@ const DuesDetailModal = ({action, open, setOpen, dues, setDues, handleCallback})
     if (action === BUTTONS_ADD) {
       setInitialValues({
         id: '',
-        inOutCd: '',
-        inOutDtlCd: '',
-        startDt: dues.startDt,
-        endDt: dues.endDt,
+        startDt: schedule.startDt,
+        endDt: schedule.endDt,
         title: '',
         description: '',
-        amount: 0
       })
     } else if (action === BUTTONS_EDIT) {
-      setInitialValues({...dues})
+      setInitialValues({...schedule})
     }
   }, [open])
 
   return (
-    <CustomModal width={500} title={action === BUTTONS_ADD ? '회비 추가' : '회비 상세'} open={open} handleClose={handleClose}>
+    <CustomModal width={500} title={action === BUTTONS_ADD ? '일정 추가' : '일정 상세'} open={open} handleClose={handleClose}>
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
         {({values, setFieldValue, isSubmitting, setSubmitting}) => (
           <Form>
-            <Box
-              display='flex'
-              justifyContent='space-between'
-              alignItems='start'
-            >
-              <Field
-                component={Select}
-                id='inOutCd'
-                name='inOutCd'
-                label='입출구분 *'
-                color='primary'
-                variant='outlined'
-                sx={{ width: '200px' }}
-                onChange={() => setFieldValue('inOutDtlCd', '')}
-              >
-                {codeList.filter(data => data.code !== COMMON_CODE.DUES.REST).map(data => (
-                  <MenuItem key={data.code} value={data.code}>{data.name}</MenuItem>
-                ))}
-              </Field>
-              {!isEmptyObject(values.inOutCd) &&
-                <Field
-                  component={Select}
-                  id='inOutDtlCd'
-                  name='inOutDtlCd'
-                  label={codeList.find(data => data.code === values.inOutCd).name + '상세 *'}
-                  color='primary'
-                  variant='outlined'
-                  sx={{ width: '200px' }}
-                >
-                  {codeList.find(data => data.code === values.inOutCd).detailList.map(detail => (
-                    <MenuItem key={detail.code} value={detail.code}>{detail.name}</MenuItem>
-                  ))}
-                </Field>
-              }
-            </Box>
             <Field
               component={DatePicker}
               id='startDt'
@@ -183,7 +130,7 @@ const DuesDetailModal = ({action, open, setOpen, dues, setDues, handleCallback})
               fullWidth
               id='title'
               name='title'
-              label='회비명 *'
+              label='일정명 *'
               color='primary'
               variant='outlined'
               margin='normal'
@@ -199,17 +146,6 @@ const DuesDetailModal = ({action, open, setOpen, dues, setDues, handleCallback})
               variant='outlined'
               margin='normal'
             />
-            <Field
-              component={TextField}
-              type='text'
-              fullWidth
-              id='amount'
-              name='amount'
-              label='입출금액 *'
-              color='primary'
-              variant='outlined'
-              margin='normal'
-            />
             <Button
               fullWidth
               variant="contained"
@@ -219,7 +155,7 @@ const DuesDetailModal = ({action, open, setOpen, dues, setDues, handleCallback})
               sx={{ mt: 3 }}
               disabled={isSubmitting}
             >
-              {action === BUTTONS_ADD ? '회비 추가' : '회비 수정'}
+              {action === BUTTONS_ADD ? '일정 추가' : '일정 수정'}
             </Button>
             {action === BUTTONS_EDIT &&
               <Button
@@ -231,7 +167,7 @@ const DuesDetailModal = ({action, open, setOpen, dues, setDues, handleCallback})
                 onClick={() => handleDelete(values.id, setSubmitting)}
                 sx={{ mt: 2 }}
               >
-                회비 삭제
+                일정 삭제
               </Button>
             }
           </Form>
@@ -241,4 +177,4 @@ const DuesDetailModal = ({action, open, setOpen, dues, setDues, handleCallback})
   )
 }
 
-export default DuesDetailModal
+export default ScheduleDetailModal

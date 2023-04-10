@@ -68,6 +68,7 @@ const ExcelUpload = () => {
         variant: 'success',
         onExit: handleSuccess
       })
+      await sleep(DEFAULT_SLEEP_MS)
     } else {
       enqueueSnackbar(makeSnackbarMessage(message), {
         variant: 'error',

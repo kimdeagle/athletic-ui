@@ -1,4 +1,4 @@
-import {DataGrid} from "@mui/x-data-grid";
+import {DataGrid, koKR} from "@mui/x-data-grid";
 import {Box, Button, styled, useTheme} from "@mui/material";
 import {tokens} from "../../theme";
 import {DATA_GRID_CELL_CLASS_NAME} from "../../utils/const";
@@ -66,6 +66,7 @@ const CustomGrid = ({rows, columns, onCellClick, selectionModel, setSelectionMod
         height='75vh'
       >
         <DataGrid
+          localeText={koKR.components.MuiDataGrid.defaultProps.localeText}
           rows={rows}
           columns={headerAlignColumns}
           onCellClick={onCellClick}

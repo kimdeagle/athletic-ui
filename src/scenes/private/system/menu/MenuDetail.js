@@ -65,7 +65,7 @@ const MenuDetail = ({selected, handleDelete}) => {
                       name='name'
                       color='primary'
                       variant='outlined'
-                      disabled={selected === ROOT_MENU.id}
+                      disabled={selected === ROOT_MENU.id || isSubmitting}
                     />
                   </TableCell>
                 </TableRow>
@@ -88,7 +88,7 @@ const MenuDetail = ({selected, handleDelete}) => {
                       name='menuUrl'
                       color='primary'
                       variant='outlined'
-                      disabled={selected === ROOT_MENU.id}
+                      disabled={selected === ROOT_MENU.id || isSubmitting}
                     />
                   </TableCell>
                 </TableRow>
@@ -108,8 +108,8 @@ const MenuDetail = ({selected, handleDelete}) => {
                       variant='outlined'
                       margin='normal'
                     >
-                      <FormControlLabel value='Y' label='사용' control={<Radio disabled={selected === ROOT_MENU.id} />} />
-                      <FormControlLabel value='N' label='미사용' control={<Radio disabled={selected === ROOT_MENU.id} />} />
+                      <FormControlLabel value='Y' label='사용' control={<Radio disabled={selected === ROOT_MENU.id || isSubmitting} />} />
+                      <FormControlLabel value='N' label='미사용' control={<Radio disabled={selected === ROOT_MENU.id || isSubmitting} />} />
                     </Field>
                   </TableCell>
                 </TableRow>
@@ -124,7 +124,7 @@ const MenuDetail = ({selected, handleDelete}) => {
                       name='sortSeq'
                       color='primary'
                       variant='outlined'
-                      disabled={selected === ROOT_MENU.id}
+                      disabled={selected === ROOT_MENU.id || isSubmitting}
                     />
                   </TableCell>
                 </TableRow>
@@ -141,7 +141,7 @@ const MenuDetail = ({selected, handleDelete}) => {
                         Label={{ label: authority.name }}
                         color='primary'
                         value={authority.id}
-                        disabled={selected === ROOT_MENU.id}
+                        disabled={selected === ROOT_MENU.id || isSubmitting}
                       />
                     )}
                   </TableCell>
@@ -158,14 +158,14 @@ const MenuDetail = ({selected, handleDelete}) => {
                         name='iconNm'
                         color='primary'
                         variant='outlined'
-                        disabled={selected === ROOT_MENU.id}
+                        disabled={selected === ROOT_MENU.id || isSubmitting}
                         helperText={iconNmHelperText}
                       />
                       <Button
                         variant='text'
                         size='medium'
                         color='info'
-                        disabled={isSubmitting || selected === ROOT_MENU.id}
+                        disabled={isSubmitting || selected === ROOT_MENU.id || isSubmitting}
                         onClick={() => window.open('https://mui.com/material-ui/material-icons/', '_blank')}
                       >
                         찾아보기

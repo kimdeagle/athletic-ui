@@ -34,6 +34,8 @@ export const BUTTON_PROPS_DISABLED = 'disabled'
 export const BUTTON_PROPS_PARAMETERS = 'params'
 export const BUTTON_PROPS_ON_CLICK = 'onClick'
 export const SEARCH_CONDITION_PERIOD = 'period'
+export const SEARCH_CONDITION_IN_OUT_CD = 'inOutCd'
+export const SEARCH_CONDITION_IN_OUT_DTL_CD = 'inOutDtlCd'
 
 /* data grid cell class name */
 export const DATA_GRID_CELL_CLASS_NAME = {
