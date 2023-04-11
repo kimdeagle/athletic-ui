@@ -53,6 +53,8 @@ const SearchConditionModal = ({open, setOpen, searchCondition, handleCallback}) 
         ...values,
         startDt: values.period === ALL ? null : getStringDateTime(values.startDt),
         endDt: values.period === ALL ? null : getStringDateTime(values.endDt),
+        inOutCd: values.inOutCd === ALL ? null : values.inOutCd,
+        inOutDtlCd: values.inOutCd === ALL || values.inOutDtlCd === ALL ? null : values.inOutDtlCd,
       }
       handleCallback(params)
       handleClose()
