@@ -1,6 +1,6 @@
 import ContentHeader from "../../../components/content/ContentHeader";
 import {Box} from "@mui/material";
-import {getAgeFromBirthday, makeSnackbarMessage, sleep} from "../../../utils/util";
+import {getAgeFromBirthday, makeSnackbarMessage} from "../../../utils/util";
 import CustomGrid from "../../../components/grid";
 import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
@@ -10,7 +10,7 @@ import {
   BUTTON_PROPS_DISABLED,
   BUTTON_PROPS_ON_CLICK, BUTTON_PROPS_PARAMETERS,
   BUTTONS_ADD, BUTTONS_EDIT, BUTTONS_EXCEL_DOWNLOAD, BUTTONS_EXCEL_UPLOAD, BUTTONS_SEARCH,
-  DATA_GRID_CELL_CLASS_NAME, DEFAULT_SLEEP_MS, STATUS_SUCCESS
+  DATA_GRID_CELL_CLASS_NAME, STATUS_SUCCESS
 } from "../../../utils/const";
 import * as Apis from "../../../apis";
 import {useSnackbar} from "notistack";

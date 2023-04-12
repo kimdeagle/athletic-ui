@@ -10,16 +10,16 @@ import {
   TableBody,
   TableCell, TableContainer,
   TableRow,
-  Typography, useTheme
+  useTheme
 } from "@mui/material";
-import {CheckboxWithLabel, RadioGroup, Select, TextField} from "formik-mui";
+import {RadioGroup, Select} from "formik-mui";
 import {
-  COMMON_CODE, ROOT_MENU,
+  COMMON_CODE,
   SEARCH_CONDITION_IN_OUT_CD,
   SEARCH_CONDITION_PERIOD,
   VALIDATION_SCHEMA
 } from "../../../utils/const";
-import {getStringDateTime, isEmptyObject, isMinEndDt} from "../../../utils/util";
+import {getStringDateTime, isMinEndDt} from "../../../utils/util";
 import {DatePicker} from "@mui/x-date-pickers";
 import {useSelector} from "react-redux";
 import {tokens} from "../../../theme";

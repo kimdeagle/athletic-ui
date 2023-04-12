@@ -42,7 +42,7 @@ const Menu = () => {
       const parentMenuId = entireMenuList.find(menu => menu.id === selected).upMenuId
       const parentMenu = entireMenuList.find(menu => menu.id === parentMenuId)
       const params = {...values, ...(selected === NEW_MENU.id ? {id: null} : null)}
-      const { status, message } = await Apis.system.menu.saveMenu(params)
+      const { status, message } = selected === NEW_MENU.id ? await Apis.system.menu.addMenu(params) : await Apis.system.menu.updateMenu(params)
       if (status === STATUS_SUCCESS) {
         enqueueSnackbar(makeSnackbarMessage(message), {
           variant: 'success',

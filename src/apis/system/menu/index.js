@@ -20,8 +20,15 @@ export const deleteMenu = async (id, thunkAPI) => {
   }, thunkAPI)
 }
 
-export const saveMenu = async (params, thunkAPI) => {
+export const addMenu = async (params, thunkAPI) => {
   return await apiService.POST({
+    url: '/system/menu',
+    params
+  }, thunkAPI)
+}
+
+export const updateMenu = async (params, thunkAPI) => {
+  return await apiService.PUT({
     url: '/system/menu',
     params
   }, thunkAPI)
