@@ -27,7 +27,7 @@ import * as Apis from "../../../apis";
 import {
   getDateSubOneDays,
   getStringDate,
-  getStringDateAddOneDays, getStringDateTime,
+  getStringDateAddOneDays,
   makeSnackbarMessage,
 } from "../../../utils/util";
 import {useSnackbar} from "notistack";
@@ -170,7 +170,7 @@ const Dues = () => {
 
   const handleEventChange = async (selected) => {
     if (window.confirm("회비를 이동하시겠습니까?")) {
-      const params = {...getSelectedParams(selected), startDt: getStringDateTime(selected.event.start), endDt: getStringDateTime(getDateSubOneDays(selected.event.end))}
+      const params = {...getSelectedParams(selected), startDt: getStringDate(selected.event.start), endDt: getStringDate(getDateSubOneDays(selected.event.end))}
       const { status, message } = await Apis.dues.updateDues(params)
       const variant = status === STATUS_SUCCESS ? 'success' : 'error'
       enqueueSnackbar(makeSnackbarMessage(message), { variant })

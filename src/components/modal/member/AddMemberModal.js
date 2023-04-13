@@ -15,7 +15,7 @@ import {
   BUTTONS_ADD,
   BUTTONS_EDIT,
   DAUM_POSTCODE_SCRIPT_URL,
-  DEFAULT_SLEEP_MS, STATUS_SUCCESS,
+  DEFAULT_SLEEP_MS, MARGIN_NORMAL, STATUS_SUCCESS,
   VALIDATION_SCHEMA
 } from "../../../utils/const";
 import { Formik, Form, Field } from "formik";
@@ -157,8 +157,7 @@ const AddMemberModal = ({action, open, setOpen, handleCallback}) => {
               display='flex'
               justifyContent='start'
               alignItems='center'
-              mt={2}
-              mb={1}
+              sx={{ ...MARGIN_NORMAL }}
             >
               <Field
                 component={TextField}
@@ -168,7 +167,6 @@ const AddMemberModal = ({action, open, setOpen, handleCallback}) => {
                 label='주소'
                 color='primary'
                 variant='outlined'
-                margin='normal'
                 readOnly
                 sx={{ width: '90%', mr: 1 }}
                 onClick={() => values.address.trim() === '' && openSearchAddressPopup(setFieldValue)}

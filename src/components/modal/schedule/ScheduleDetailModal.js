@@ -1,16 +1,17 @@
-import {Button} from "@mui/material";
+import {Box, Button, MenuItem, Typography} from "@mui/material";
 import {useLayoutEffect, useState} from "react";
 import CustomModal from "../index";
-import {getStringDateTime, isMinEndDt, makeSnackbarMessage, sleep} from "../../../utils/util";
+import {getStringDate, isMinEndDt, makeSnackbarMessage, sleep} from "../../../utils/util";
 import * as Apis from "../../../apis";
 import {
+  BG_COLOR_LIST,
   BUTTONS_ADD,
   BUTTONS_EDIT,
-  DEFAULT_SLEEP_MS, STATUS_SUCCESS,
+  DEFAULT_SLEEP_MS, MARGIN_NORMAL, STATUS_SUCCESS,
   VALIDATION_SCHEMA
 } from "../../../utils/const";
 import { Formik, Form, Field } from "formik";
-import {TextField} from "formik-mui";
+import {Select, TextField} from "formik-mui";
 import {useSnackbar} from "notistack";
 import * as Yup from "yup";
 import {DatePicker} from "@mui/x-date-pickers";
@@ -22,6 +23,8 @@ const ScheduleDetailModal = ({action, open, setOpen, schedule, setSchedule, hand
   const validationSchema = Yup.object().shape({
     title: Yup.string()
       .required(VALIDATION_SCHEMA.COMMON.requiredMessage),
+    bgColor: Yup.string()
+      .required(VALIDATION_SCHEMA.COMMON.requiredSelectedMessage),
   })
 
   const handleClose = () => {
@@ -39,8 +42,8 @@ const ScheduleDetailModal = ({action, open, setOpen, schedule, setSchedule, hand
     if (window.confirm(action === BUTTONS_ADD ? "추가하시겠습니까?" : "수정하시겠습니까?")) {
       const params = {
         ...values,
-        startDt: getStringDateTime(values.startDt),
-        endDt: getStringDateTime(values.endDt),
+        startDt: getStringDate(values.startDt),
+        endDt: getStringDate(values.endDt),
       }
       const { status, message } = action === BUTTONS_ADD ? await Apis.schedule.addSchedule(params) : await Apis.schedule.updateSchedule(params)
       if (status === STATUS_SUCCESS) {
@@ -80,6 +83,7 @@ const ScheduleDetailModal = ({action, open, setOpen, schedule, setSchedule, hand
         endDt: schedule.endDt,
         title: '',
         description: '',
+        bgColor: '',
       })
     } else if (action === BUTTONS_EDIT) {
       setInitialValues({...schedule})
@@ -146,6 +150,28 @@ const ScheduleDetailModal = ({action, open, setOpen, schedule, setSchedule, hand
               variant='outlined'
               margin='normal'
             />
+            <Field
+              component={Select}
+              id='bgColor'
+              name='bgColor'
+              label='배경색 *'
+              color='primary'
+              variant='outlined'
+              formControl={{ sx: { width: '100%', ...MARGIN_NORMAL }}}
+            >
+              {BG_COLOR_LIST.map(data => (
+                <MenuItem key={data.label} value={data.color}>
+                  <Box
+                    display='flex'
+                    justifyContent='start'
+                    alignItems='center'
+                  >
+                    <Box width='10px' height='10px' borderRadius='50%' bgcolor={data.color} mr={1} />
+                    <Typography variant='h5'>{data.label}</Typography>
+                  </Box>
+                </MenuItem>
+              ))}
+            </Field>
             <Button
               fullWidth
               variant="contained"

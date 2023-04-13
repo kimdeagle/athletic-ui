@@ -19,7 +19,7 @@ import {
   SEARCH_CONDITION_PERIOD,
   VALIDATION_SCHEMA
 } from "../../../utils/const";
-import {getStringDateTime, isMinEndDt} from "../../../utils/util";
+import {getStringDate, isMinEndDt} from "../../../utils/util";
 import {DatePicker} from "@mui/x-date-pickers";
 import {useSelector} from "react-redux";
 import {tokens} from "../../../theme";
@@ -51,8 +51,8 @@ const SearchConditionModal = ({open, setOpen, searchCondition, handleCallback}) 
     if (window.confirm("엑셀 다운로드 하시겠습니까?")) {
       const params = {
         ...values,
-        startDt: values.period === ALL ? null : getStringDateTime(values.startDt),
-        endDt: values.period === ALL ? null : getStringDateTime(values.endDt),
+        startDt: values.period === ALL ? null : getStringDate(values.startDt),
+        endDt: values.period === ALL ? null : getStringDate(values.endDt),
         inOutCd: values.inOutCd === ALL ? null : values.inOutCd,
         inOutDtlCd: values.inOutCd === ALL || values.inOutDtlCd === ALL ? null : values.inOutDtlCd,
       }

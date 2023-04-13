@@ -13,7 +13,6 @@ import {
   getDateSubOneDays,
   getStringDate,
   getStringDateAddOneDays,
-  getStringDateTime,
   makeSnackbarMessage
 } from "../../../utils/util";
 import * as Apis from "../../../apis";
@@ -35,14 +34,17 @@ const Schedule = () => {
   const { enqueueSnackbar } = useSnackbar()
 
   const getDisplaySchedule = (schedule) => {
-    const { id, startDt:start, endDt:end, title, description } = schedule
+    const { id, startDt:start, endDt:end, title, description, bgColor } = schedule
     return {
       id,
       start: getStringDate(start),
       end: getStringDateAddOneDays(end),
       title,
       description,
+      bgColor,
       textColor: colors.grey[100],
+      backgroundColor: bgColor || colors.blue[700],
+      borderColor: bgColor || colors.blue[700]
     }
   }
 
@@ -82,8 +84,8 @@ const Schedule = () => {
 
   const getSelectedParams = (selected) => {
     const { id, start:startDt, end:endDt, title } = selected.event
-    const { description } = selected.event.extendedProps
-    return { id, startDt, endDt, title, description }
+    const { description, bgColor } = selected.event.extendedProps
+    return { id, startDt, endDt, title, description, bgColor }
   }
 
   const handleEventClick = (selected) => {
@@ -95,7 +97,7 @@ const Schedule = () => {
 
   const handleEventChange = async (selected) => {
     if (window.confirm("일정을 이동하시겠습니까?")) {
-      const params = {...getSelectedParams(selected), startDt: getStringDateTime(selected.event.start), endDt: getStringDateTime(getDateSubOneDays(selected.event.end))}
+      const params = {...getSelectedParams(selected), startDt: getStringDate(selected.event.start), endDt: getStringDate(getDateSubOneDays(selected.event.end))}
       const { status, message } = await Apis.schedule.updateSchedule(params)
       const variant = status === STATUS_SUCCESS ? 'success' : 'error'
       enqueueSnackbar(makeSnackbarMessage(message), { variant })

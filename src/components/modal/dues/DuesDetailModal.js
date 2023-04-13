@@ -5,12 +5,18 @@ import {
 } from "@mui/material";
 import {useLayoutEffect, useState} from "react";
 import CustomModal from "../index";
-import {getStringDateTime, isEmptyObject, isMinEndDt, makeSnackbarMessage, sleep} from "../../../utils/util";
+import {
+  getStringDate,
+  isEmptyObject,
+  isMinEndDt,
+  makeSnackbarMessage,
+  sleep
+} from "../../../utils/util";
 import * as Apis from "../../../apis";
 import {
   BUTTONS_ADD,
   BUTTONS_EDIT, COMMON_CODE,
-  DEFAULT_SLEEP_MS, STATUS_SUCCESS,
+  DEFAULT_SLEEP_MS, MARGIN_NORMAL, STATUS_SUCCESS,
   VALIDATION_SCHEMA
 } from "../../../utils/const";
 import { Formik, Form, Field } from "formik";
@@ -53,8 +59,8 @@ const DuesDetailModal = ({action, open, setOpen, dues, setDues, handleCallback})
     if (window.confirm(action === BUTTONS_ADD ? "추가하시겠습니까?" : "수정하시겠습니까?")) {
       const params = {
         ...values,
-        startDt: getStringDateTime(values.startDt),
-        endDt: getStringDateTime(values.endDt),
+        startDt: getStringDate(values.startDt),
+        endDt: getStringDate(values.endDt),
         amount: parseInt(values.amount)
       }
       const { status, message } = action === BUTTONS_ADD ? await Apis.dues.addDues(params) : await Apis.dues.updateDues(params)
@@ -113,6 +119,7 @@ const DuesDetailModal = ({action, open, setOpen, dues, setDues, handleCallback})
               display='flex'
               justifyContent='space-between'
               alignItems='start'
+              sx={{ ...MARGIN_NORMAL }}
             >
               <Field
                 component={Select}
