@@ -167,7 +167,7 @@ const AddMemberModal = ({action, open, setOpen, handleCallback}) => {
                 label='주소'
                 color='primary'
                 variant='outlined'
-                readOnly
+                inputProps={{ readOnly: true }}
                 sx={{ width: '90%', mr: 1 }}
                 onClick={() => values.address.trim() === '' && openSearchAddressPopup(setFieldValue)}
               />
