@@ -7,7 +7,7 @@ import {
   BUTTON_PROPS_DISABLED,
   BUTTON_PROPS_PARAMETERS, BUTTONS_ADD, BUTTONS_EDIT,
   BUTTONS_EXCEL_DOWNLOAD, BUTTONS_EXCEL_DOWNLOAD_SEARCH_CONDITION,
-  BUTTONS_EXCEL_UPLOAD, SEARCH_CONDITION_PERIOD, STATUS_SUCCESS
+  BUTTONS_EXCEL_UPLOAD, COMMON_CODE, SEARCH_CONDITION_PERIOD, STATUS_SUCCESS
 } from "../../../utils/const";
 import {
   getDateSubOneDays,
@@ -21,6 +21,9 @@ import React from "react";
 import {getScheduleList, resetScheduleList} from "../../../redux/schedule";
 import ScheduleDetailModal from "../../../components/modal/schedule/ScheduleDetailModal";
 import {tokens} from "../../../theme";
+import {getCodeListByGroupCodes, resetCodeList} from "../../../redux/code";
+
+const groupCodes = [COMMON_CODE.BG_COLOR]
 
 const Schedule = () => {
   const theme = useTheme()
@@ -31,10 +34,13 @@ const Schedule = () => {
   const [eventList, setEventList] = useState([])
   const [selectedSchedule, setSelectedSchedule] = useState({})
   const scheduleList = useSelector(state => state.schedule.scheduleList)
+  const codeList = useSelector(state => state.code.codeList)
   const { enqueueSnackbar } = useSnackbar()
 
   const getDisplaySchedule = (schedule) => {
     const { id, startDt:start, endDt:end, title, description, bgColor } = schedule
+    const { detailList } = codeList.find(data => data.code === COMMON_CODE.BG_COLOR)
+    const hexColor = detailList.find(detail => detail.code === bgColor)?.name
     return {
       id,
       start: getStringDate(start),
@@ -43,8 +49,8 @@ const Schedule = () => {
       description,
       bgColor,
       textColor: colors.grey[100],
-      backgroundColor: bgColor || colors.blue[700],
-      borderColor: bgColor || colors.blue[700]
+      backgroundColor: hexColor,
+      borderColor: hexColor
     }
   }
 
@@ -112,8 +118,10 @@ const Schedule = () => {
   }
 
   useLayoutEffect(() => {
+    dispatch(getCodeListByGroupCodes({groupCodes}))
     dispatch(getScheduleList())
     return () => {
+      dispatch(resetCodeList())
       dispatch(resetScheduleList())
     }
   }, [])

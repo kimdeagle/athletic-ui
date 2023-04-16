@@ -145,18 +145,8 @@ export const COMMON_CODE = {
     OUT: 'OUT',
     REST: 'REST',
   },
+  BG_COLOR: 'BG_COLOR',
 }
-
-export const BG_COLOR_LIST = [
-  { label: 'red', color: '#f44336' },
-  { label: 'orange', color: '#ff9800' },
-  { label: 'yellow', color: '#ffeb3b' },
-  { label: 'green', color: '#4caf50' },
-  { label: 'blue', color: '#2196f3' },
-  { label: 'pink', color: '#e91e63' },
-  { label: 'purple', color: '#9c27b0' },
-  { label: 'brown', color: '#795548' },
-]
 
 export const MARGIN_NORMAL = {
   mt: '16px',

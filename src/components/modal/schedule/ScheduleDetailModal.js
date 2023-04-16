@@ -4,9 +4,8 @@ import CustomModal from "../index";
 import {getStringDate, isMinEndDt, makeSnackbarMessage, sleep} from "../../../utils/util";
 import * as Apis from "../../../apis";
 import {
-  BG_COLOR_LIST,
   BUTTONS_ADD,
-  BUTTONS_EDIT,
+  BUTTONS_EDIT, COMMON_CODE,
   DEFAULT_SLEEP_MS, MARGIN_NORMAL, STATUS_SUCCESS,
   VALIDATION_SCHEMA
 } from "../../../utils/const";
@@ -15,10 +14,12 @@ import {Select, TextField} from "formik-mui";
 import {useSnackbar} from "notistack";
 import * as Yup from "yup";
 import {DatePicker} from "@mui/x-date-pickers";
+import {useSelector} from "react-redux";
 
 const ScheduleDetailModal = ({action, open, setOpen, schedule, setSchedule, handleCallback}) => {
   const { enqueueSnackbar } = useSnackbar()
   const [initialValues, setInitialValues] = useState({})
+  const codeList = useSelector(state => state.code.codeList)
 
   const validationSchema = Yup.object().shape({
     title: Yup.string()
@@ -83,7 +84,7 @@ const ScheduleDetailModal = ({action, open, setOpen, schedule, setSchedule, hand
         endDt: schedule.endDt,
         title: '',
         description: '',
-        bgColor: '',
+        bgColor: 'BLUE',
       })
     } else if (action === BUTTONS_EDIT) {
       setInitialValues({...schedule})
@@ -159,15 +160,15 @@ const ScheduleDetailModal = ({action, open, setOpen, schedule, setSchedule, hand
               variant='outlined'
               formControl={{ sx: { width: '100%', ...MARGIN_NORMAL }}}
             >
-              {BG_COLOR_LIST.map(data => (
-                <MenuItem key={data.label} value={data.color}>
+              {codeList?.find(data => data.code === COMMON_CODE.BG_COLOR)?.detailList.map(({code, name:bgColor}) => (
+                <MenuItem key={code} value={code}>
                   <Box
                     display='flex'
                     justifyContent='start'
                     alignItems='center'
                   >
-                    <Box width='10px' height='10px' borderRadius='50%' bgcolor={data.color} mr={1} />
-                    <Typography variant='h5'>{data.label}</Typography>
+                    <Box width='10px' height='10px' borderRadius='50%' bgcolor={bgColor} mr={1} />
+                    <Typography variant='h5'>{code}</Typography>
                   </Box>
                 </MenuItem>
               ))}
