@@ -131,14 +131,14 @@ const MenuDetail = ({selected, handleDelete}) => {
                 <TableRow>
                   <TableCell component='th' scope='row'>메뉴권한 *</TableCell>
                   <TableCell>
-                    {authorityList.length && authorityList.map(authority =>
+                    {authorityList?.map(authority =>
                       <Field
                         key={authority.id}
                         component={CheckboxWithLabel}
                         type='checkbox'
                         name='authorities'
                         checked={values.authorities.includes(authority.id)}
-                        Label={{ label: authority.name }}
+                        Label={{ label: authority.displayName }}
                         color='primary'
                         value={authority.id}
                         disabled={selected === ROOT_MENU.id || isSubmitting}
