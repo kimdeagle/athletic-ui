@@ -38,16 +38,16 @@ const Schedule = () => {
   const { enqueueSnackbar } = useSnackbar()
 
   const getDisplaySchedule = (schedule) => {
-    const { id, startDt:start, endDt:end, title, description, bgColor } = schedule
+    const { id, startDt:start, endDt:end, title, description, bgColorCd } = schedule
     const { detailList } = codeList.find(data => data.code === COMMON_CODE.BG_COLOR)
-    const hexColor = detailList.find(detail => detail.code === bgColor)?.name
+    const hexColor = detailList.find(detail => detail.code === bgColorCd)?.name
     return {
       id,
       start: getStringDate(start),
       end: getStringDateAddOneDays(end),
       title,
       description,
-      bgColor,
+      bgColorCd,
       textColor: colors.grey[100],
       backgroundColor: hexColor,
       borderColor: hexColor
@@ -90,8 +90,8 @@ const Schedule = () => {
 
   const getSelectedParams = (selected) => {
     const { id, start:startDt, end:endDt, title } = selected.event
-    const { description, bgColor } = selected.event.extendedProps
-    return { id, startDt, endDt, title, description, bgColor }
+    const { description, bgColorCd } = selected.event.extendedProps
+    return { id, startDt, endDt, title, description, bgColorCd }
   }
 
   const handleEventClick = (selected) => {

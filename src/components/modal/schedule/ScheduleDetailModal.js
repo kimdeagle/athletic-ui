@@ -24,7 +24,7 @@ const ScheduleDetailModal = ({action, open, setOpen, schedule, setSchedule, hand
   const validationSchema = Yup.object().shape({
     title: Yup.string()
       .required(VALIDATION_SCHEMA.COMMON.requiredMessage),
-    bgColor: Yup.string()
+    bgColorCd: Yup.string()
       .required(VALIDATION_SCHEMA.COMMON.requiredSelectedMessage),
   })
 
@@ -84,7 +84,7 @@ const ScheduleDetailModal = ({action, open, setOpen, schedule, setSchedule, hand
         endDt: schedule.endDt,
         title: '',
         description: '',
-        bgColor: 'BLUE',
+        bgColorCd: 'BLUE',
       })
     } else if (action === BUTTONS_EDIT) {
       setInitialValues({...schedule})
@@ -153,8 +153,8 @@ const ScheduleDetailModal = ({action, open, setOpen, schedule, setSchedule, hand
             />
             <Field
               component={Select}
-              id='bgColor'
-              name='bgColor'
+              id='bgColorCd'
+              name='bgColorCd'
               label='배경색 *'
               color='primary'
               variant='outlined'
