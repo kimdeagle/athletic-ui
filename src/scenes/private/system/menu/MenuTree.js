@@ -249,7 +249,7 @@ const MenuTree = ({selected, setSelected, entireMenuList, setEntireMenuList, pro
   }, [menuList])
 
   return (
-    <Box width='25%' mr={5}>
+    <>
       <Typography variant='h4' mb={2}>
         메뉴 리스트
       </Typography>
@@ -307,7 +307,7 @@ const MenuTree = ({selected, setSelected, entireMenuList, setEntireMenuList, pro
           {!isEmptyObject(processedRootMenu) && renderMenu()}
         </TreeView>
       </Box>
-    </Box>
+    </>
   )
 }
 

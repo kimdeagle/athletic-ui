@@ -32,7 +32,7 @@ const MenuDetail = ({selected, handleDelete}) => {
   const { values, isSubmitting } = useFormikContext()
 
   return (
-    <Box width='35%'>
+    <>
       <Typography variant='h4' mb={2}>
         메뉴 상세
       </Typography>
@@ -203,7 +203,7 @@ const MenuDetail = ({selected, handleDelete}) => {
           </Box>
         </Form>
       </Box>
-    </Box>
+    </>
   )
 }
 

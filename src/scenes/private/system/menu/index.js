@@ -7,11 +7,11 @@ import {getProcessedMenuList, isEmptyObject, makeSnackbarMessage, sleep} from ".
 import { Formik } from "formik";
 import * as Yup from "yup";
 import * as Apis from "../../../../apis";
-import {getMenuList, getUseMenuList} from "../../../../redux/system/menu";
+import {getMenuList, getUseMenuList, resetMenuList} from "../../../../redux/system/menu";
 import {DEFAULT_SLEEP_MS, NEW_MENU, ROOT_MENU, STATUS_SUCCESS, VALIDATION_SCHEMA} from "../../../../utils/const";
 import MenuTree from "./MenuTree";
 import MenuDetail from "./MenuDetail";
-import {getAuthorityList} from "../../../../redux/authority";
+import {getAuthorityList, resetAuthorityList} from "../../../../redux/authority";
 
 const Menu = () => {
   const [selected, setSelected] = useState(ROOT_MENU.id)
@@ -101,6 +101,10 @@ const Menu = () => {
   useEffect(() => {
     dispatch(getMenuList())
     dispatch(getAuthorityList())
+    return () => {
+      dispatch(resetMenuList())
+      dispatch(resetAuthorityList())
+    }
   }, [])
 
   return (
@@ -112,19 +116,23 @@ const Menu = () => {
             display='flex'
             justifyContent='center'
           >
-            <MenuTree
-              selected={selected}
-              setSelected={setSelected}
-              entireMenuList={entireMenuList}
-              setEntireMenuList={setEntireMenuList}
-              processedRootMenu={processedRootMenu}
-              setProcessedRootMenu={setProcessedRootMenu}
-              deleteAlreadyAddMenu={deleteAlreadyAddMenu}
-            />
-            <MenuDetail
-              selected={selected}
-              handleDelete={() => handleDelete(setSubmitting, setValues)}
-            />
+            <Box width='25%' mr={5}>
+              <MenuTree
+                selected={selected}
+                setSelected={setSelected}
+                entireMenuList={entireMenuList}
+                setEntireMenuList={setEntireMenuList}
+                processedRootMenu={processedRootMenu}
+                setProcessedRootMenu={setProcessedRootMenu}
+                deleteAlreadyAddMenu={deleteAlreadyAddMenu}
+              />
+            </Box>
+            <Box width='35%'>
+              <MenuDetail
+                selected={selected}
+                handleDelete={() => handleDelete(setSubmitting, setValues)}
+              />
+            </Box>
           </Box>
         )}
       </Formik>
