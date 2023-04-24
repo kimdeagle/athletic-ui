@@ -1,12 +1,9 @@
 import React from "react";
-import {Box, IconButton, Typography, useTheme} from "@mui/material";
-import {tokens} from "../../../../theme";
+import {Box, IconButton, Typography} from "@mui/material";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import {useProSidebar} from "react-pro-sidebar";
 
 const SidebarHeader = () => {
-  const theme = useTheme()
-  const colors = tokens(theme.palette.mode)
   const { collapsed, collapseSidebar } = useProSidebar()
 
   return (

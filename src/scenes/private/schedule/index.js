@@ -39,7 +39,7 @@ const Schedule = () => {
 
   const getDisplaySchedule = (schedule) => {
     const { id, startDt:start, endDt:end, title, description, bgColorCd } = schedule
-    const { detailList } = codeList.find(data => data.code === COMMON_CODE.BG_COLOR)
+    const detailList = codeList.find(data => data.code === COMMON_CODE.BG_COLOR)?.detailList
     const hexColor = detailList.find(detail => detail.code === bgColorCd)?.name
     return {
       id,
@@ -127,7 +127,7 @@ const Schedule = () => {
   }, [])
 
   useEffect(() => {
-    setEventList(scheduleList.length ? scheduleList.map(schedule => getDisplaySchedule(schedule)) : [])
+    setEventList(scheduleList.length && codeList.length ? scheduleList.map(schedule => getDisplaySchedule(schedule)) : [])
   }, [scheduleList])
 
   return (

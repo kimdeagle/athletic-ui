@@ -160,7 +160,7 @@ const ScheduleDetailModal = ({action, open, setOpen, schedule, setSchedule, hand
               variant='outlined'
               formControl={{ sx: { width: '100%', ...MARGIN_NORMAL }}}
             >
-              {codeList?.find(data => data.code === COMMON_CODE.BG_COLOR)?.detailList.map(({code, name:bgColor}) => (
+              {codeList.find(data => data.code === COMMON_CODE.BG_COLOR)?.detailList.map(({code, name:bgColor}) => (
                 <MenuItem key={code} value={code}>
                   <Box
                     display='flex'

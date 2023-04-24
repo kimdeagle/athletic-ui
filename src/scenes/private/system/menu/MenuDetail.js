@@ -131,7 +131,7 @@ const MenuDetail = ({selected, handleDelete}) => {
                 <TableRow>
                   <TableCell component='th' scope='row'>메뉴권한 *</TableCell>
                   <TableCell>
-                    {authorityList?.map(authority =>
+                    {authorityList.map(authority =>
                       <Field
                         key={authority.id}
                         component={CheckboxWithLabel}

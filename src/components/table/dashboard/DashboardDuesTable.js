@@ -19,26 +19,26 @@ const DashboardDuesTable = () => {
         >
           <TableRow>
             <TableCell component='th' width='10%'>날짜</TableCell>
-            {duesStatisticsList?.map((statistics, index) => (
+            {duesStatisticsList.map((statistics, index) => (
               <TableCell key={index} component='th'>{statistics.displayDate}</TableCell>
             ))}
           </TableRow>
           <TableRow>
             <TableCell component='th'>입금</TableCell>
-            {duesStatisticsList?.map((statistics, index) => (
+            {duesStatisticsList.map((statistics, index) => (
               <TableCell key={index}>{statistics.inAmount.toLocaleString()}</TableCell>
             ))}
           </TableRow>
           <TableRow>
             <TableCell component='th'>출금</TableCell>
-            {duesStatisticsList?.map((statistics, index) => (
+            {duesStatisticsList.map((statistics, index) => (
               <TableCell key={index}>{statistics.outAmount.toLocaleString()}</TableCell>
             ))}
           </TableRow>
           <TableRow>
             <TableCell component='th'>잔액</TableCell>
-            {duesStatisticsList?.map((statistics, index) => (
-              <TableCell key={index}>{statistics.restAmount.toLocaleString()}</TableCell>
+            {duesStatisticsList.map((statistics, index) => (
+              <TableCell key={index} sx={{ fontWeight: 'bold' }}>{statistics.restAmount.toLocaleString()}</TableCell>
             ))}
           </TableRow>
         </TableBody>
