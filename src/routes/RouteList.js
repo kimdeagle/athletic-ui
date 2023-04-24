@@ -9,10 +9,11 @@ const ResetPassword = React.lazy(() => import("../scenes/public/resetPassword"))
 const Home = React.lazy(() => import("../scenes/private/home"))
 const Member = React.lazy(() => import("../scenes/private/member"))
 const Dues = React.lazy(() => import("../scenes/private/dues"))
-const NotFound = React.lazy(() => import("../scenes/global/notFound"))
 const MyInfo = React.lazy(() => import("../scenes/private/myInfo"))
 const SystemMenu = React.lazy(() => import("../scenes/private/system/menu"))
 const Schedule = React.lazy(() => import("../scenes/private/schedule"))
+const NotFound = React.lazy(() => import("../scenes/global/notFound"))
+const AccessDenied = React.lazy(() => import("../scenes/global/accessDenied"))
 
 export const ROUTE_PATH_NAME = {
   login: '/login',
@@ -26,6 +27,7 @@ export const ROUTE_PATH_NAME = {
   system: {
     menu: '/system/menu',
   },
+  accessDenied: '/access-denied'
 }
 
 const RouteList = () => {
@@ -45,6 +47,7 @@ const RouteList = () => {
           <Route path={ROUTE_PATH_NAME.schedule} element={<Schedule />} />
           <Route path={ROUTE_PATH_NAME.system.menu} element={<SystemMenu />} />
         </Route>
+        <Route path={ROUTE_PATH_NAME.accessDenied} element={<AccessDenied />} />
         <Route path='/*' element={<NotFound />} />
       </Routes>
     </Suspense>
