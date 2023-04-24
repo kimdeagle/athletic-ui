@@ -10,6 +10,7 @@ import authority from "./authority";
 import dues from "./dues";
 import code from "./code";
 import schedule from "./schedule";
+import statistics from "./statistics";
 
 import autoMergeLevel1 from "redux-persist/es/stateReconciler/autoMergeLevel1";
 
@@ -31,6 +32,7 @@ const rootReducer = combineReducers({
   }),
   code,
   schedule,
+  statistics,
 })
 
 export default rootReducer

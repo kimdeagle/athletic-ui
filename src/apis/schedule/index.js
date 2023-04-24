@@ -26,3 +26,9 @@ export const updateSchedule = async (params, thunkAPI) => {
     params
   }, thunkAPI)
 }
+
+export const getScheduleListOfDashboard = async (thunkAPI) => {
+  return await apiService.GET({
+    url: '/schedule/dashboard'
+  }, thunkAPI)
+}

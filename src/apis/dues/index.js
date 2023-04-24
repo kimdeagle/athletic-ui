@@ -33,9 +33,8 @@ export const updateDues = async (params, thunkAPI) => {
   }, thunkAPI)
 }
 
-export const getAmountThisMonth = async (params, thunkAPI) => {
+export const getAmountThisMonth = async (thunkAPI) => {
   return await apiService.GET({
-    url: '/dues/amount/this-month',
-    params
+    url: '/statistics/dues/this-month'
   }, thunkAPI)
 }

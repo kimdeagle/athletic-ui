@@ -7,6 +7,7 @@ import * as authority from "./authority";
 import * as dues from "./dues";
 import * as code from "./code";
 import * as schedule from "./schedule";
+import * as statistics from "./statistics";
 
 const system = {
   menu,
@@ -22,4 +23,5 @@ export {
   system,
   code,
   schedule,
+  statistics,
 }
