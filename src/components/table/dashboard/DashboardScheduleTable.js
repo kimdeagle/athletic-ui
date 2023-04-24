@@ -18,16 +18,18 @@ const DashboardScheduleTable = () => {
           }}
         >
           <TableRow>
-            <TableCell component='th' width='30%'>일정명</TableCell>
+            <TableCell component='th' width='25%'>일정명</TableCell>
             <TableCell component='th' width='15%'>시작일자</TableCell>
             <TableCell component='th' width='15%'>종료일자</TableCell>
-            <TableCell component='th' width='40%'>상세내용</TableCell>
+            <TableCell component='th' width='10%'>진행상태</TableCell>
+            <TableCell component='th' width='35%'>상세내용</TableCell>
           </TableRow>
           {scheduleList?.map((schedule, index) => (
             <TableRow key={index}>
               <TableCell align='left'>{schedule.title}</TableCell>
               <TableCell align='center'>{schedule.startDt}</TableCell>
               <TableCell align='center'>{schedule.endDt}</TableCell>
+              <TableCell align='center'>{schedule.statusName}</TableCell>
               <TableCell align='left'>{schedule.description}</TableCell>
             </TableRow>
           ))}

@@ -55,7 +55,7 @@ const Home = () => {
       </Box>
       <Box mt={2} mb={3}>
         <Box display='flex' justifyContent='start' alignItems='center' mb={1}>
-          <Typography variant='h4'>일정 요약</Typography>
+          <Typography variant='h4'>일정 현황</Typography>
           <IconButton title='일정 관리로 이동' color='info' onClick={() => navigate(ROUTE_PATH_NAME.schedule)}><ReadMoreOutlinedIcon /></IconButton>
         </Box>
         <DashboardScheduleTable />
