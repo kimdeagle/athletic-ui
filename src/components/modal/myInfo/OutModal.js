@@ -7,22 +7,17 @@ import {
   VALIDATION_SCHEMA
 } from "../../../utils/const";
 import {useSnackbar} from "notistack";
-import {resetAccessToken} from "../../../redux/auth";
-import {removeRefreshToken, removeRememberId, removeUser} from "../../../utils/cookie";
-import {resetMenuState} from "../../../redux/system/menu";
+import {removeRefreshToken, removeRememberId} from "../../../utils/cookie";
 import axios from "axios";
-import {useDispatch} from "react-redux";
-import {useNavigate} from "react-router-dom";
 import { Formik, Form, Field } from "formik";
 import { TextField } from "formik-mui";
 import * as Yup from "yup";
-import {makeSnackbarMessage, sleep} from "../../../utils/util";
+import {clearAllInterval, makeSnackbarMessage, sleep} from "../../../utils/util";
 import {ROUTE_PATH_NAME} from "../../../routes/RouteList";
+import {persistor} from "../../../redux/store";
 
 const OutModal = ({open, setOpen}) => {
   const { enqueueSnackbar } = useSnackbar()
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
 
   const handleClose = () => {
     setOpen(false)
@@ -36,17 +31,21 @@ const OutModal = ({open, setOpen}) => {
     loginPw: Yup.string().required(VALIDATION_SCHEMA.COMMON.requiredMessage)
   })
 
-  const outProcess = () => {
-    handleClose()
-    clearInterval('authInterval')
-    clearInterval('reIssueInterval')
-    dispatch(resetAccessToken())
-    removeRefreshToken()
-    removeUser()
-    dispatch(resetMenuState())
-    removeRememberId()
+  const outProcess = async () => {
+    //remove rememberId
+    await removeRememberId()
+    //reset authorization of axios header
     axios.defaults.headers.common[AUTHORIZATION_HEADER_NAME] = null
-    navigate(ROUTE_PATH_NAME.login, {replace: true})
+    //clear all interval
+    await clearAllInterval()
+    //remove refresh token
+    await removeRefreshToken()
+    //redux-persist purge(remove)
+    await persistor.purge()
+
+    handleClose()
+
+    window.location.replace(ROUTE_PATH_NAME.login)
   }
 
   const handleSubmit = async (values) => {

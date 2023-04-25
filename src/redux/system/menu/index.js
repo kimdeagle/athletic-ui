@@ -1,5 +1,6 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import * as Apis from "../../../apis"
+import {PURGE} from "redux-persist";
 
 export const getMenuList = createAsyncThunk('getMenuList', Apis.system.menu.getMenuList)
 export const getUseMenuList = createAsyncThunk('getUseMenuList', Apis.system.menu.getUseMenuList)
@@ -19,10 +20,6 @@ export const menuSlice = createSlice({
     resetUseMenuList: (state) => {
       state.useMenuList = []
     },
-    resetMenuState: (state) => {
-      state.menuList = []
-      state.useMenuList = []
-    }
   },
   extraReducers: (builder) => {
     builder
@@ -32,9 +29,10 @@ export const menuSlice = createSlice({
       .addCase(getUseMenuList.fulfilled, (state, action) => {
         state.useMenuList = action.payload.data
       })
+      .addCase(PURGE, () => initialState)
   }
 })
 
-export const { resetMenuList, resetUseMenuList, resetMenuState } = menuSlice.actions
+export const { resetMenuList, resetUseMenuList } = menuSlice.actions
 
 export default menuSlice.reducer

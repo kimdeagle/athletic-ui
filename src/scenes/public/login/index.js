@@ -6,10 +6,10 @@ import {
   Typography,
   useTheme
 } from "@mui/material";
-import {getRememberId, removeRememberId, setRefreshToken, setRememberId, setUser} from "../../../utils/cookie";
+import {getRememberId, removeRememberId, setRefreshToken, setRememberId} from "../../../utils/cookie";
 import {useNavigate} from "react-router-dom";
 import * as Apis from "../../../apis";
-import {setAccessToken} from "../../../redux/auth";
+import {setAuthInfo} from "../../../redux/auth";
 import jwtDecode from "jwt-decode";
 import {getUseMenuList} from "../../../redux/system/menu";
 import {useDispatch} from "react-redux";
@@ -50,19 +50,21 @@ const Login = () => {
   const handleSubmit = async (values) => {
     const { status, message, data:token } = await Apis.auth.login(values)
     if (status === STATUS_SUCCESS) {
+      //set rememberId
+      values.isRemember ? setRememberId(values.loginId) : removeRememberId()
+      //get token data
       const {accessToken, accessTokenExpiresIn, refreshToken, refreshTokenExpiresIn} = token
-      dispatch(setAccessToken({accessToken, accessTokenExpiresIn}))
-      setRefreshToken({refreshToken, refreshTokenExpiresIn})
+      //set authorization of axios header
       axios.defaults.headers.common[AUTHORIZATION_HEADER_NAME] = BEARER_PREFIX + accessToken
-      const user = jwtDecode(accessToken)
-      setUser({user, expires: refreshTokenExpiresIn})
-      dispatch(getUseMenuList())
+      //get user by token
+      const user = await jwtDecode(accessToken)
+      //set use menu list
+      await dispatch(getUseMenuList())
+      //set auth
+      await dispatch(setAuthInfo({accessToken, accessTokenExpiresIn, user}))
+      //set refresh token
+      await setRefreshToken({refreshToken, refreshTokenExpiresIn})
 
-      if (values.isRemember) {
-        setRememberId(values.loginId)
-      } else {
-        removeRememberId()
-      }
       await sleep(DEFAULT_SLEEP_MS)
       navigate(ROUTE_PATH_NAME.home, {replace: true})
     } else {

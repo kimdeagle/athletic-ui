@@ -1,17 +1,15 @@
 import {Box, Button, Typography} from "@mui/material";
 import * as Apis from "../../../apis";
-import {useNavigate} from "react-router-dom";
 import {Helmet} from "react-helmet-async";
 import {useSnackbar} from "notistack";
 import { Formik, Form, Field } from "formik";
 import { TextField } from "formik-mui";
 import * as Yup from "yup";
-import {DEFAULT_SLEEP_MS, STATUS_SUCCESS, VALIDATION_SCHEMA} from "../../../utils/const";
-import {makeSnackbarMessage, sleep} from "../../../utils/util";
+import {STATUS_SUCCESS, VALIDATION_SCHEMA} from "../../../utils/const";
+import {makeSnackbarMessage} from "../../../utils/util";
 import {ROUTE_PATH_NAME} from "../../../routes/RouteList";
 
 const ResetPassword = () => {
-  const navigate = useNavigate()
   const { enqueueSnackbar } = useSnackbar()
 
   const initialValues = {
@@ -32,7 +30,7 @@ const ResetPassword = () => {
     if (status === STATUS_SUCCESS) {
       enqueueSnackbar(makeSnackbarMessage(message), {
         variant: 'success',
-        onClose: () => navigate(ROUTE_PATH_NAME.login, { replace: true }),
+        onClose: () => window.location.replace(ROUTE_PATH_NAME.login),
       })
     } else {
       enqueueSnackbar(message, { variant: 'error' })

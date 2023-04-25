@@ -8,9 +8,6 @@ export const AUTHORIZATION_HEADER_NAME = 'Authorization'
 /* bearer prefix */
 export const BEARER_PREFIX = 'Bearer '
 
-/* 로그인 접근 url */
-export const IS_AUTHENTICATED_PATH_LIST = ['/']
-
 /* 비로그인 접근 url */
 export const IS_NOT_AUTHENTICATED_PATH_LIST = ['/login', '/join', '/reset-password']
 
@@ -19,9 +16,6 @@ export const AUTH_INTERVAL_TIMEOUT = 1000
 
 /* re issue access token interval timeout (30 min) */
 export const RE_ISSUE_ACCESS_TOKEN_INTERVAL_TIMEOUT = 1000 * 60 * 30;
-
-/* hide button pathname list */
-export const HIDE_BUTTON_PATHNAME_LIST = ['/', '/my', '/system', '/system/menu', '/system/admin']
 
 /* common button attributes */
 export const BUTTONS_EXCEL_UPLOAD = 'excelUpload'

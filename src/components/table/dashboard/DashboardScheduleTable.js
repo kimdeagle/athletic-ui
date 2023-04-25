@@ -24,7 +24,7 @@ const DashboardScheduleTable = () => {
             <TableCell component='th' width='10%'>진행상태</TableCell>
             <TableCell component='th' width='35%'>상세내용</TableCell>
           </TableRow>
-          {scheduleList.map((schedule, index) => (
+          {scheduleList?.map((schedule, index) => (
             <TableRow key={index}>
               <TableCell align='left'>{schedule.title}</TableCell>
               <TableCell align='center'>{schedule.startDt}</TableCell>

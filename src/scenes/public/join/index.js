@@ -1,6 +1,5 @@
 import {Box, Button, Typography} from "@mui/material";
 import * as Apis from "../../../apis";
-import {useNavigate} from "react-router-dom";
 import {Helmet} from "react-helmet-async";
 import { Formik, Form, Field } from "formik";
 import {TextField} from "formik-mui";
@@ -12,7 +11,6 @@ import {ROUTE_PATH_NAME} from "../../../routes/RouteList";
 
 const Join = () => {
   const { enqueueSnackbar } = useSnackbar()
-  const navigate = useNavigate()
 
   const initialValues = {
     loginId: '',
@@ -48,7 +46,7 @@ const Join = () => {
     if (status === STATUS_SUCCESS) {
       enqueueSnackbar(makeSnackbarMessage(message), {
         variant: 'success',
-        onClose: () => navigate(ROUTE_PATH_NAME.login, { replace: true }),
+        onClose: () => window.location.replace(ROUTE_PATH_NAME.login),
       })
       await sleep(DEFAULT_SLEEP_MS)
     } else {

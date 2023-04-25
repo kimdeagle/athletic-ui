@@ -3,7 +3,6 @@ import { Cookies } from "react-cookie";
 const cookies = new Cookies()
 const REMEMBER_ID_COOKIE_NAME = "rememberId"
 const REFRESH_TOKEN_COOKIE_NAME = "refresh_token"
-const USER_COOKIE_NAME = "user"
 
 /**
  * 1. remember id cookie
@@ -43,23 +42,4 @@ export const setRefreshToken = (token) => {
 
 export const removeRefreshToken = () => {
   cookies.remove(REFRESH_TOKEN_COOKIE_NAME)
-}
-
-/**
- * 3. user information
- */
-export const getUser = () => {
-  return cookies.get(USER_COOKIE_NAME)
-}
-
-export const setUser = (data) => {
-  cookies.set(USER_COOKIE_NAME, data.user, {
-    sameSite: 'strict',
-    path: '/',
-    expires: new Date(data.expires)
-  })
-}
-
-export const removeUser = () => {
-  cookies.remove(USER_COOKIE_NAME)
 }

@@ -13,22 +13,29 @@ import schedule from "./schedule";
 import statistics from "./statistics";
 
 import autoMergeLevel1 from "redux-persist/es/stateReconciler/autoMergeLevel1";
+import autoMergeLevel2 from "redux-persist/es/stateReconciler/autoMergeLevel2";
 
-const persistConfig = {
+const menuPersistConfig = {
   key: 'system/menu',
   storage,
   stateReconciler: autoMergeLevel1 //dispatch 할 경우 병합(기존 데이터 삭제, 새 데이터 적용)
 }
 
+const authPersistConfig = {
+  key: 'auth',
+  storage,
+  stateReconciler: autoMergeLevel1
+}
+
 const rootReducer = combineReducers({
   common,
-  auth,
+  auth: persistReducer(authPersistConfig, auth),
   member,
   admin,
   authority,
   dues,
   system: combineReducers({
-    menu: persistReducer(persistConfig, menu),
+    menu: persistReducer(menuPersistConfig, menu),
   }),
   code,
   schedule,

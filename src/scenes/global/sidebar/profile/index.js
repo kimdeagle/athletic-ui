@@ -2,14 +2,15 @@ import React from "react";
 import {Box, Typography, useTheme} from "@mui/material";
 import {tokens} from "../../../../theme";
 import ArrowCircleRightOutlinedIcon from '@mui/icons-material/ArrowCircleRightOutlined';
-import {getUser} from "../../../../utils/cookie";
 import {useProSidebar} from "react-pro-sidebar";
+import {useSelector} from "react-redux";
 
 const SidebarProfile = () => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
   const { collapsed } = useProSidebar()
-  const { name, authorityDisplayName, loginAt } = getUser()
+  const user = useSelector(state => state.auth.user)
+  const { name, authorityDisplayName, loginAt } = user
   return (
     !collapsed &&
     <Box mb="25px">
