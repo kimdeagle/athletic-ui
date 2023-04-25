@@ -37,7 +37,7 @@ import {
   resetAmountThisMonth,
   resetDuesList
 } from "../../../redux/dues";
-import React, {useEffect, useState, useLayoutEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {tokens} from "../../../theme";
 import DuesDetailModal from "../../../components/modal/dues/DuesDetailModal";
 import {format} from "date-fns";
@@ -184,7 +184,7 @@ const Dues = () => {
     }
   }
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     dispatch(getCodeListByGroupCodes({groupCodes}))
     dispatch(getAmountThisMonth())
     dispatch(getDuesList())

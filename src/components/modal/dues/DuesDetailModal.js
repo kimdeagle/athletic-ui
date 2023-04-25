@@ -3,7 +3,7 @@ import {
   Button,
   MenuItem,
 } from "@mui/material";
-import {useLayoutEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import CustomModal from "../index";
 import {
   getStringDate,
@@ -93,7 +93,7 @@ const DuesDetailModal = ({action, open, setOpen, dues, setDues, handleCallback})
     setSubmitting(false)
   }
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (action === BUTTONS_ADD) {
       setInitialValues({
         id: '',

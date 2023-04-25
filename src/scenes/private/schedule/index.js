@@ -1,7 +1,7 @@
 import ContentHeader from "../../../components/content/ContentHeader";
 import {Box, useTheme} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
-import {useEffect, useLayoutEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {useSnackbar} from "notistack";
 import {
   BUTTON_PROPS_DISABLED,
@@ -117,7 +117,7 @@ const Schedule = () => {
     }
   }
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     dispatch(getCodeListByGroupCodes({groupCodes}))
     dispatch(getScheduleList())
     return () => {

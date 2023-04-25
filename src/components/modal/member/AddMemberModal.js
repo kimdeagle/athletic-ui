@@ -3,7 +3,7 @@ import {
   Button,
   IconButton,
 } from "@mui/material";
-import {useLayoutEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import CustomModal from "../index";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import { useDaumPostcodePopup } from "react-daum-postcode";
@@ -82,7 +82,7 @@ const AddMemberModal = ({action, open, setOpen, handleCallback}) => {
     }
   }
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (action === BUTTONS_ADD) {
       setInitialValues({
         id: '',
