@@ -5,7 +5,7 @@ import CustomGrid from "../../../components/grid";
 import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {getMember, getMemberList, resetMemberList} from "../../../redux/member";
-import AddMemberModal from "../../../components/modal/member/AddMemberModal";
+import MemberDetailModal from "../../../components/modal/member/MemberDetailModal";
 import {
   BUTTON_PROPS_DISABLED,
   BUTTON_PROPS_ON_CLICK, BUTTON_PROPS_PARAMETERS,
@@ -24,6 +24,7 @@ const Member = () => {
   const { enqueueSnackbar } = useSnackbar()
 
   const columns = [
+    { field: 'id', headerName: '회원번호', flex: 1},
     { field: 'name', headerName: '회원명', flex: 1, cellClassName: `${DATA_GRID_CELL_CLASS_NAME.GREEN_COLOR} ${DATA_GRID_CELL_CLASS_NAME.CURSOR_POINTER}`},
     { field: 'email', headerName: '이메일', flex: 1},
     { field: 'mobileNo', headerName: '휴대폰 번호', flex: 1},
@@ -38,6 +39,7 @@ const Member = () => {
   }
 
   const handleSearch = () => {
+    setSelectionModel([])
     dispatch(getMemberList())
   }
 
@@ -84,7 +86,6 @@ const Member = () => {
     if (window.confirm("선택한 " + count + "명의 회원을 삭제하시겠습니까?")) {
       const { status, message } = await Apis.member.deleteMembers(selectionModel)
       if (status === STATUS_SUCCESS) {
-        setSelectionModel([])
         enqueueSnackbar(makeSnackbarMessage(message), { variant: 'success' })
         handleSearch()
       } else {
@@ -112,7 +113,7 @@ const Member = () => {
         handleDelete={handleDelete}
       >
       </CustomGrid>
-      <AddMemberModal action={action} open={open} setOpen={setOpen} handleCallback={handleSearch} />
+      <MemberDetailModal action={action} open={open} setOpen={setOpen} handleCallback={handleSearch} />
     </Box>
   )
 }

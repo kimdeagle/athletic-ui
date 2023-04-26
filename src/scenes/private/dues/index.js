@@ -97,8 +97,8 @@ const Dues = () => {
   }
 
   const getDisplayTitle = (inOutCd, inOutDtlCd, oriTitle, amount) => {
-    const inOutName = (codeList.find(data => data.code === inOutCd)?.name).substring(0, 1)
-    const inOutDtlName = codeList.find(data => data.code === inOutCd)?.detailList.find(detail => detail.code === inOutDtlCd)?.name
+    const inOutName = (codeList?.find(data => data.code === inOutCd)?.name).substring(0, 1)
+    const inOutDtlName = codeList?.find(data => data.code === inOutCd)?.detailList?.find(detail => detail.code === inOutDtlCd)?.name
     return '(' + inOutName + '-' + inOutDtlName + ')' + oriTitle + ' ' + amount.toLocaleString()
   }
 

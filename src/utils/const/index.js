@@ -104,6 +104,12 @@ export const VALIDATION_SCHEMA = {
   END_DT: {
     MinMessage: '종료일자는 시작일자보다 작을 수 없습니다.',
   },
+  AUTHORITY_NAME: {
+    MATCHES: {
+      regex: /^ROLE_[A-Z]+$/g,
+      message: '올바른 권한명을 입력하세요. (ex. ROLE_ABC)'
+    }
+  }
 }
 
 /* default auto hide duration ms */

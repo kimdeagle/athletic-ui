@@ -3,9 +3,10 @@ import { tokens } from "../../theme";
 import {setExcelUploadModalProps, setOpenExcelUploadModal} from "../../redux/common";
 import {useDispatch} from "react-redux";
 import {
-  BUTTON_PROPS_PARAMETERS,
+  BUTTON_PROPS_DISABLED, BUTTON_PROPS_ON_CLICK,
+  BUTTON_PROPS_PARAMETERS, BUTTONS_ADD,
   BUTTONS_EXCEL_DOWNLOAD, BUTTONS_EXCEL_DOWNLOAD_SEARCH_CONDITION,
-  BUTTONS_EXCEL_UPLOAD, STATUS_SUCCESS,
+  BUTTONS_EXCEL_UPLOAD, BUTTONS_SEARCH, STATUS_SUCCESS,
 } from "../../utils/const";
 import {useSnackbar} from "notistack";
 import * as Apis from "../../apis";
@@ -21,10 +22,10 @@ const ContentHeader = ({ title, subTitle, hideButtons, buttonProps }) => {
   const { enqueueSnackbar } = useSnackbar()
 
   const defaultButtonProps = {
-    [BUTTONS_EXCEL_UPLOAD]: buttonProps === undefined || buttonProps[BUTTONS_EXCEL_UPLOAD] === undefined ? { disabled: true } : buttonProps[BUTTONS_EXCEL_UPLOAD],
-    [BUTTONS_EXCEL_DOWNLOAD]: buttonProps === undefined || buttonProps[BUTTONS_EXCEL_DOWNLOAD] === undefined ? { disabled: true } : buttonProps[BUTTONS_EXCEL_DOWNLOAD],
-    add: buttonProps === undefined || buttonProps.add === undefined ? { disabled: true, onClick: null } : buttonProps.add,
-    search: buttonProps === undefined || buttonProps.search === undefined ? { disabled: true, onClick: null } : buttonProps.search,
+    [BUTTONS_EXCEL_UPLOAD]: buttonProps?.[BUTTONS_EXCEL_UPLOAD] || { [BUTTON_PROPS_DISABLED]: true },
+    [BUTTONS_EXCEL_DOWNLOAD]: buttonProps?.[BUTTONS_EXCEL_DOWNLOAD] ||  { [BUTTON_PROPS_DISABLED]: true },
+    [BUTTONS_ADD]: buttonProps?.[BUTTONS_ADD] || { [BUTTON_PROPS_DISABLED]: true, [BUTTON_PROPS_ON_CLICK]: null },
+    [BUTTONS_SEARCH]: buttonProps?.[BUTTONS_SEARCH] || { [BUTTON_PROPS_DISABLED]: true, [BUTTON_PROPS_ON_CLICK]: null }
   }
 
   const handleExcelUpload = () => {
@@ -91,32 +92,32 @@ const ContentHeader = ({ title, subTitle, hideButtons, buttonProps }) => {
         <Button
           variant="contained"
           color="warning"
-          disabled={defaultButtonProps.excelUpload.disabled}
-          onClick={handleExcelUpload}
+          disabled={defaultButtonProps[BUTTONS_EXCEL_UPLOAD][BUTTON_PROPS_DISABLED]}
+          onClick={defaultButtonProps[BUTTONS_EXCEL_UPLOAD][BUTTON_PROPS_PARAMETERS] ? handleExcelUpload : undefined}
         >
           엑셀 업로드
         </Button>
         <Button
           variant="contained"
           color="info"
-          disabled={defaultButtonProps.excelDownload.disabled}
-          onClick={handleExcelDownload}
+          disabled={defaultButtonProps[BUTTONS_EXCEL_DOWNLOAD][BUTTON_PROPS_DISABLED]}
+          onClick={defaultButtonProps[BUTTONS_EXCEL_DOWNLOAD][BUTTON_PROPS_PARAMETERS] ? handleExcelDownload : undefined}
         >
           엑셀 다운로드
         </Button>
         <Button
           variant="contained"
           color="success"
-          disabled={defaultButtonProps.add.disabled}
-          onClick={defaultButtonProps.add.onClick}
+          disabled={defaultButtonProps[BUTTONS_ADD][BUTTON_PROPS_DISABLED]}
+          onClick={defaultButtonProps[BUTTONS_ADD][BUTTON_PROPS_ON_CLICK]}
         >
           신규
         </Button>
         <Button
           variant="contained"
           color="primary"
-          disabled={defaultButtonProps.search.disabled}
-          onClick={defaultButtonProps.search.onClick}
+          disabled={defaultButtonProps[BUTTONS_SEARCH][BUTTON_PROPS_DISABLED]}
+          onClick={defaultButtonProps[BUTTONS_SEARCH][BUTTON_PROPS_ON_CLICK]}
         >
           조회
         </Button>

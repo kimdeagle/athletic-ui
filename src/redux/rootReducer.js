@@ -6,7 +6,7 @@ import auth from "./auth";
 import menu from "./system/menu";
 import member from "./member";
 import admin from "./admin";
-import authority from "./authority";
+import authority from "./system/authority";
 import dues from "./dues";
 import code from "./code";
 import schedule from "./schedule";
@@ -32,10 +32,10 @@ const rootReducer = combineReducers({
   auth: persistReducer(authPersistConfig, auth),
   member,
   admin,
-  authority,
   dues,
   system: combineReducers({
     menu: persistReducer(menuPersistConfig, menu),
+    authority,
   }),
   code,
   schedule,

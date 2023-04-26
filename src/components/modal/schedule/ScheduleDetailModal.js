@@ -1,5 +1,5 @@
 import {Box, Button, MenuItem, Typography} from "@mui/material";
-import {useEffect, useState} from "react";
+import {useLayoutEffect, useState} from "react";
 import CustomModal from "../index";
 import {getStringDate, isMinEndDt, makeSnackbarMessage, sleep} from "../../../utils/util";
 import * as Apis from "../../../apis";
@@ -76,7 +76,7 @@ const ScheduleDetailModal = ({action, open, setOpen, schedule, setSchedule, hand
     setSubmitting(false)
   }
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (action === BUTTONS_ADD) {
       setInitialValues({
         id: '',

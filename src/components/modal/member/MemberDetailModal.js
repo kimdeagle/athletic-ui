@@ -3,7 +3,7 @@ import {
   Button,
   IconButton,
 } from "@mui/material";
-import {useEffect, useState} from "react";
+import {useLayoutEffect, useState} from "react";
 import CustomModal from "../index";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import { useDaumPostcodePopup } from "react-daum-postcode";
@@ -23,7 +23,7 @@ import { TextField } from "formik-mui";
 import {useSnackbar} from "notistack";
 import * as Yup from "yup";
 
-const AddMemberModal = ({action, open, setOpen, handleCallback}) => {
+const MemberDetailModal = ({action, open, setOpen, handleCallback}) => {
   const dispatch = useDispatch()
   const openAddressPopup = useDaumPostcodePopup(DAUM_POSTCODE_SCRIPT_URL)
   const member = useSelector(state => state.member.member)
@@ -82,7 +82,7 @@ const AddMemberModal = ({action, open, setOpen, handleCallback}) => {
     }
   }
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (action === BUTTONS_ADD) {
       setInitialValues({
         id: '',
@@ -107,6 +107,18 @@ const AddMemberModal = ({action, open, setOpen, handleCallback}) => {
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
         {({values, setFieldValue, isSubmitting}) => (
           <Form>
+            <Field
+              component={TextField}
+              type='text'
+              fullWidth
+              disabled
+              id='id'
+              name='id'
+              label='회원번호'
+              color='primary'
+              variant='outlined'
+              margin='normal'
+            />
             <Field
               component={TextField}
               type='text'
@@ -218,4 +230,4 @@ const AddMemberModal = ({action, open, setOpen, handleCallback}) => {
   )
 }
 
-export default AddMemberModal
+export default MemberDetailModal

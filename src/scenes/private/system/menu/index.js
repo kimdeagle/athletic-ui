@@ -11,7 +11,7 @@ import {getMenuList, getUseMenuList, resetMenuList} from "../../../../redux/syst
 import {DEFAULT_SLEEP_MS, NEW_MENU, ROOT_MENU, STATUS_SUCCESS, VALIDATION_SCHEMA} from "../../../../utils/const";
 import MenuTree from "./MenuTree";
 import MenuDetail from "./MenuDetail";
-import {getAuthorityList, resetAuthorityList} from "../../../../redux/authority";
+import {getAuthorityList, resetAuthorityList} from "../../../../redux/system/authority";
 
 const Menu = () => {
   const [selected, setSelected] = useState(ROOT_MENU.id)

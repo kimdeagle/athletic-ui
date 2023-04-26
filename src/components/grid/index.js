@@ -3,15 +3,15 @@ import {Box, Button, styled, useTheme} from "@mui/material";
 import {tokens} from "../../theme";
 import {DATA_GRID_CELL_CLASS_NAME} from "../../utils/const";
 
-const CustomGrid = ({rows, columns, onCellClick, selectionModel, setSelectionModel, checkboxSelection, getRowId, handleDelete}) => {
+const CustomGrid = ({rows, columns, onCellClick, selectionModel, setSelectionModel, checkboxSelection, handleDelete}) => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
 
   const headerAlignColumns = [...columns]
 
   headerAlignColumns.forEach(column => {
-    column.align = column.align ? column.align : 'center'
-    column.headerAlign = column.headerAlign ? column.headerAlign : 'center'
+    column.align = column?.align || 'center'
+    column.headerAlign = column?.headerAlign || 'center'
   })
 
   const CustomBox = styled(Box)`

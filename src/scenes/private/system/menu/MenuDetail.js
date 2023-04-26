@@ -27,7 +27,7 @@ const MenuDetail = ({selected, handleDelete}) => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
 
-  const authorityList = useSelector(state => state.authority.authorityList)
+  const authorityList = useSelector(state => state.system.authority.authorityList)
 
   const { values, isSubmitting } = useFormikContext()
 
