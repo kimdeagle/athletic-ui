@@ -9,10 +9,9 @@ import {
 import {getRememberId, removeRememberId, setRefreshToken, setRememberId} from "../../../utils/cookie";
 import {useNavigate} from "react-router-dom";
 import * as Apis from "../../../apis";
-import {setAuthInfo} from "../../../redux/auth";
-import jwtDecode from "jwt-decode";
+import {setAccessToken} from "../../../redux/auth";
 import {getUseMenuList} from "../../../redux/system/menu";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import axios from "axios";
 import {Helmet} from "react-helmet-async";
 import {useSnackbar} from "notistack";
@@ -21,11 +20,14 @@ import {CheckboxWithLabel, TextField} from "formik-mui";
 import * as Yup from "yup";
 import {
   AUTHORIZATION_HEADER_NAME, BEARER_PREFIX,
-  DEFAULT_SLEEP_MS, STATUS_SUCCESS,
+  STATUS_SUCCESS,
   VALIDATION_SCHEMA
 } from "../../../utils/const";
-import {makeSnackbarMessage, sleep} from "../../../utils/util";
+import {makeSnackbarMessage} from "../../../utils/util";
 import {ROUTE_PATH_NAME} from "../../../routes/RouteList";
+import {getUser, setLoginAt} from "../../../redux/user";
+import {useEffect} from "react";
+import {format} from "date-fns";
 
 const Login = () => {
   const theme = useTheme()
@@ -33,6 +35,7 @@ const Login = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const { enqueueSnackbar } = useSnackbar()
+  const authenticated = useSelector(state => state.auth.authenticated)
 
   const initialValues = {
     loginId: getRememberId() || '',
@@ -50,27 +53,33 @@ const Login = () => {
   const handleSubmit = async (values) => {
     const { status, message, data:token } = await Apis.auth.login(values)
     if (status === STATUS_SUCCESS) {
-      //set rememberId
-      values.isRemember ? setRememberId(values.loginId) : removeRememberId()
       //get token data
-      const {accessToken, accessTokenExpiresIn, refreshToken, refreshTokenExpiresIn} = token
+      const {accessToken, refreshToken, refreshTokenExpiresIn} = token
       //set authorization of axios header
       axios.defaults.headers.common[AUTHORIZATION_HEADER_NAME] = BEARER_PREFIX + accessToken
-      //get user by token
-      const user = await jwtDecode(accessToken)
+      //set rememberId
+      values.isRemember ? setRememberId(values.loginId) : removeRememberId()
+      //set user
+      dispatch(getUser())
+      //set login time
+      dispatch(setLoginAt(format(new Date(), 'yyyy-MM-dd HH:mm:ss')))
       //set use menu list
-      await dispatch(getUseMenuList())
-      //set auth
-      await dispatch(setAuthInfo({accessToken, accessTokenExpiresIn, user}))
+      dispatch(getUseMenuList())
       //set refresh token
-      await setRefreshToken({refreshToken, refreshTokenExpiresIn})
-
-      await sleep(DEFAULT_SLEEP_MS)
-      navigate(ROUTE_PATH_NAME.home, {replace: true})
+      setRefreshToken({refreshToken, refreshTokenExpiresIn})
+      //set accessToken
+      dispatch(setAccessToken(accessToken))
     } else {
       enqueueSnackbar(makeSnackbarMessage(message), { variant: 'error' })
     }
   }
+
+  useEffect(() => {
+    //로그인 성공 시 메인으로 이동
+    if (authenticated) {
+      window.location.replace(ROUTE_PATH_NAME.home)
+    }
+  }, [authenticated])
 
   return (
     <>

@@ -2,7 +2,7 @@ import {ColorModeContext, useMode} from "./theme";
 import {CssBaseline, ThemeProvider} from "@mui/material";
 import * as Apis from "./apis"
 import {useDispatch, useSelector} from "react-redux";
-import {setAuthInfo} from "./redux/auth";
+import {setAccessToken} from "./redux/auth";
 import {getRefreshToken, removeRefreshToken} from "./utils/cookie";
 import axios from "axios";
 import React, {useEffect} from "react";
@@ -22,7 +22,6 @@ import {clearAllInterval, makeSnackbarMessage} from "./utils/util";
 import {LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDateFns} from "@mui/x-date-pickers/AdapterDateFns";
 import ko from "date-fns/locale/ko";
-import jwtDecode from "jwt-decode";
 import {persistor} from "./redux/store";
 
 
@@ -40,13 +39,11 @@ function App() {
       const { status, message, data:token } = await Apis.auth.reIssueAccessToken({refreshToken})
       if (status === STATUS_SUCCESS) {
         //get token data
-        const { accessToken, accessTokenExpiresIn } = token
+        const { accessToken } = token
         //set authorization of axios header
         axios.defaults.headers.common[AUTHORIZATION_HEADER_NAME] = BEARER_PREFIX + accessToken
-        //get user by token
-        const user = await jwtDecode(accessToken)
         //set auth
-        await dispatch(setAuthInfo({accessToken, accessTokenExpiresIn, user}))
+        await dispatch(setAccessToken(accessToken))
       } else {
         enqueueSnackbar(makeSnackbarMessage(message), { variant: 'error' })
       }

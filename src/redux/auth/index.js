@@ -2,10 +2,8 @@ import {createSlice} from "@reduxjs/toolkit";
 import { PURGE } from "redux-persist";
 
 const initialState = {
-  authenticated: false,
   accessToken: null,
-  accessTokenExpiresIn: null,
-  user: {},
+  authenticated: false,
   intervalFlag: false,
 }
 
@@ -13,11 +11,9 @@ export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setAuthInfo: (state, action) => {
+    setAccessToken: (state, action) => {
+      state.accessToken = action.payload
       state.authenticated = true
-      state.accessToken = action.payload.accessToken
-      state.accessTokenExpiresIn = action.payload.accessTokenExpiresIn
-      state.user = action.payload.user
       state.intervalFlag = true
     },
   },
@@ -27,6 +23,6 @@ export const authSlice = createSlice({
   }
 })
 
-export const { setAuthInfo } = authSlice.actions
+export const { setAccessToken } = authSlice.actions
 
 export default authSlice.reducer

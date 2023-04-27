@@ -9,8 +9,9 @@ const SidebarProfile = () => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
   const { collapsed } = useProSidebar()
-  const user = useSelector(state => state.auth.user)
-  const { name, authorityDisplayName, loginAt } = user
+  const { name, authorityDisplayName } = useSelector(state => state.user.user)
+  const loginAt = useSelector(state => state.user.loginAt)
+
   return (
     !collapsed &&
     <Box mb="25px">

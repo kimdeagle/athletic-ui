@@ -136,7 +136,7 @@ export const isMinEndDt = (values) => {
   return format(startDt, 'yyyyMMdd') > format(endDt, 'yyyyMMdd')
 }
 
-export const clearAllInterval = async () => {
+export const clearAllInterval = () => {
   for (let i=0; i<=window.authInterval; i++) {
     clearInterval(i)
   }

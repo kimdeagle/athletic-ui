@@ -8,29 +8,37 @@ import {clearAllInterval, makeSnackbarMessage} from "../../../utils/util";
 import {AUTHORIZATION_HEADER_NAME, STATUS_SUCCESS} from "../../../utils/const";
 import {ROUTE_PATH_NAME} from "../../../routes/RouteList";
 import {persistor} from "../../../redux/store";
+import {useEffect} from "react";
+import {useSelector} from "react-redux";
 
 const Logout = () => {
   const { enqueueSnackbar } = useSnackbar()
+  const authenticated = useSelector(state => state.auth.authenticated)
 
   const handleLogout = async () => {
     if (window.confirm("로그아웃 하시겠습니까?")) {
       const { status, message } = await Apis.auth.logout()
       if (status === STATUS_SUCCESS) {
+        alert(message)
         //reset authorization of axios header
         axios.defaults.headers.common[AUTHORIZATION_HEADER_NAME] = null
         //clear all interval
-        await clearAllInterval()
+        clearAllInterval()
         //remove refresh token
-        await removeRefreshToken()
+        removeRefreshToken()
         //redux-persist purge(remove)
         await persistor.purge()
-        alert(message)
-        window.location.replace(ROUTE_PATH_NAME.login)
       } else {
         enqueueSnackbar(makeSnackbarMessage(message), { variant: 'error' })
       }
     }
   }
+
+  useEffect(() => {
+    if (!authenticated) {
+      window.location.replace(ROUTE_PATH_NAME.login)
+    }
+  }, [authenticated])
 
   return (
     <Button

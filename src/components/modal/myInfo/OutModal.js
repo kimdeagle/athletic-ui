@@ -15,9 +15,12 @@ import * as Yup from "yup";
 import {clearAllInterval, makeSnackbarMessage, sleep} from "../../../utils/util";
 import {ROUTE_PATH_NAME} from "../../../routes/RouteList";
 import {persistor} from "../../../redux/store";
+import {useEffect} from "react";
+import {useSelector} from "react-redux";
 
 const OutModal = ({open, setOpen}) => {
   const { enqueueSnackbar } = useSnackbar()
+  const authenticated = useSelector(state => state.auth.authenticated)
 
   const handleClose = () => {
     setOpen(false)
@@ -33,19 +36,16 @@ const OutModal = ({open, setOpen}) => {
 
   const outProcess = async () => {
     //remove rememberId
-    await removeRememberId()
+    removeRememberId()
     //reset authorization of axios header
     axios.defaults.headers.common[AUTHORIZATION_HEADER_NAME] = null
     //clear all interval
-    await clearAllInterval()
+    clearAllInterval()
     //remove refresh token
-    await removeRefreshToken()
+    removeRefreshToken()
     //redux-persist purge(remove)
     await persistor.purge()
-
     handleClose()
-
-    window.location.replace(ROUTE_PATH_NAME.login)
   }
 
   const handleSubmit = async (values) => {
@@ -60,6 +60,12 @@ const OutModal = ({open, setOpen}) => {
       enqueueSnackbar(makeSnackbarMessage(message), { variant: 'error' })
     }
   }
+
+  useEffect(() => {
+    if (!authenticated) {
+      window.location.replace(ROUTE_PATH_NAME.login)
+    }
+  }, [authenticated])
 
   return (
     <CustomModal width='550' title='계정삭제' subtitle='삭제를 원하시면 비밀번호 입력 후 계정삭제 버튼을 클릭하세요.' open={open} handleClose={handleClose}>
