@@ -3,24 +3,14 @@ import {
   Box,
   Button,
 } from "@mui/material";
-import {useDispatch} from "react-redux";
-import {useEffect, useState} from "react";
-import {getMyInfo, resetAdmin} from "../../../redux/admin";
+import {useState} from "react";
 import ChangePwModal from "../../../components/modal/myInfo/ChangePwModal";
 import OutModal from "../../../components/modal/myInfo/OutModal";
 import MyInfoTable from "../../../components/table/my/MyInfoTable";
 
 const MyInfo = () => {
-  const dispatch = useDispatch()
   const [openChangePwModal, setOpenChangePwModal] = useState(false)
   const [openOutModal, setOpenOutModal] = useState(false)
-
-  useEffect(() => {
-    dispatch(getMyInfo())
-    return () => {
-      dispatch(resetAdmin())
-    }
-  }, [])
 
   return (
     <Box m="20px">

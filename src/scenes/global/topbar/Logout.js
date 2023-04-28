@@ -7,11 +7,14 @@ import {useSnackbar} from "notistack";
 import {clearAllInterval, makeSnackbarMessage} from "../../../utils/util";
 import {AUTHORIZATION_HEADER_NAME, STATUS_SUCCESS} from "../../../utils/const";
 import {ROUTE_PATH_NAME} from "../../../routes/RouteList";
-import {persistor} from "../../../redux/store";
 import {useEffect} from "react";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {resetAccessToken} from "../../../redux/auth";
+import {resetUseMenuList} from "../../../redux/system/menu";
+import {resetUser} from "../../../redux/user";
 
 const Logout = () => {
+  const dispatch = useDispatch()
   const { enqueueSnackbar } = useSnackbar()
   const authenticated = useSelector(state => state.auth.authenticated)
 
@@ -26,8 +29,12 @@ const Logout = () => {
         clearAllInterval()
         //remove refresh token
         removeRefreshToken()
-        //redux-persist purge(remove)
-        await persistor.purge()
+        //reset access token
+        dispatch(resetAccessToken())
+        //reset use menu list
+        dispatch(resetUseMenuList())
+        //reset user
+        dispatch(resetUser())
       } else {
         enqueueSnackbar(makeSnackbarMessage(message), { variant: 'error' })
       }

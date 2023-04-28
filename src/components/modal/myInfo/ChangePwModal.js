@@ -33,7 +33,7 @@ const ChangePwModal = ({open, setOpen}) => {
   })
 
   const handleSubmit = async (values) => {
-    const { status, message } = await Apis.admin.changePassword(values)
+    const { status, message } = await Apis.system.admin.changePassword(values)
     if (status === STATUS_SUCCESS) {
       enqueueSnackbar(makeSnackbarMessage(message), {
         variant: 'success',

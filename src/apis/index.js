@@ -1,7 +1,7 @@
 import * as auth from "./auth";
 import * as menu from "./system/menu";
 import * as member from "./member";
-import * as admin from "./admin";
+import * as admin from "./system/admin";
 import * as common from "./common";
 import * as authority from "./system/authority";
 import * as dues from "./dues";
@@ -13,12 +13,12 @@ import * as user from "./user";
 const system = {
   menu,
   authority,
+  admin,
 }
 
 export {
   auth,
   member,
-  admin,
   common,
   dues,
   system,

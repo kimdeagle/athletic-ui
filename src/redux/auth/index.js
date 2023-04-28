@@ -1,5 +1,4 @@
 import {createSlice} from "@reduxjs/toolkit";
-import { PURGE } from "redux-persist";
 
 const initialState = {
   accessToken: null,
@@ -16,13 +15,14 @@ export const authSlice = createSlice({
       state.authenticated = true
       state.intervalFlag = true
     },
+    resetAccessToken: (state) => {
+      state.accessToken = null
+      state.authenticated = false
+      state.intervalFlag = false
+    }
   },
-  extraReducers: builder => {
-    builder
-      .addCase(PURGE, () => initialState)
-  }
 })
 
-export const { setAccessToken } = authSlice.actions
+export const { setAccessToken, resetAccessToken } = authSlice.actions
 
 export default authSlice.reducer

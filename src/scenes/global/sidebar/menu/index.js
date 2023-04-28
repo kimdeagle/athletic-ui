@@ -40,7 +40,7 @@ const SidebarMenu = () => {
   const memoMenuList = useMemo(() => getProcessedMenuList(useMenuList), [useMenuList])
 
   return (
-    <Box paddingLeft={collapsed ? undefined : "10%"}>
+    <Box paddingLeft={collapsed ? undefined : "12%"}>
       {useMenuList.length && renderMenu(memoMenuList)}
     </Box>
   )

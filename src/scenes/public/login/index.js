@@ -6,12 +6,12 @@ import {
   Typography,
   useTheme
 } from "@mui/material";
-import {getRememberId, removeRememberId, setRefreshToken, setRememberId} from "../../../utils/cookie";
+import {getRememberId, removeRememberId, setLoginAt, setRefreshToken, setRememberId} from "../../../utils/cookie";
 import {useNavigate} from "react-router-dom";
 import * as Apis from "../../../apis";
 import {setAccessToken} from "../../../redux/auth";
 import {getUseMenuList} from "../../../redux/system/menu";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import axios from "axios";
 import {Helmet} from "react-helmet-async";
 import {useSnackbar} from "notistack";
@@ -25,9 +25,7 @@ import {
 } from "../../../utils/const";
 import {makeSnackbarMessage} from "../../../utils/util";
 import {ROUTE_PATH_NAME} from "../../../routes/RouteList";
-import {getUser, setLoginAt} from "../../../redux/user";
-import {useEffect} from "react";
-import {format} from "date-fns";
+import {getUser} from "../../../redux/user";
 
 const Login = () => {
   const theme = useTheme()
@@ -35,7 +33,6 @@ const Login = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const { enqueueSnackbar } = useSnackbar()
-  const authenticated = useSelector(state => state.auth.authenticated)
 
   const initialValues = {
     loginId: getRememberId() || '',
@@ -59,27 +56,22 @@ const Login = () => {
       axios.defaults.headers.common[AUTHORIZATION_HEADER_NAME] = BEARER_PREFIX + accessToken
       //set rememberId
       values.isRemember ? setRememberId(values.loginId) : removeRememberId()
-      //set user
-      dispatch(getUser())
-      //set login time
-      dispatch(setLoginAt(format(new Date(), 'yyyy-MM-dd HH:mm:ss')))
-      //set use menu list
-      dispatch(getUseMenuList())
-      //set refresh token
-      setRefreshToken({refreshToken, refreshTokenExpiresIn})
       //set accessToken
       dispatch(setAccessToken(accessToken))
+      //get use menu list
+      dispatch(getUseMenuList())
+      //get user
+      dispatch(getUser())
+      //set login time
+      setLoginAt()
+      //set refresh token
+      setRefreshToken({refreshToken, refreshTokenExpiresIn})
+
+      window.location.replace(ROUTE_PATH_NAME.home)
     } else {
       enqueueSnackbar(makeSnackbarMessage(message), { variant: 'error' })
     }
   }
-
-  useEffect(() => {
-    //로그인 성공 시 메인으로 이동
-    if (authenticated) {
-      window.location.replace(ROUTE_PATH_NAME.home)
-    }
-  }, [authenticated])
 
   return (
     <>

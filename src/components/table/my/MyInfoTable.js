@@ -5,7 +5,7 @@ import {useSelector} from "react-redux";
 const MyInfoTable = () => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
-  const admin = useSelector(state => state.admin.admin)
+  const admin = useSelector(state => state.user.user)
 
   return (
     <TableContainer component={Paper} sx={{ mt: 2 }}>
@@ -38,6 +38,10 @@ const MyInfoTable = () => {
           <TableRow>
             <TableCell component='th' scope='row'>휴대폰 번호</TableCell>
             <TableCell>{admin?.mobileNo}</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell component='th' scope='row'>권한명</TableCell>
+            <TableCell>{admin?.authorityDisplayName}</TableCell>
           </TableRow>
           <TableRow>
             <TableCell component='th' scope='row'>최종 수정일시</TableCell>

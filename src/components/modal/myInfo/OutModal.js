@@ -14,11 +14,14 @@ import { TextField } from "formik-mui";
 import * as Yup from "yup";
 import {clearAllInterval, makeSnackbarMessage, sleep} from "../../../utils/util";
 import {ROUTE_PATH_NAME} from "../../../routes/RouteList";
-import {persistor} from "../../../redux/store";
 import {useEffect} from "react";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {resetAccessToken} from "../../../redux/auth";
+import {resetUseMenuList} from "../../../redux/system/menu";
+import {resetUser} from "../../../redux/user";
 
 const OutModal = ({open, setOpen}) => {
+  const dispatch = useDispatch()
   const { enqueueSnackbar } = useSnackbar()
   const authenticated = useSelector(state => state.auth.authenticated)
 
@@ -43,13 +46,17 @@ const OutModal = ({open, setOpen}) => {
     clearAllInterval()
     //remove refresh token
     removeRefreshToken()
-    //redux-persist purge(remove)
-    await persistor.purge()
+    //reset access token
+    dispatch(resetAccessToken())
+    //reset use menu list
+    dispatch(resetUseMenuList())
+    //reset user
+    dispatch(resetUser())
     handleClose()
   }
 
   const handleSubmit = async (values) => {
-    const { status, message } = await Apis.admin.out(values)
+    const { status, message } = await Apis.system.admin.out(values)
     if (status === STATUS_SUCCESS) {
       enqueueSnackbar(makeSnackbarMessage(message), {
         variant: 'success',

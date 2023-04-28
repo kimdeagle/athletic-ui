@@ -4,13 +4,14 @@ import {tokens} from "../../../../theme";
 import ArrowCircleRightOutlinedIcon from '@mui/icons-material/ArrowCircleRightOutlined';
 import {useProSidebar} from "react-pro-sidebar";
 import {useSelector} from "react-redux";
+import {getLoginAt} from "../../../../utils/cookie";
 
 const SidebarProfile = () => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
   const { collapsed } = useProSidebar()
   const { name, authorityDisplayName } = useSelector(state => state.user.user)
-  const loginAt = useSelector(state => state.user.loginAt)
+  const loginAt = getLoginAt()
 
   return (
     !collapsed &&

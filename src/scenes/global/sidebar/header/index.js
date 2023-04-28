@@ -1,6 +1,7 @@
 import React from "react";
 import {Box, IconButton, Typography} from "@mui/material";
-import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
+import KeyboardDoubleArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardDoubleArrowLeftOutlined';
+import KeyboardDoubleArrowRightOutlinedIcon from '@mui/icons-material/KeyboardDoubleArrowRightOutlined';
 import {useProSidebar} from "react-pro-sidebar";
 
 const SidebarHeader = () => {
@@ -9,12 +10,18 @@ const SidebarHeader = () => {
   return (
     <Box
       display='flex'
-      justifyContent='center'
+      justifyContent={!collapsed ? 'right' : 'center'}
       alignItems='center'
       m='20px 0 20px 0'
     >
       {!collapsed && <Typography variant='h3' fontWeight='bold' mr='30px'>Athletic</Typography>}
-      <IconButton sx={{ mr: collapsed ? '5px' : undefined }} onClick={() => collapseSidebar()}><MenuOutlinedIcon /></IconButton>
+      <IconButton
+        title={!collapsed ? '접기' : '펼치기'}
+        onClick={() => collapseSidebar()}
+        sx={{ mr: !collapsed ? '25px' : undefined }}
+      >
+        {!collapsed ? <KeyboardDoubleArrowLeftOutlinedIcon /> : <KeyboardDoubleArrowRightOutlinedIcon />}
+      </IconButton>
     </Box>
   )
 }

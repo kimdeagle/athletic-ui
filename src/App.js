@@ -2,10 +2,10 @@ import {ColorModeContext, useMode} from "./theme";
 import {CssBaseline, ThemeProvider} from "@mui/material";
 import * as Apis from "./apis"
 import {useDispatch, useSelector} from "react-redux";
-import {setAccessToken} from "./redux/auth";
+import {resetAccessToken, setAccessToken} from "./redux/auth";
 import {getRefreshToken, removeRefreshToken} from "./utils/cookie";
 import axios from "axios";
-import React, {useEffect} from "react";
+import React, {useEffect, useLayoutEffect} from "react";
 import RouteList, {ROUTE_PATH_NAME} from "./routes/RouteList";
 import {ProSidebarProvider} from "react-pro-sidebar";
 import Topbar from "./scenes/global/topbar";
@@ -22,7 +22,8 @@ import {clearAllInterval, makeSnackbarMessage} from "./utils/util";
 import {LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDateFns} from "@mui/x-date-pickers/AdapterDateFns";
 import ko from "date-fns/locale/ko";
-import {persistor} from "./redux/store";
+import {getUseMenuList, resetUseMenuList} from "./redux/system/menu";
+import {getUser, resetUser} from "./redux/user";
 
 
 function App() {
@@ -42,8 +43,12 @@ function App() {
         const { accessToken } = token
         //set authorization of axios header
         axios.defaults.headers.common[AUTHORIZATION_HEADER_NAME] = BEARER_PREFIX + accessToken
-        //set auth
-        await dispatch(setAccessToken(accessToken))
+        //set access token
+        dispatch(setAccessToken(accessToken))
+        //get use menu list
+        dispatch(getUseMenuList())
+        //get user
+        dispatch(getUser())
       } else {
         enqueueSnackbar(makeSnackbarMessage(message), { variant: 'error' })
       }
@@ -60,11 +65,15 @@ function App() {
           //reset authorization of axios header
           axios.defaults.headers.common[AUTHORIZATION_HEADER_NAME] = null
           //clear all interval
-          await clearAllInterval()
+          clearAllInterval()
           //remove refresh token
-          await removeRefreshToken()
-          //redux-persist purge(remove)
-          await persistor.purge()
+          removeRefreshToken()
+          //reset access token
+          dispatch(resetAccessToken())
+          //reset use menu list
+          dispatch(resetUseMenuList())
+          //reset user
+          dispatch(resetUser())
           alert("인증이 만료되었습니다.\n다시 로그인 해주세요.")
           window.location.replace(ROUTE_PATH_NAME.login)
         }
@@ -79,7 +88,7 @@ function App() {
   }, [intervalFlag])
 
   /* check auth */
-  useEffect(() => {
+  useLayoutEffect(() => {
     reIssueAccessToken()
 
     return () => {
