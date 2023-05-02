@@ -140,6 +140,7 @@ export const ROOT_MENU = {...NEW_MENU, id: 'root', name: 'root', menuUrl: ''}
 
 
 export const COMMON_CODE = {
+  APPROVE_STATUS: 'APPROVE_STATUS',
   DUES: {
     IN: 'IN',
     OUT: 'OUT',

@@ -10,7 +10,7 @@ const initialState = {
 }
 
 export const adminSlice = createSlice({
-  name: 'admin',
+  name: 'system/admin',
   initialState,
   reducers: {
     resetAdminList: (state) => {

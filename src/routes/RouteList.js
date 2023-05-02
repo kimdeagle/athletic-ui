@@ -13,6 +13,7 @@ const MyInfo = React.lazy(() => import("../scenes/private/myInfo"))
 const SystemMenu = React.lazy(() => import("../scenes/private/system/menu"))
 const Schedule = React.lazy(() => import("../scenes/private/schedule"))
 const SystemAuthority = React.lazy(() => import("../scenes/private/system/authority"))
+const SystemAdmin = React.lazy(() => import("../scenes/private/system/admin"))
 const NotFound = React.lazy(() => import("../scenes/global/notFound"))
 const AccessDenied = React.lazy(() => import("../scenes/global/accessDenied"))
 
@@ -28,6 +29,7 @@ export const ROUTE_PATH_NAME = {
   system: {
     menu: '/system/menu',
     authority: '/system/authority',
+    admin: '/system/admin',
   },
   accessDenied: '/access-denied'
 }
@@ -49,6 +51,7 @@ const RouteList = () => {
           <Route path={ROUTE_PATH_NAME.schedule} element={<Schedule />} />
           <Route path={ROUTE_PATH_NAME.system.menu} element={<SystemMenu />} />
           <Route path={ROUTE_PATH_NAME.system.authority} element={<SystemAuthority />} />
+          <Route path={ROUTE_PATH_NAME.system.admin} element={<SystemAdmin />} />
         </Route>
         <Route path={ROUTE_PATH_NAME.accessDenied} element={<AccessDenied />} />
         <Route path='/*' element={<NotFound />} />

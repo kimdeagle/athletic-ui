@@ -1,32 +1,41 @@
+import {Box} from "@mui/material";
 import ContentHeader from "../../../../components/content/ContentHeader";
 import CustomGrid from "../../../../components/grid";
-import {Box} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
 import {useSnackbar} from "notistack";
 import {
   BUTTON_PROPS_DISABLED,
-  BUTTON_PROPS_ON_CLICK,
-  BUTTONS_ADD, BUTTONS_EDIT, BUTTONS_SEARCH,
+  BUTTON_PROPS_ON_CLICK, BUTTON_PROPS_PARAMETERS,
+  BUTTONS_ADD, BUTTONS_EDIT, BUTTONS_EXCEL_DOWNLOAD, BUTTONS_SEARCH, COMMON_CODE,
   DATA_GRID_CELL_CLASS_NAME, STATUS_SUCCESS
 } from "../../../../utils/const";
-import {getAuthority, getAuthorityList, resetAuthorityList} from "../../../../redux/system/authority";
+import {getAdmin, getAdminList, resetAdminList} from "../../../../redux/system/admin";
 import * as Apis from "../../../../apis";
 import {makeSnackbarMessage} from "../../../../utils/util";
-import AuthorityDetailModal from "../../../../components/modal/system/authority/AuthorityDetailModal";
+import {getCodeListByGroupCodes, resetCodeList} from "../../../../redux/code";
+import AdminDetailModal from "../../../../components/modal/system/admin/AdminDetailModal";
+import {getAuthorityList, resetAuthorityList} from "../../../../redux/system/authority";
 
-const Authority = () => {
+const groupCodes = [COMMON_CODE.APPROVE_STATUS]
+
+const Admin = () => {
   const dispatch = useDispatch()
-  const authorityList = useSelector(state => state.system.authority.authorityList)
+  const adminList = useSelector(state => state.system.admin.adminList)
   const [open, setOpen] = useState(false)
   const [action, setAction] = useState(null)
   const [selectionModel, setSelectionModel] = useState([])
   const { enqueueSnackbar, closeSnackbar } = useSnackbar()
 
   const columns = [
-    { field: 'id', headerName: '권한번호', flex: 1},
-    { field: 'name', headerName: '권한명', flex: 1, cellClassName: `${DATA_GRID_CELL_CLASS_NAME.GREEN_COLOR} ${DATA_GRID_CELL_CLASS_NAME.CURSOR_POINTER}`},
-    { field: 'displayName', headerName: '권한전시명', flex: 1},
+    { field: 'id', headerName: '관리자번호', flex: 1},
+    { field: 'name', headerName: '관리자명', flex: 1, cellClassName: `${DATA_GRID_CELL_CLASS_NAME.GREEN_COLOR} ${DATA_GRID_CELL_CLASS_NAME.CURSOR_POINTER}`},
+    { field: 'loginId', headerName: '로그인ID', flex: 1},
+    { field: 'email', headerName: '이메일', flex: 1},
+    { field: 'mobileNo', headerName: '휴대폰 번호', flex: 1},
+    { field: 'authorityId', headerName: '권한번호', flex: 1},
+    { field: 'authorityDisplayName', headerName: '권한전시명', flex: 1},
+    { field: 'approveStatusName', headerName: '승인상태명', flex: 1},
   ]
 
   const handleAdd = () => {
@@ -36,7 +45,7 @@ const Authority = () => {
 
   const handleSearch = () => {
     setSelectionModel([])
-    dispatch(getAuthorityList())
+    dispatch(getAdminList())
   }
 
   const buttonProps = {
@@ -48,11 +57,17 @@ const Authority = () => {
       [BUTTON_PROPS_DISABLED]: false,
       [BUTTON_PROPS_ON_CLICK]: handleSearch
     },
+    [BUTTONS_EXCEL_DOWNLOAD]: {
+      [BUTTON_PROPS_DISABLED]: false,
+      [BUTTON_PROPS_PARAMETERS]: {
+        downloadUrl: '/admin/excel/download',
+      }
+    }
   }
 
   const handleCellClick = async (params, event) => {
     if (params.field === 'name') {
-      await dispatch(getAuthority(params.row.id))
+      await dispatch(getAdmin(params.row.id))
       setAction(BUTTONS_EDIT)
       setOpen(true)
     }
@@ -60,8 +75,8 @@ const Authority = () => {
 
   const handleDelete = async () => {
     const count = selectionModel.length
-    if (window.confirm("선택한 " + count + "개의 권한을 삭제하시겠습니까?")) {
-      const { status, message } = await Apis.system.authority.deleteAuthorities(selectionModel)
+    if (window.confirm("선택한 " + count + "명의 관리자를 삭제하시겠습니까?")) {
+      const { status, message } = await Apis.system.admin.deleteAdmins(selectionModel)
       if (status === STATUS_SUCCESS) {
         enqueueSnackbar(makeSnackbarMessage(message), { variant: 'success' })
         handleSearch()
@@ -77,16 +92,20 @@ const Authority = () => {
   }
 
   useEffect(() => {
+    dispatch(getCodeListByGroupCodes({groupCodes}))
+    dispatch(getAuthorityList())
     return () => {
+      dispatch(resetCodeList())
       dispatch(resetAuthorityList())
+      dispatch(resetAdminList())
     }
   }, [])
 
   return (
-    <Box m="20px">
-      <ContentHeader title='권한 관리' subTitle="권한 관리" buttonProps={buttonProps} />
+    <Box m='20px'>
+      <ContentHeader title='관리자 관리' subTitle="관리자 관리" buttonProps={buttonProps} />
       <CustomGrid
-        rows={authorityList}
+        rows={adminList}
         columns={columns}
         onCellClick={handleCellClick}
         checkboxSelection={true}
@@ -94,9 +113,9 @@ const Authority = () => {
         setSelectionModel={setSelectionModel}
         handleDelete={handleDelete}
       />
-      <AuthorityDetailModal action={action} open={open} setOpen={setOpen} handleCallback={handleSearch} />
+      <AdminDetailModal action={action} open={open} setOpen={setOpen} handleCallback={handleSearch} />
     </Box>
   )
 }
 
-export default Authority
+export default Admin

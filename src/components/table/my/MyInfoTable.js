@@ -40,7 +40,7 @@ const MyInfoTable = () => {
             <TableCell>{admin?.mobileNo}</TableCell>
           </TableRow>
           <TableRow>
-            <TableCell component='th' scope='row'>권한명</TableCell>
+            <TableCell component='th' scope='row'>권한전시명</TableCell>
             <TableCell>{admin?.authorityDisplayName}</TableCell>
           </TableRow>
           <TableRow>

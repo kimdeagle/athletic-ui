@@ -111,8 +111,7 @@ const Member = () => {
         selectionModel={selectionModel}
         setSelectionModel={setSelectionModel}
         handleDelete={handleDelete}
-      >
-      </CustomGrid>
+      />
       <MemberDetailModal action={action} open={open} setOpen={setOpen} handleCallback={handleSearch} />
     </Box>
   )
