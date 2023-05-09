@@ -1,4 +1,5 @@
 import * as apiService from "../apiService";
+import {BEARER_PREFIX} from "../../utils/const";
 
 export const login = async (params, thunkAPI) => {
   return await apiService.POST({
@@ -24,7 +25,7 @@ export const resetPassword = async (params, thunkAPI) => {
 export const reIssueAccessToken = async (params, thunkAPI) => {
   return await apiService.POST({
     url: '/auth/re-issue/access',
-    headers:{Authorization: `Bearer ${params.refreshToken}`},
+    headers:{Authorization: BEARER_PREFIX + params.refreshToken},
   }, thunkAPI)
 }
 
