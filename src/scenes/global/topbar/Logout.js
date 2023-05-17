@@ -1,6 +1,6 @@
 import {Button} from "@mui/material";
 import ExitToAppOutlinedIcon from "@mui/icons-material/ExitToAppOutlined";
-import {removeRefreshToken} from "../../../utils/cookie";
+import {removeLoginAt, removeRefreshToken} from "../../../utils/cookie";
 import * as Apis from "../../../apis";
 import axios from "axios";
 import {useSnackbar} from "notistack";
@@ -27,6 +27,8 @@ const Logout = () => {
         axios.defaults.headers.common[AUTHORIZATION_HEADER_NAME] = null
         //clear all interval
         clearAllInterval()
+        //remove loginAt
+        removeLoginAt()
         //remove refresh token
         removeRefreshToken()
         //reset access token

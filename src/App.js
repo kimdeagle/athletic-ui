@@ -3,7 +3,7 @@ import {CssBaseline, ThemeProvider} from "@mui/material";
 import * as Apis from "./apis"
 import {useDispatch, useSelector} from "react-redux";
 import {resetAccessToken, setAccessToken} from "./redux/auth";
-import {getRefreshToken, removeRefreshToken} from "./utils/cookie";
+import {getRefreshToken, removeLoginAt, removeRefreshToken} from "./utils/cookie";
 import axios from "axios";
 import React, {useEffect, useLayoutEffect} from "react";
 import RouteList, {ROUTE_PATH_NAME} from "./routes/RouteList";
@@ -66,6 +66,8 @@ function App() {
           axios.defaults.headers.common[AUTHORIZATION_HEADER_NAME] = null
           //clear all interval
           clearAllInterval()
+          //remove loginAt
+          removeLoginAt()
           //remove refresh token
           removeRefreshToken()
           //reset access token

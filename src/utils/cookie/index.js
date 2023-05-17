@@ -59,3 +59,7 @@ export const setLoginAt = () => {
     expires: new Date(expires)
   })
 }
+
+export const removeLoginAt = () => {
+  cookies.remove(LOGIN_AT_COOKIE_NAME)
+}

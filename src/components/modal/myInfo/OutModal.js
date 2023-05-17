@@ -7,7 +7,7 @@ import {
   VALIDATION_SCHEMA
 } from "../../../utils/const";
 import {useSnackbar} from "notistack";
-import {removeRefreshToken, removeRememberId} from "../../../utils/cookie";
+import {removeLoginAt, removeRefreshToken, removeRememberId} from "../../../utils/cookie";
 import axios from "axios";
 import { Formik, Form, Field } from "formik";
 import { TextField } from "formik-mui";
@@ -44,6 +44,8 @@ const OutModal = ({open, setOpen}) => {
     axios.defaults.headers.common[AUTHORIZATION_HEADER_NAME] = null
     //clear all interval
     clearAllInterval()
+    //remove loginAt
+    removeLoginAt()
     //remove refresh token
     removeRefreshToken()
     //reset access token
