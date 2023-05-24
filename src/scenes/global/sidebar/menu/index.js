@@ -9,7 +9,7 @@ import {getProcessedMenuList, isEmptyObject} from "../../../../utils/util";
 
 const SidebarMenu = () => {
   const { collapsed } = useProSidebar()
-  const useMenuList = useSelector(state => state.system.menu.useMenuList)
+  const useMenuList = useSelector(state => state.auth.useMenuList)
 
   const renderMenu = (list) => {
     return list.map(menu => {

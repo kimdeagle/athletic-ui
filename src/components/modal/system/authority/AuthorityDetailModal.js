@@ -10,12 +10,12 @@ import CustomModal from "../../index";
 import { Formik, Form, Field } from "formik";
 import {TextField} from "formik-mui";
 import {Button} from "@mui/material";
-import {getUser} from "../../../../redux/user";
+import {getCurrentUser} from "../../../../redux/auth";
 
 const AuthorityDetailModal = ({action, open, setOpen, handleCallback}) => {
   const dispatch = useDispatch()
   const authority = useSelector(state => state.system.authority.authority)
-  const { authorityId } = useSelector(state => state.user.user)
+  const { authorityId } = useSelector(state => state.auth.user)
   const { enqueueSnackbar } = useSnackbar()
   const [initialValues, setInitialValues] = useState({})
 
@@ -42,7 +42,7 @@ const AuthorityDetailModal = ({action, open, setOpen, handleCallback}) => {
       const { status, message } = action === BUTTONS_ADD ? await Apis.system.authority.addAuthority(values) : await Apis.system.authority.updateAuthority(values)
       if (status === STATUS_SUCCESS) {
         if (action === BUTTONS_EDIT && authorityId === values.id) {
-          dispatch(getUser())
+          dispatch(getCurrentUser())
         }
         enqueueSnackbar(makeSnackbarMessage(message), {
           variant: 'success',

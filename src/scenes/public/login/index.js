@@ -6,33 +6,21 @@ import {
   Typography,
   useTheme
 } from "@mui/material";
-import {getRememberId, removeRememberId, setLoginAt, setRefreshToken, setRememberId} from "../../../utils/cookie";
+import {getRememberId} from "../../../utils/cookie";
 import {useNavigate} from "react-router-dom";
-import * as Apis from "../../../apis";
-import {setAccessToken} from "../../../redux/auth";
-import {getUseMenuList} from "../../../redux/system/menu";
-import {useDispatch} from "react-redux";
-import axios from "axios";
 import {Helmet} from "react-helmet-async";
-import {useSnackbar} from "notistack";
 import { Formik, Form, Field } from "formik";
 import {CheckboxWithLabel, TextField} from "formik-mui";
 import * as Yup from "yup";
 import {
-  AUTHORIZATION_HEADER_NAME, BEARER_PREFIX,
-  STATUS_SUCCESS,
   VALIDATION_SCHEMA
 } from "../../../utils/const";
-import {makeSnackbarMessage} from "../../../utils/util";
 import {ROUTE_PATH_NAME} from "../../../routes/RouteList";
-import {getUser} from "../../../redux/user";
 
-const Login = () => {
+const Login = ({handleLogin}) => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
-  const dispatch = useDispatch()
   const navigate = useNavigate()
-  const { enqueueSnackbar } = useSnackbar()
 
   const initialValues = {
     loginId: getRememberId() || '',
@@ -46,32 +34,6 @@ const Login = () => {
     loginPw: Yup.string()
       .required(VALIDATION_SCHEMA.COMMON.requiredMessage)
   })
-
-  const handleSubmit = async (values) => {
-    const { status, message, data:token } = await Apis.auth.login(values)
-    if (status === STATUS_SUCCESS) {
-      //get token data
-      const {accessToken, refreshToken, refreshTokenExpiresIn} = token
-      //set authorization of axios header
-      axios.defaults.headers.common[AUTHORIZATION_HEADER_NAME] = BEARER_PREFIX + accessToken
-      //set rememberId
-      values.isRemember ? setRememberId(values.loginId) : removeRememberId()
-      //set accessToken
-      dispatch(setAccessToken(accessToken))
-      //get use menu list
-      dispatch(getUseMenuList())
-      //get user
-      dispatch(getUser())
-      //set login time
-      setLoginAt()
-      //set refresh token
-      setRefreshToken({refreshToken, refreshTokenExpiresIn})
-
-      window.location.replace(ROUTE_PATH_NAME.home)
-    } else {
-      enqueueSnackbar(makeSnackbarMessage(message), { variant: 'error' })
-    }
-  }
 
   return (
     <>
@@ -92,7 +54,7 @@ const Login = () => {
         >
           LOGIN
         </Typography>
-        <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
+        <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleLogin}>
           {({isSubmitting}) => (
             <Form>
               <Field

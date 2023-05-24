@@ -22,16 +22,29 @@ export const resetPassword = async (params, thunkAPI) => {
   }, thunkAPI)
 }
 
-export const reIssueAccessToken = async (params, thunkAPI) => {
+export const refresh = async (params, thunkAPI) => {
   return await apiService.POST({
-    url: '/auth/re-issue/access',
-    headers:{Authorization: BEARER_PREFIX + params.refreshToken},
+    url: '/auth/refresh'
   }, thunkAPI)
 }
 
 export const logout = async (params, thunkAPI) => {
   return await apiService.POST({
     url: '/auth/logout',
+    params
+  }, thunkAPI)
+}
+
+export const getCurrentUser = async (params, thunkAPI) => {
+  return await apiService.GET({
+    url: '/auth/user/current',
+    params
+  }, thunkAPI)
+}
+
+export const getUseMenuList = async (params, thunkAPI) => {
+  return await apiService.GET({
+    url: '/system/menu/use',
     params
   }, thunkAPI)
 }

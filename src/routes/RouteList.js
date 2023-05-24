@@ -34,12 +34,12 @@ export const ROUTE_PATH_NAME = {
   accessDenied: '/access-denied'
 }
 
-const RouteList = () => {
+const RouteList = ({handleLogin}) => {
   return (
     <Suspense fallback={<Loading />}>
       <Routes>
         <Route element={<AuthRoute requireAuth={false} />}>
-          <Route path={ROUTE_PATH_NAME.login} element={<Login />} />
+          <Route path={ROUTE_PATH_NAME.login} element={<Login handleLogin={handleLogin} />} />
           <Route path={ROUTE_PATH_NAME.join} element={<Join />} />
           <Route path={ROUTE_PATH_NAME.resetPassword} element={<ResetPassword />} />
         </Route>

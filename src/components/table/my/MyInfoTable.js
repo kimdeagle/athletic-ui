@@ -5,7 +5,7 @@ import {useSelector} from "react-redux";
 const MyInfoTable = () => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
-  const admin = useSelector(state => state.user.user)
+  const admin = useSelector(state => state.auth.user)
 
   return (
     <TableContainer component={Paper} sx={{ mt: 2 }}>

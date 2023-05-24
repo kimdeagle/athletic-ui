@@ -5,10 +5,12 @@ import { tokens } from "../../../theme";
 import SidebarHeader from "./header";
 import SidebarProfile from "./profile";
 import SidebarMenu from "./menu";
+import {useSelector} from "react-redux";
 
 const ProSidebar = () => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
+  const isLoggedIn = useSelector(state => state.auth.isLoggedIn)
   const { collapsed } = useProSidebar()
 
   const menuItemStyles = {
@@ -38,6 +40,7 @@ const ProSidebar = () => {
   }
 
   return (
+    isLoggedIn &&
     <Box
       sx={{
         display: 'flex',

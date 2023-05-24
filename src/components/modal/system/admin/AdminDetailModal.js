@@ -8,20 +8,19 @@ import {
   BUTTONS_EDIT,
   COMMON_CODE,
   DEFAULT_SLEEP_MS, MARGIN_NORMAL,
-  ROOT_MENU,
   STATUS_SUCCESS
 } from "../../../../utils/const";
-import {getUser} from "../../../../redux/user";
 import {makeSnackbarMessage, sleep} from "../../../../utils/util";
 import {Field, Form, Formik} from "formik";
-import {RadioGroup, Select, TextField} from "formik-mui";
-import {Box, Button, FormControlLabel, MenuItem, Radio, Typography} from "@mui/material";
+import {Select, TextField} from "formik-mui";
+import {Box, Button, MenuItem} from "@mui/material";
 import CustomModal from "../../index";
+import {getCurrentUser} from "../../../../redux/auth";
 
 const AdminDetailModal = ({action, open, setOpen, handleCallback}) => {
   const dispatch = useDispatch()
   const admin = useSelector(state => state.system.admin.admin)
-  const { id:currentUserId } = useSelector(state => state.user.user)
+  const { id:currentUserId } = useSelector(state => state.auth.user)
   const codeList = useSelector(state => state.code.codeList)
   const authorityList = useSelector(state => state.system.authority.authorityList)
   const { enqueueSnackbar } = useSnackbar()
@@ -49,7 +48,7 @@ const AdminDetailModal = ({action, open, setOpen, handleCallback}) => {
       const { status, message } = action === BUTTONS_ADD ? await Apis.system.admin.addAdmin(values) : await Apis.system.admin.updateAdmin(values)
       if (status === STATUS_SUCCESS) {
         if (action === BUTTONS_EDIT && currentUserId === values.id) {
-          dispatch(getUser())
+          dispatch(getCurrentUser())
         }
         enqueueSnackbar(makeSnackbarMessage(message), {
           variant: 'success',

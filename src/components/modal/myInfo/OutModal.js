@@ -7,23 +7,18 @@ import {
   VALIDATION_SCHEMA
 } from "../../../utils/const";
 import {useSnackbar} from "notistack";
-import {removeLoginAt, removeRefreshToken, removeRememberId} from "../../../utils/cookie";
+import {removeLoginAt, removeRememberId} from "../../../utils/cookie";
 import axios from "axios";
 import { Formik, Form, Field } from "formik";
 import { TextField } from "formik-mui";
 import * as Yup from "yup";
-import {clearAllInterval, makeSnackbarMessage, sleep} from "../../../utils/util";
-import {ROUTE_PATH_NAME} from "../../../routes/RouteList";
-import {useEffect} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {resetAccessToken} from "../../../redux/auth";
-import {resetUseMenuList} from "../../../redux/system/menu";
-import {resetUser} from "../../../redux/user";
+import {makeSnackbarMessage, sleep} from "../../../utils/util";
+import {useDispatch} from "react-redux";
+import {resetAuth} from "../../../redux/auth";
 
 const OutModal = ({open, setOpen}) => {
   const dispatch = useDispatch()
   const { enqueueSnackbar } = useSnackbar()
-  const authenticated = useSelector(state => state.auth.authenticated)
 
   const handleClose = () => {
     setOpen(false)
@@ -42,18 +37,10 @@ const OutModal = ({open, setOpen}) => {
     removeRememberId()
     //reset authorization of axios header
     axios.defaults.headers.common[AUTHORIZATION_HEADER_NAME] = null
-    //clear all interval
-    clearAllInterval()
     //remove loginAt
     removeLoginAt()
-    //remove refresh token
-    removeRefreshToken()
     //reset access token
-    dispatch(resetAccessToken())
-    //reset use menu list
-    dispatch(resetUseMenuList())
-    //reset user
-    dispatch(resetUser())
+    dispatch(resetAuth())
     handleClose()
   }
 
@@ -69,12 +56,6 @@ const OutModal = ({open, setOpen}) => {
       enqueueSnackbar(makeSnackbarMessage(message), { variant: 'error' })
     }
   }
-
-  useEffect(() => {
-    if (!authenticated) {
-      window.location.replace(ROUTE_PATH_NAME.login)
-    }
-  }, [authenticated])
 
   return (
     <CustomModal width='550' title='계정삭제' subtitle='삭제를 원하시면 비밀번호 입력 후 계정삭제 버튼을 클릭하세요.' open={open} handleClose={handleClose}>

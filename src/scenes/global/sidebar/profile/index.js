@@ -10,7 +10,7 @@ const SidebarProfile = () => {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
   const { collapsed } = useProSidebar()
-  const { name, authorityDisplayName } = useSelector(state => state.user.user)
+  const { name, authorityDisplayName } = useSelector(state => state.auth.user)
   const loginAt = getLoginAt()
 
   return (

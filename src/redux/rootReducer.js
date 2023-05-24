@@ -9,7 +9,6 @@ import dues from "./dues";
 import code from "./code";
 import schedule from "./schedule";
 import statistics from "./statistics";
-import user from "./user";
 
 const rootReducer = combineReducers({
   common,
@@ -24,7 +23,6 @@ const rootReducer = combineReducers({
   code,
   schedule,
   statistics,
-  user,
 })
 
 export default rootReducer

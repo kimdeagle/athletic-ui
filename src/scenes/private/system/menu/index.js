@@ -7,11 +7,12 @@ import {getProcessedMenuList, isEmptyObject, makeSnackbarMessage, sleep} from ".
 import { Formik } from "formik";
 import * as Yup from "yup";
 import * as Apis from "../../../../apis";
-import {getMenuList, getUseMenuList, resetMenuList} from "../../../../redux/system/menu";
+import {getMenuList, resetMenuList} from "../../../../redux/system/menu";
 import {DEFAULT_SLEEP_MS, NEW_MENU, ROOT_MENU, STATUS_SUCCESS, VALIDATION_SCHEMA} from "../../../../utils/const";
 import MenuTree from "./MenuTree";
 import MenuDetail from "./MenuDetail";
 import {getAuthorityList, resetAuthorityList} from "../../../../redux/system/authority";
+import {getUseMenuList} from "../../../../redux/auth";
 
 const Menu = () => {
   const [selected, setSelected] = useState(ROOT_MENU.id)

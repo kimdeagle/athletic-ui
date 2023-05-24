@@ -3,7 +3,6 @@ import {format} from "date-fns";
 
 const cookies = new Cookies()
 const REMEMBER_ID_COOKIE_NAME = "remember_id"
-const REFRESH_TOKEN_COOKIE_NAME = "refresh_token"
 const LOGIN_AT_COOKIE_NAME = "login_at"
 
 /**
@@ -28,24 +27,8 @@ export const removeRememberId = () => {
 }
 
 /**
- * 2. refresh token
+ * 2. login timestamp cookie
  */
-export const getRefreshToken = () => {
-  return cookies.get(REFRESH_TOKEN_COOKIE_NAME)
-}
-
-export const setRefreshToken = (token) => {
-  cookies.set(REFRESH_TOKEN_COOKIE_NAME, token.refreshToken, {
-    sameSite: 'strict',
-    path: '/',
-    expires: new Date(token.refreshTokenExpiresIn)
-  })
-}
-
-export const removeRefreshToken = () => {
-  cookies.remove(REFRESH_TOKEN_COOKIE_NAME)
-}
-
 export const getLoginAt = () => {
   return cookies.get(LOGIN_AT_COOKIE_NAME)
 }

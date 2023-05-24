@@ -3,8 +3,8 @@ import ToggleTheme from "./ToggleTheme";
 import Logout from "./Logout";
 import {useSelector} from "react-redux";
 
-const Topbar = () => {
-  const authenticated = useSelector(state => state.auth.authenticated)
+const Topbar = ({handleLogout}) => {
+  const isLoggedIn = useSelector(state => state.auth.isLoggedIn)
 
   return (
     <Box display="flex" justifyContent="end" height='6%' p={2}>
@@ -13,7 +13,7 @@ const Topbar = () => {
         <ToggleTheme />
 
         {/* my information icon button and submenu */}
-        {authenticated && <Logout /> }
+        {isLoggedIn && <Logout handleLogout={handleLogout} /> }
       </Box>
     </Box>
   )
